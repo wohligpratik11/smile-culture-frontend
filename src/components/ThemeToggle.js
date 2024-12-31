@@ -1,15 +1,25 @@
 // src/components/ThemeToggle.js
 import { useTheme } from 'next-themes';
+import { Sun, SunMoon } from 'lucide-react';
 
 const ThemeToggle = () => {
   const { theme, setTheme } = useTheme();
 
+  const toggleTheme = () => {
+    setTheme(theme === 'light' ? 'dark' : 'light');
+  };
+
   return (
     <button
-      onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-      style={{ padding: '10px', margin: '10px' }}
+      onClick={toggleTheme}
+      style={{
+        padding: '10px',
+        margin: '10px',
+        display: 'flex',
+        alignItems: 'center',
+      }}
     >
-      Toggle Theme
+      {theme === 'light' ? <SunMoon /> : <Sun />}
     </button>
   );
 };
