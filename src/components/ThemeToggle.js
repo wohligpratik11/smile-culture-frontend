@@ -12,14 +12,13 @@ const ThemeToggle = () => {
   return (
     <button
       onClick={toggleTheme}
-      style={{
-        padding: '10px',
-        margin: '10px',
-        display: 'flex',
-        alignItems: 'center',
-      }}
+      className="m-2 flex items-center justify-center rounded bg-gray-200 p-2 transition hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700"
     >
-      {theme === 'light' ? <SunMoon /> : <Sun />}
+      {theme === 'light' ? (
+        <SunMoon className="h-5 w-5" />
+      ) : (
+        <Sun className="h-5 w-5" />
+      )}
     </button>
   );
 };

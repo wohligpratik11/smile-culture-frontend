@@ -1,11 +1,14 @@
 // pages/index.js
-import ThemeToggle from '../components/ThemeToggle';
+// import ThemeToggle from '../components/ThemeToggle';
+import HomeDashboard from './home/index';
 
 export default function Home() {
 	return (
 		<div>
-			<h1 className='text-white'>Welcome to Next.js 14!</h1>
-			<ThemeToggle />
+			{/* <ThemeToggle /> */}
+
+			<HomeDashboard />
+
 		</div>
 	);
 }

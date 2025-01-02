@@ -7,7 +7,7 @@ export default function ThemeSwitcher() {
   return (
     <button
       onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-      style={{ padding: '10px', cursor: 'pointer' }}
+      className="rounded-md bg-gray-800 px-4 py-2 text-white transition-colors hover:bg-gray-700"
     >
       Switch to {theme === 'dark' ? 'Light' : 'Dark'} Mode
     </button>

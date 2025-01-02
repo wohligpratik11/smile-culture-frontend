@@ -17,14 +17,26 @@
 }
 
 /* Apply the theme variables */
+
 body {
   background-color: var(--background-color);
   color: var(--text-color);
   background-image: var(--background-image); /* Apply background image */
   background-size: cover; /* Ensure the image covers the full background */
   background-position: center; /* Center the image */
+  font-family: 'Poppins', sans-serif;
   transition:
     background-color 0.3s,
     color 0.3s,
     background-image 0.3s;
+}
+.btn-gradient {
+  background: linear-gradient(to right, #0ca1ea 50%, #3ec5b6 50%);
+}
+/* styles/globals.css */
+.bg-gradient-custom-gradient {
+  background: linear-gradient(90deg, #0ca1ea, #3ec5b6);
+}
+.bg-polygon-gradient {
+  background: linear-gradient(90deg, #10a3e7, #3ec4b9);
 }
