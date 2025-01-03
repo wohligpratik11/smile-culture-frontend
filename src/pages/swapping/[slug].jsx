@@ -9,42 +9,42 @@ const DynamicSlugPage = () => {
 	const features = [
 		{
 			title: 'Face Swapping',
-			image: '/assets/images/faceswap.webp',
+			image: '/assets/images/img2.webp',
 			path: '/swapping/face-swap',
 		},
 		{
 			title: 'Face Swapping',
-			image: '/assets/images/faceswap.webp',
+			image: '/assets/images/img2.webp',
 			path: '/swapping/face-swap',
 		}, {
 			title: 'Face Swapping',
-			image: '/assets/images/faceswap.webp',
+			image: '/assets/images/img2.webp',
 			path: '/swapping/face-swap',
 		}, {
 			title: 'Face Swapping',
-			image: '/assets/images/faceswap.webp',
+			image: '/assets/images/img2.webp',
 			path: '/swapping/face-swap',
 		}, {
 			title: 'Face Swapping',
-			image: '/assets/images/faceswap.webp',
+			image: '/assets/images/img2.webp',
 			path: '/swapping/face-swap',
 		}, {
 			title: 'Face Swapping',
-			image: '/assets/images/faceswap.webp',
+			image: '/assets/images/img2.webp',
 			path: '/swapping/face-swap',
 		}, {
 			title: 'Face Swapping',
-			image: '/assets/images/faceswap.webp',
+			image: '/assets/images/img2.webp',
 			path: '/swapping/face-swap',
 		}, {
 			title: 'Face Swapping',
-			image: '/assets/images/faceswap.webp',
+			image: '/assets/images/img2.webp',
 			path: '/swapping/face-swap',
 		},
 	];
 	const { slug } = router.query;
 	const [pageType, setPageType] = useState('');
-
+	console.log("Using state", pageType)
 	useEffect(() => {
 		// Determine which feature we're dealing with based on the URL path
 		if (router.pathname.includes('swapping')) {
@@ -88,36 +88,36 @@ const DynamicSlugPage = () => {
 						>
 							<ArrowLeft />
 						</button>
-						<div className="mt-[17px]">
+						<div className="text-lg font-medium leading-10 mt-[17px]">
 							{renderHeader()}
 						</div>
 					</div>
+					<div className="text-lg font-medium leading-10">
+						Choose Movie
+					</div>
 
+					<div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-6">
+						{features.map((feature, index) => (
+							<div key={feature.path || index} className="space-y-2">
+								<Link href={feature.path} passHref legacyBehavior>
+									<Card
+										className="bg-blue-800/20 border-0 backdrop-blur-sm overflow-hidden cursor-pointer transform transition-transform duration-200 hover:scale-105 mb-6"
+										aria-label={`Go to ${feature.title}`}
+									>
+										<CardContent className="p-0">
+											<div className="relative aspect-video">
+												<img
+													src={feature.image}
+													alt={`${feature.title} image`}
+													className="w-full h-full object-cover"
+												/>
+											</div>
+										</CardContent>
+									</Card>
+								</Link>
+							</div>
+						))}
 
-					<div className="flex items-center justify-center">
-						<div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-6">
-							{features.map((feature) => (
-								<div key={feature.title} className="space-y-2">
-									<Link href={feature.path} passHref legacyBehavior>
-										<Card
-											className="bg-blue-800/20 border-0 backdrop-blur-sm overflow-hidden cursor-pointer transform transition-transform duration-200 hover:scale-105 mb-6"
-											aria-label={`Go to ${feature.title}`}
-										>
-											<CardContent className="p-0">
-												<div className="relative aspect-video">
-													<img
-														src={feature.image}
-														alt={`${feature.title} image`}
-														className="w-full h-full object-cover"
-													/>
-												</div>
-											</CardContent>
-										</Card>
-									</Link>
-								</div>
-
-							))}
-						</div>
 					</div>
 				</div>
 			</Card>
