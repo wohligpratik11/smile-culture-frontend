@@ -22,6 +22,7 @@ module.exports = {
         vividSkyBlue: '#10A3E7',
         lavenderBlue: '##5E6DA7',
         slateBlue: '#5B6BAB',
+        blueYonder: '#495583',
         button: {},
         card: {
           cardCustomBlue: 'rgba(31,44,100,0.7)', // Define the transparent color

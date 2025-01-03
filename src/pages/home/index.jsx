@@ -78,7 +78,7 @@ const SceneSelector = () => {
 									<div key={feature.title} className="space-y-2">
 										<Link href={feature.path} passHref legacyBehavior>
 											<Card
-												className="bg-blue-800/20 border-0 backdrop-blur-sm overflow-hidden cursor-pointer transform transition-transform duration-200 hover:scale-105 mb-6"
+												className="bg-blue-800/20 border-0 backdrop-blur-sm overflow-hidden transform transition-transform duration-200 hover:scale-105 mb-6 cursor-pointer"
 												aria-label={`Go to ${feature.title}`}
 											>
 												<CardContent className="p-0">
@@ -92,14 +92,17 @@ const SceneSelector = () => {
 												</CardContent>
 											</Card>
 										</Link>
-										<div
-											className="flex items-center justify-center text-center text-white text-lg font-medium h-14 border border-slateBlue rounded-2xl"
-											style={{
-												background: 'linear-gradient(180deg, rgba(49, 58, 91, 0) -1.11%, rgba(49, 58, 91, 0.44) 23.83%, #313A5B 99.56%)',
-											}}
-										>
-											{feature.title}
-										</div>
+										<Link href={feature.path} passHref legacyBehavior>
+
+											<div
+												className="flex items-center justify-center text-center text-white text-lg font-medium h-14 border border-slateBlue rounded-2xl cursor-pointer"
+												style={{
+													background: 'linear-gradient(180deg, rgba(49, 58, 91, 0) -1.11%, rgba(49, 58, 91, 0.44) 23.83%, #313A5B 99.56%)',
+												}}
+											>
+												{feature.title}
+											</div>
+										</Link>
 
 									</div>
 
