@@ -32,6 +32,9 @@ const SceneSelector = () => {
 	const handleBackClick = () => {
 		router.back();
 	};
+	const handleHomeBackClick = () => {
+		router.push('https://erosnow.com/');
+	};
 
 	return (
 		<div className="min-h-screen p-6 h-[835px]">
@@ -40,7 +43,7 @@ const SceneSelector = () => {
 					<div className="relative">
 						<button
 							className="px-4 py-2 rounded-lg bg-gradient-custom-gradient border border-buttonBorder"
-							onClick={handleBackClick}
+							onClick={handleHomeBackClick}
 							aria-label="Go Back"
 						>
 							<ArrowLeft />
@@ -65,7 +68,6 @@ const SceneSelector = () => {
 					<div className="flex justify-center space-x-4 mt-6">
 						<button
 							className="px-4 py-2 rounded-lg bg-gradient-custom-gradient border border-buttonBorder w-52 h-12"
-							onClick={handleBackClick}
 						>
 							Get Started
 						</button>
