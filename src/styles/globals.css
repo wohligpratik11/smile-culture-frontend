@@ -40,3 +40,31 @@ body {
 .bg-polygon-gradient {
   background: linear-gradient(90deg, #10a3e7, #3ec4b9);
 }
+/* globals.css or your custom global styles file */
+
+/* globals.css or styles.css */
+
+/* globals.css or your custom global styles file */
+
+/* Define a CSS custom property (variable) for reusability */
+:root {
+  --gradient-border: 1px solid transparent;
+  --gradient-border-image: conic-gradient(
+      from 180deg at 51.95% 49.81%,
+      rgba(0, 0, 0, 0.105455) -2.11deg,
+      rgba(51, 66, 255, 0) 131.45deg,
+      #37f4f4 175.58deg,
+      rgba(51, 66, 255, 0) 252.32deg,
+      rgba(0, 0, 0, 0.0885149) 310.85deg,
+      rgba(0, 0, 0, 0.105455) 357.89deg,
+      rgba(51, 66, 255, 0) 491.45deg
+    ),
+    linear-gradient(0deg, #ffffff, #ffffff);
+}
+
+/* Apply to elements that need the gradient border */
+.gradient-border {
+  border: var(--gradient-border);
+  border-image: var(--gradient-border-image);
+  border-image-slice: 1;
+}

@@ -5,7 +5,7 @@ import { cn } from "@/components/lib/utils"
 const Card = React.forwardRef(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn("rounded-xl border custom-border  shadow ", className)}
+    className={cn("rounded-xl border border-slateBlue shadow ", className)}
     {...props} />
 ))
 Card.displayName = "Card"
@@ -13,7 +13,7 @@ Card.displayName = "Card"
 const CardHeader = React.forwardRef(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn("flex flex-col space-y-1.5 p-6", className)}
+    className={cn("flex flex-col space-y-1.5 p-6  ", className)}
     {...props} />
 ))
 CardHeader.displayName = "CardHeader"

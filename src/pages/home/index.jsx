@@ -32,7 +32,7 @@ const SceneSelector = () => {
 	};
 
 	return (
-		<div className="min-h-screen p-6">
+		<div className="min-h-screen p-6 h-[835px]">
 			<Card className="bg-card-cardCustomBlue p-6">
 				<div className="space-y-4">
 					<div className="relative">
@@ -65,7 +65,7 @@ const SceneSelector = () => {
 							className="px-4 py-2 rounded-lg bg-gradient-custom-gradient border border-buttonBorder w-52 h-12"
 							onClick={handleBackClick}
 						>
-							Back
+							Get Started
 						</button>
 					</div>
 					<div className="flex items-center justify-center">
