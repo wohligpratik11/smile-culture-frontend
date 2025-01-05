@@ -9,7 +9,6 @@ import { CiSearch } from "react-icons/ci";
 const DynamicSlugPage = () => {
 	const router = useRouter();
 	const [searchQuery, setSearchQuery] = useState('');
-	const [pageType, setPageType] = useState('');
 	const { slug } = router.query; // Extract slug from URL
 
 	const features = [
@@ -29,16 +28,6 @@ const DynamicSlugPage = () => {
 			path: '/multilingual',
 		},
 	];
-
-	useEffect(() => {
-		if (router.pathname.includes('face-swap')) {
-			setPageType('face-swap');
-		} else if (router.pathname.includes('lip-syncing')) {
-			setPageType('lip-syncing');
-		} else if (router.pathname.includes('multilingual')) {
-			setPageType('multilingual');
-		}
-	}, [router.pathname]);
 
 	const handleSearchChange = (e) => {
 		setSearchQuery(e.target.value);
@@ -93,7 +82,6 @@ const DynamicSlugPage = () => {
 					<div className="relative mt-4">
 						Choose Movie
 					</div>
-
 
 					<div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-6">
 						{filteredFeatures.length === 0 ? (
