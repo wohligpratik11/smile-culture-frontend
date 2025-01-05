@@ -11,20 +11,20 @@ const SceneSelector = () => {
 			title: 'Face Swapping',
 			image: '/assets/images/faceswap.webp',
 			description: 'Advanced face swapping technology',
-			path: '/swapping/face-swap',
+			path: '/movie/face-swap',
 		},
 		{
 			title: 'Lip-syncing',
 			image: '/assets/images/lipsyncing.webp',
 			description: 'Precise lip synchronization',
-			path: '/swapping/lip-syncing',
+			path: '/movie/lip-syncing',
 
 		},
 		{
 			title: 'Multilingual',
 			image: '/assets/images/multilingual.webp',
 			description: 'Support for multiple languages',
-			path: '/swapping/multilingual',
+			path: '/movie/multilingual',
 
 		},
 	];

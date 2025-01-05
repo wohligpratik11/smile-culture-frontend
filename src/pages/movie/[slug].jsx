@@ -10,6 +10,7 @@ const DynamicSlugPage = () => {
 	const router = useRouter();
 	const [searchQuery, setSearchQuery] = useState('');
 	const [pageType, setPageType] = useState('');
+	const { slug } = router.query; // Extract slug from URL
 
 	const features = [
 		{
@@ -29,10 +30,8 @@ const DynamicSlugPage = () => {
 		},
 	];
 
-	const { slug } = router.query;
-
 	useEffect(() => {
-		if (router.pathname.includes('swapping')) {
+		if (router.pathname.includes('face-swap')) {
 			setPageType('face-swap');
 		} else if (router.pathname.includes('lip-syncing')) {
 			setPageType('lip-syncing');
@@ -50,7 +49,7 @@ const DynamicSlugPage = () => {
 	);
 
 	const renderHeader = () => {
-		switch (pageType) {
+		switch (slug) {
 			case 'face-swap':
 				return <h1 className="text-2xl leading-10 text-customWhite font-medium mb-4">Face Swapping</h1>;
 			case 'lip-syncing':
@@ -80,6 +79,7 @@ const DynamicSlugPage = () => {
 							{renderHeader()}
 						</div>
 					</div>
+
 					<div className="relative mt-4">
 						<CiSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 font-bold text-customWhite h-full w-6" />
 						<Input
@@ -89,6 +89,9 @@ const DynamicSlugPage = () => {
 							onChange={handleSearchChange}
 							className="w-full pl-12 pr-3 py-3 border-none bg-blueYonder rounded-full text-customWhite placeholder-customWhite"
 						/>
+					</div>
+					<div className="relative mt-4">
+						Choose Movie
 					</div>
 
 
