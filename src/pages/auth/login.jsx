@@ -1,32 +1,34 @@
-// pages/login.js
 import { useState } from 'react';
-import { apiService } from '../../utils/api'; // Assuming apiService is in this path
-import { useRouter } from 'next/router'; // To redirect after login
+import { useRouter } from 'next/router';
+import { apiService } from '../../utils/api'; // Assuming this path for apiService
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '../../components/components/ui/card';
 
 const Login = () => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [error, setError] = useState('');
-	const router = useRouter(); // For redirection after successful login
+	const [isLoading, setIsLoading] = useState(false);
+	const router = useRouter();
 
 	const handleLogin = async (e) => {
 		e.preventDefault();
+		setIsLoading(true); // Set loading to true during API call
 
 		try {
-			// Call the login API
+			// Call your API for login
 			const response = await apiService.auth.login({ email, password });
 
 			if (response.status === 200) {
-				// Assuming the API response includes a token or a success message
-				// Store token or perform other actions like redirecting
-				localStorage.setItem('authToken', response.data.token); // Example of saving the token
+				// If successful, set the auth token in cookies
+				document.cookie = `authToken=${response.data.token}; path=/; HttpOnly; Secure`; // Secure and HttpOnly for production
 
-				// Redirect to dashboard or home page
-				router.push('/dashboard'); // Example of redirection
+				// Redirect to dashboard after login
+				router.push('/dashboard');
 			}
 		} catch (err) {
 			setError('Login failed. Please check your credentials and try again.');
+		} finally {
+			setIsLoading(false); // Disable loading after API call
 		}
 	};
 
@@ -47,7 +49,7 @@ const Login = () => {
 								value={email}
 								onChange={(e) => setEmail(e.target.value)}
 								required
-								className='w-full p-2 mb-3 bg-customWhite text-black'
+								className="w-full p-2 mb-3 bg-customWhite text-black"
 							/>
 						</div>
 						<div>
@@ -58,12 +60,16 @@ const Login = () => {
 								value={password}
 								onChange={(e) => setPassword(e.target.value)}
 								required
-								className='w-full p-2 mb-3 bg-customWhite text-black'
+								className="w-full p-2 mb-3 bg-customWhite text-black"
 							/>
 						</div>
 						{error && <p className="error" style={{ color: 'red', fontSize: '14px' }}>{error}</p>}
-						<button type="submit" className='bg-gradient-custom-gradient w-full h-full p-2.5 rounded-full'>
-							Login
+						<button
+							type="submit"
+							className="bg-gradient-custom-gradient w-full h-full p-2.5 rounded-full"
+							disabled={isLoading}
+						>
+							{isLoading ? 'Logging in...' : 'Login'}
 						</button>
 					</form>
 				</CardContent>

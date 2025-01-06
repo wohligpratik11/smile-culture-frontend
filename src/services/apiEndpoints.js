@@ -1,5 +1,5 @@
 // services/api.js
-import { api } from '@/utils/api';
+import { api } from '../utils/api';
 
 export const apiService = {
   // Movies
@@ -11,6 +11,7 @@ export const apiService = {
     delete: (id) => api.delete(`/api/movies/${id}`),
   },
 
+  // Auth
   auth: {
     login: (data) => api.post('/api/login/login', data),
   },
