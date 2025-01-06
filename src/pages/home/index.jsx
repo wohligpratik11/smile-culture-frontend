@@ -3,12 +3,12 @@ import Link from 'next/link';
 import { Card, CardContent } from '../../components/components/ui/card';
 import { ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/router';
-// import Polygon from '../../../public/assets/images/polygon.webp';
+import Cookies from 'js-cookie'; // Import the js-cookie library
 import { apiService, API_ENDPOINTS } from '../../lib/api/apiService';
 
 const SceneSelector = () => {
 	const router = useRouter();
-	const [isLoading, setIsLoading] = useState(false); // Loading state for the button
+	const [isLoading, setIsLoading] = useState(false);
 	const [loginMessage, setLoginMessage] = useState('');
 
 	const features = [
@@ -23,14 +23,12 @@ const SceneSelector = () => {
 			image: '/assets/images/lipsyncing.webp',
 			description: 'Precise lip synchronization',
 			path: '/movie/lip-syncing',
-
 		},
 		{
 			title: 'Multilingual',
 			image: '/assets/images/multilingual.webp',
 			description: 'Support for multiple languages',
 			path: '/movie/multilingual',
-
 		},
 	];
 
@@ -40,26 +38,25 @@ const SceneSelector = () => {
 	const handleHomeBackClick = () => {
 		router.push('https://erosnow.com/');
 	};
+
 	useEffect(() => {
 		const handleLogin = async () => {
-			setIsLoading(true); // Start loading
+			setIsLoading(true);
 			try {
 				const response = await apiService.post(API_ENDPOINTS.LOGIN, {
 					user_email: 'pratik.sawant@wohlig.in',
 					password: '123',
 				});
-				setLoginMessage('Login Successful!');
-				console.log('Login Response:', response.data?.data?.token);
+				Cookies.set('userData', JSON.stringify(response.data?.data));
 			} catch (error) {
-				setLoginMessage('Login Failed. Please try again.');
 				console.error('Login Error:', error);
 			} finally {
-				setIsLoading(false); // Stop loading
+				setIsLoading(false);
 			}
 		};
 
-		handleLogin(); // Trigger login on component mount
-	}, []); // Empty dependency array means this will run once on mount
+		handleLogin();
+	}, []);
 
 	return (
 		<div className="min-h-screen p-6 h-[835px]">
@@ -78,12 +75,6 @@ const SceneSelector = () => {
 						<div className="text-customWhite text-4xl font-semibold w-913 text-center">
 							Live Your Movie Dream—Step Into the Spotlight!
 						</div>
-						{/* <div >
-							<img
-								src="/assets/images/polygon.webp"
-								alt={`Polygon image`}
-								className="w-full h-full object-cover"
-							/></div> */}
 					</div>
 					<div className="flex justify-center space-x-4 mt-6">
 						<div className="text-customWhite text-xl leading-7 w-1004 text-center">
@@ -101,7 +92,6 @@ const SceneSelector = () => {
 						<div className="max-w-7xl mx-auto">
 							<div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
 								{features.map((feature) => (
-
 									<div key={feature.title} className="space-y-2">
 										<Link href={feature.path} passHref legacyBehavior>
 											<Card
@@ -120,19 +110,17 @@ const SceneSelector = () => {
 											</Card>
 										</Link>
 										<Link href={feature.path} passHref legacyBehavior>
-
 											<div
 												className="flex items-center justify-center text-center text-white text-lg font-medium h-14 border border-slateBlue rounded-2xl cursor-pointer"
 												style={{
-													background: 'linear-gradient(180deg, rgba(49, 58, 91, 0) -1.11%, rgba(49, 58, 91, 0.44) 23.83%, #313A5B 99.56%)',
+													background:
+														'linear-gradient(180deg, rgba(49, 58, 91, 0) -1.11%, rgba(49, 58, 91, 0.44) 23.83%, #313A5B 99.56%)',
 												}}
 											>
 												{feature.title}
 											</div>
 										</Link>
-
 									</div>
-
 								))}
 							</div>
 						</div>

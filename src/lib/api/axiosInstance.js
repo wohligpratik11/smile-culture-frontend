@@ -3,7 +3,8 @@ import { parseCookies } from 'nookies';
 
 const axiosInstance = () => {
   const cookies = parseCookies();
-  const authToken = cookies.auth_token;
+  const userData = cookies.userData ? JSON.parse(cookies.userData) : {}; // Parse the userData if available
+  const authToken = userData?.token;
 
   const instance = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_BASE_URL, // Base API URL

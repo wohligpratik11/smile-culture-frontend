@@ -6,9 +6,16 @@ export const getAuthToken = () => {
 };
 
 export const setAuthToken = (token) => {
-  setCookie(null, 'auth_token', token, { path: '/' });
+  setCookie(null, 'auth_token', token, {
+    path: '/',
+    // secure: process.env.NODE_ENV === 'production',
+    secure: process.env.NODE_ENV === 'development',
+    httpOnly: true,
+    sameSite: 'Strict',
+    maxAge: 60 * 60 * 24 * 7,
+  });
 };
 
 export const removeAuthToken = () => {
-  destroyCookie(null, 'auth_token');
+  destroyCookie(null, 'auth_token', { path: '/' });
 };

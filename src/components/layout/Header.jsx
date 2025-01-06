@@ -1,32 +1,48 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
-import ErosNow from "../../../public/assets/images/erosnow.webp"; // Import the image
+import ErosNow from "../../../public/assets/images/erosnow.webp";
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
 } from '../../components/components/ui/hover-card';
-import { useRouter } from 'next/router'; // Import useRouter
+import { useRouter } from 'next/router';
+import Cookies from 'js-cookie';
 
 const Header = () => {
-  const router = useRouter(); // Initialize useRouter
+  const router = useRouter();
 
+  const [userEmail, setUserEmail] = useState(null);
+  console.log("userEmail", userEmail)
+  useEffect(() => {
+    const userData = Cookies.get('userData');
+    if (userData) {
+      const parsedData = JSON.parse(userData);
+      setUserEmail(parsedData?.user_email);
+    }
+  }, []);
+  const getFirstLetter = (email) => {
+    if (email) {
+      return email.charAt(0).toUpperCase();
+    }
+    return '';
+  };
   const handleLoginClick = () => {
-    router.push('/auth/login'); // Navigate to the login page
+    router.push('/auth/login');
   };
 
   return (
-    <div className="flex items-center gap-2 justify-between"> {/* Ensure flex items are aligned to the left */}
-      {/* ErosNow Image */}
-      <img src={ErosNow.src} alt="ErosNow" className="mr-4 w-[14%] ml-5" /> {/* Add margin-right to give space between image and next content */}
-
+    <div className="flex items-center gap-2 justify-between">
+      <img src={ErosNow.src} alt="ErosNow" className="mr-4 w-[14%] ml-5" />
       <div className="relative mt-[3px] flex h-[61px] flex-grow items-center justify-around gap-2 rounded-full bg-gradient-custom-gradient px-8 py-2 shadow-xl shadow-shadow-500 dark:!bg-navy-800 dark:shadow-none md:flex-grow-0 md:gap-1 xl:w-[150px] xl:gap-2 text-white border border-buttonBorder !w-[100px]">
+        <Avatar className="ml-auto cursor-pointer text-4xl">
+          <AvatarFallback >{userEmail ? getFirstLetter(userEmail) : 'A'}</AvatarFallback>
+        </Avatar>
         {/* HoverCard with Avatar */}
-        <HoverCard>
+        {/* <HoverCard>
           <HoverCardTrigger>
             <Avatar className="ml-auto cursor-pointer">
-              <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>CN</AvatarFallback>
+              <AvatarFallback>{userEmail ? getFirstLetter(userEmail) : 'A'}</AvatarFallback>
             </Avatar>
           </HoverCardTrigger>
 
@@ -36,7 +52,7 @@ const Header = () => {
               <p>Dark Mode</p>
             </div>
           </HoverCardContent>
-        </HoverCard>
+        </HoverCard> */}
       </div>
     </div>
   );
