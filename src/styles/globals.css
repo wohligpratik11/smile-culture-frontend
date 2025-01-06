@@ -11,9 +11,9 @@
 
 /* Light theme */
 .light {
-  --background-color: #ffffff; /* Light background */
-  --text-color: #000000; /* Dark text */
-  --background-image: none; /* No background image for light theme */
+  --background-color: #ffffff;
+  --text-color: #000000;
+  --background-image: none;
 }
 
 /* Apply the theme variables */
@@ -22,8 +22,8 @@ body {
   background-color: var(--background-color);
   color: var(--text-color);
   background-image: var(--background-image); /* Apply background image */
-  background-size: cover; /* Ensure the image covers the full background */
-  background-position: center; /* Center the image */
+  background-size: cover;
+  background-position: center;
   font-family: 'Poppins', sans-serif;
   transition:
     background-color 0.3s,
@@ -33,20 +33,13 @@ body {
 .btn-gradient {
   background: linear-gradient(to right, #0ca1ea 50%, #3ec5b6 50%);
 }
-/* styles/globals.css */
 .bg-gradient-custom-gradient {
   background: linear-gradient(90deg, #0ca1ea, #3ec5b6);
 }
 .bg-polygon-gradient {
   background: linear-gradient(90deg, #10a3e7, #3ec4b9);
 }
-/* globals.css or your custom global styles file */
 
-/* globals.css or styles.css */
-
-/* globals.css or your custom global styles file */
-
-/* Define a CSS custom property (variable) for reusability */
 :root {
   --gradient-border: 1px solid transparent;
   --gradient-border-image: conic-gradient(
@@ -62,9 +55,14 @@ body {
     linear-gradient(0deg, #ffffff, #ffffff);
 }
 
-/* Apply to elements that need the gradient border */
 .gradient-border {
   border: var(--gradient-border);
   border-image: var(--gradient-border-image);
+  border-image-slice: 1;
+}
+
+.border-image-gradient {
+  border: 2px solid;
+  border-image-source: linear-gradient(180deg, #13a6e3 0%, #3bc2ba 100%);
   border-image-slice: 1;
 }

@@ -13,21 +13,25 @@ const DynamicSlugPage = () => {
 
 	const features = [
 		{
+			id: 1,
 			title: 'Face Swapping',
 			image: '/assets/images/img2.webp',
-			path: '/swapping/face-swap',
+			path: '/scenes/face-swap',
 		},
 		{
+			id: 2,
 			title: 'Lip Syncing',
 			image: '/assets/images/img2.webp',
-			path: '/lip-syncing',
+			path: '/scenes/lip-syncing',
 		},
 		{
+			id: 3,
 			title: 'Multilingual',
 			image: '/assets/images/img2.webp',
-			path: '/multilingual',
+			path: '/scenes/multilingual',
 		},
 	];
+
 
 	const handleSearchChange = (e) => {
 		setSearchQuery(e.target.value);
@@ -89,7 +93,7 @@ const DynamicSlugPage = () => {
 						) : (
 							filteredFeatures.map((feature) => (
 								<div key={feature.path} className="space-y-2">
-									<Link href={feature.path} passHref legacyBehavior>
+									<Link href={`${feature.path}?id=${feature.id}`} passHref legacyBehavior>
 										<Card
 											className="bg-blue-800/20 border-0 backdrop-blur-sm overflow-hidden cursor-pointer transform transition-transform duration-200 hover:scale-105 mb-6"
 											aria-label={`Go to ${feature.title}`}

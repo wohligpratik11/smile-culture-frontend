@@ -1,40 +1,34 @@
 import { useRouter } from 'next/router';
-import { useState, useEffect } from 'react';
-import { Input } from '../../components/components/ui/input'; // Import ShadCN Input
+import { useState } from 'react';
+import { Input } from '../../components/components/ui/input';
 import { Card, CardContent } from '../../components/components/ui/card';
-import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { CiSearch } from "react-icons/ci";
+import { Checkbox } from '../../components/components/ui/checkbox';
 
 const DynamicSlugPage = () => {
 	const router = useRouter();
 	const [searchQuery, setSearchQuery] = useState('');
 	const { slug } = router.query; // Extract slug from URL
+	const [selectedFeatures, setSelectedFeatures] = useState([]);
 
 	const features = [
-		{
-			id: 1,
-			title: 'Face Swapping',
-			image: '/assets/images/amir.webp',
-			path: '/characters/face-swap',
-		},
-		{
-			id: 2,
-			title: 'Lip Syncing',
-			image: '/assets/images/amir.webp',
-			path: '/characters/lip-syncing',
-		},
-		{
-			id: 3,
-			title: 'Multilingual',
-			image: '/assets/images/amir.webp',
-			path: '/characters/multilingual',
-		},
+		{ id: 1, title: 'Face Swapping', image: '/assets/images/raju.webp', path: '/scenes/face-swap' },
+		{ id: 2, title: 'Lip Syncing', image: '/assets/images/raju.webp', path: '/scenes/lip-syncing' },
+		{ id: 3, title: 'Multilingual', image: '/assets/images/raju.webp', path: '/scenes/multilingual' },
 	];
-
 
 	const handleSearchChange = (e) => {
 		setSearchQuery(e.target.value);
+	};
+
+	// Handle checkbox click to toggle selection
+	const handleCheckboxChange = (id) => {
+		setSelectedFeatures((prevSelected) =>
+			prevSelected.includes(id)
+				? prevSelected.filter((featureId) => featureId !== id) // Deselect
+				: [...prevSelected, id] // Select
+		);
 	};
 
 	const filteredFeatures = features.filter((feature) =>
@@ -83,35 +77,45 @@ const DynamicSlugPage = () => {
 							className="w-full pl-12 pr-3 py-3 border-none bg-blueYonder rounded-full text-customWhite placeholder-customWhite"
 						/>
 					</div>
-					<div className="relative mt-4">
-						Choose Scenes
-					</div>
-
+					<div className="relative mt-4">Choose Characters</div>
 					<div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-6">
 						{filteredFeatures.length === 0 ? (
 							<div>No features found</div>
 						) : (
 							filteredFeatures.map((feature) => (
-								<div key={feature.path} className="space-y-2">
-									<Link href={`${feature.path}?id=${feature.id}`} passHref legacyBehavior>
-										<Card
-											className="bg-blue-800/20 border-0 backdrop-blur-sm overflow-hidden cursor-pointer transform transition-transform duration-200 hover:scale-105 mb-6"
-											aria-label={`Go to ${feature.title}`}
-										>
-											<CardContent className="p-0">
-												<div className="relative aspect-video">
-													<img
-														src={feature.image}
-														alt={`${feature.title} image`}
-														className="w-full h-full object-cover"
-													/>
-												</div>
-											</CardContent>
-										</Card>
-									</Link>
+								<div key={feature.id} className="space-y-2 relative">
+									<div
+										className={`overflow-hidden cursor-pointer transform transition-transform duration-200 hover:scale-105 ${selectedFeatures.includes(feature.id) ? 'border-image-gradient' : ''}`}
+									>
+										<CardContent className="p-0" >
+											<div className="relative aspect-video">
+												<img
+													src={feature.image}
+													alt={`${feature.title} image`}
+													className="object-cover"
+												/>
+												{/* Checkbox positioned in the top-left corner */}
+												<Checkbox
+													checked={selectedFeatures.includes(feature.id)}
+													onCheckedChange={() => handleCheckboxChange(feature.id)} // Toggle on checkbox click
+													className="absolute top-2 left-2 z-10 border-image-gradient rounded-full"
+												/>
+											</div>
+										</CardContent>
+									</div>
 								</div>
 							))
 						)}
+					</div>
+
+					<div className="mt-6">
+						<p>Selected Features:</p>
+						<ul>
+							{selectedFeatures.map((id) => {
+								const feature = features.find((feature) => feature.id === id);
+								return <li key={id}>{feature?.title}</li>;
+							})}
+						</ul>
 					</div>
 				</div>
 			</Card>
