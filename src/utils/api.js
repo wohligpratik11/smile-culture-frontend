@@ -1,15 +1,13 @@
-import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
+import Cookies from 'js-cookie';
 
 const BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || 'https://api.yourbackend.com';
 
 const getToken = () => {
-  const cookieStore = cookies();
-  const token = cookieStore.get('auth_token')?.value;
+  const token = Cookies.get('auth_token');
 
   if (!token) {
-    redirect('/');
+    window.location.href = '/'; // Redirect to homepage if no token
   }
 
   return token;
@@ -25,7 +23,7 @@ const getHeaders = () => {
 
 const handleResponse = async (response) => {
   if (response.status === 401) {
-    redirect('/');
+    window.location.href = '/'; // Redirect to homepage on unauthorized
   }
 
   if (!response.ok) {
@@ -75,7 +73,3 @@ export const api = {
     return handleResponse(res);
   },
 };
-
-// Usage in Server Components:
-// const data = await api.get('/users');
-// const newUser = await api.post('/users', { name: 'John' });

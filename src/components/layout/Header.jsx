@@ -6,8 +6,15 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from '../../components/components/ui/hover-card';
+import { useRouter } from 'next/router'; // Import useRouter
 
 const Header = () => {
+  const router = useRouter(); // Initialize useRouter
+
+  const handleLoginClick = () => {
+    router.push('/auth/login'); // Navigate to the login page
+  };
+
   return (
     <div className="flex items-center gap-2 justify-between"> {/* Ensure flex items are aligned to the left */}
       {/* ErosNow Image */}
@@ -25,7 +32,7 @@ const Header = () => {
 
           <HoverCardContent className="bg-card-cardCustomBlue">
             <div>
-              <p className='pb-3'>Login</p>
+              <p className='pb-3 cursor-pointer' onClick={handleLoginClick}>Login</p>
               <p>Dark Mode</p>
             </div>
           </HoverCardContent>
