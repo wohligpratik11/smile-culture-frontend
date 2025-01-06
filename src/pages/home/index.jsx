@@ -1,11 +1,16 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Card, CardContent } from '../../components/components/ui/card';
 import { ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/router';
 // import Polygon from '../../../public/assets/images/polygon.webp';
+import { apiService, API_ENDPOINTS } from '../../lib/api/apiService';
+
 const SceneSelector = () => {
 	const router = useRouter();
+	const [isLoading, setIsLoading] = useState(false); // Loading state for the button
+	const [loginMessage, setLoginMessage] = useState('');
+
 	const features = [
 		{
 			title: 'Face Swapping',
@@ -35,6 +40,26 @@ const SceneSelector = () => {
 	const handleHomeBackClick = () => {
 		router.push('https://erosnow.com/');
 	};
+	useEffect(() => {
+		const handleLogin = async () => {
+			setIsLoading(true); // Start loading
+			try {
+				const response = await apiService.post(API_ENDPOINTS.LOGIN, {
+					user_email: 'pratik.sawant@wohlig.in',
+					password: '123',
+				});
+				setLoginMessage('Login Successful!');
+				console.log('Login Response:', response.data?.data?.token);
+			} catch (error) {
+				setLoginMessage('Login Failed. Please try again.');
+				console.error('Login Error:', error);
+			} finally {
+				setIsLoading(false); // Stop loading
+			}
+		};
+
+		handleLogin(); // Trigger login on component mount
+	}, []); // Empty dependency array means this will run once on mount
 
 	return (
 		<div className="min-h-screen p-6 h-[835px]">

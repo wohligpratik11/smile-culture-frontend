@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { apiService } from '../../utils/api'; // Assuming this path for apiService
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '../../components/components/ui/card';
 
 const Login = () => {

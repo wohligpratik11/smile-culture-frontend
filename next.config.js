@@ -5,7 +5,7 @@ const nextConfig = {
     PORT: process.env.PORT || 3001,
     NEXT_PUBLIC_API_URL:
       process.env.NEXT_PUBLIC_API_URL ||
-      `http://localhost:${process.env.PORT || 3001}`,
+      `http://localhost:${process.env.PORT || 3000}`,
   },
 };
 
