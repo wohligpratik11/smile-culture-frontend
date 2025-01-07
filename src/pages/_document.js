@@ -5,9 +5,7 @@ class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>
-          {/* Add the favicon */}
           <link rel="icon" href="/favicon.ico" />
-          {/* Add global stylesheets, including Tailwind CSS */}
           <link rel="stylesheet" href="../../src/styles/globals.css" />
           <link
             href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"

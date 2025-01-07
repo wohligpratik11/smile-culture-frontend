@@ -4,7 +4,6 @@ import { Card, CardContent } from '../../components/components/ui/card';
 import { ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/router';
 import Cookies from 'js-cookie'; // Import the js-cookie library
-import { apiService, API_ENDPOINTS } from '../../lib/api/apiService';
 
 const SceneSelector = () => {
 	const router = useRouter();
@@ -38,25 +37,6 @@ const SceneSelector = () => {
 	const handleHomeBackClick = () => {
 		router.push('https://erosnow.com/');
 	};
-
-	useEffect(() => {
-		const handleLogin = async () => {
-			setIsLoading(true);
-			try {
-				const response = await apiService.post(API_ENDPOINTS.LOGIN, {
-					user_email: 'pratik.sawant@wohlig.in',
-					password: '123',
-				});
-				Cookies.set('userData', JSON.stringify(response.data?.data));
-			} catch (error) {
-				console.error('Login Error:', error);
-			} finally {
-				setIsLoading(false);
-			}
-		};
-
-		handleLogin();
-	}, []);
 
 	return (
 		<div className="min-h-screen p-6 h-[835px]">

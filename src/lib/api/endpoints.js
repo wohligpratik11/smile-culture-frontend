@@ -1,5 +1,4 @@
 export const API_ENDPOINTS = {
   LOGIN: '/api/login/login',
-  USERS: '/users',
-  POSTS: '/posts',
+  GET_ALL_MOVIES_LIST: '/api/movies/getAllMoviesList',
 };
