@@ -5,40 +5,29 @@ import { Card, CardContent } from '../../components/components/ui/card';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { CiSearch } from "react-icons/ci";
+import { apiService, API_ENDPOINTS } from '../../lib/api/apiService';
+import axiosInstance from '../../lib/api/axiosInstance';
 
-const DynamicSlugPage = () => {
+const DynamicSlugPage = ({ scenes }) => {
 	const router = useRouter();
 	const [searchQuery, setSearchQuery] = useState('');
 	const { slug } = router.query; // Extract slug from URL
 
-	const features = [
-		{
-			id: 1,
-			title: 'Face Swapping',
-			image: '/assets/images/amir.webp',
-			path: '/characters/face-swap',
-		},
-		{
-			id: 2,
-			title: 'Lip Syncing',
-			image: '/assets/images/amir.webp',
-			path: '/characters/lip-syncing',
-		},
-		{
-			id: 3,
-			title: 'Multilingual',
-			image: '/assets/images/amir.webp',
-			path: '/characters/multilingual',
-		},
-	];
+	const features = scenes?.map(scenes => ({
+		id: scenes.scenes_id,
+		title: scenes.scenes_name,
+		name: scenes.scenes_name,
+		image: scenes.thumbnail,
+		path: `/scenes/${scenes.scenes_id}`,
+	}));
 
 
 	const handleSearchChange = (e) => {
 		setSearchQuery(e.target.value);
 	};
 
-	const filteredFeatures = features.filter((feature) =>
-		feature.title.toLowerCase().includes(searchQuery.toLowerCase())
+	const filteredFeatures = features?.filter((feature) =>
+		feature?.title?.toLowerCase()?.includes(searchQuery.toLowerCase())
 	);
 
 	const renderHeader = () => {
@@ -84,16 +73,16 @@ const DynamicSlugPage = () => {
 						/>
 					</div>
 					<div className="relative mt-4">
-						Choose Scenes
+						Choose scenes
 					</div>
 
 					<div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-6">
-						{filteredFeatures.length === 0 ? (
+						{filteredFeatures?.length === 0 ? (
 							<div>No features found</div>
 						) : (
-							filteredFeatures.map((feature) => (
+							filteredFeatures?.map((feature) => (
 								<div key={feature.path} className="space-y-2">
-									<Link href={`${feature.path}?id=${feature.id}`} passHref legacyBehavior>
+									<Link href={`${feature.path}`} passHref legacyBehavior>
 										<Card
 											className="bg-blue-800/20 border-0 backdrop-blur-sm overflow-hidden cursor-pointer transform transition-transform duration-200 hover:scale-105 mb-6"
 											aria-label={`Go to ${feature.title}`}
@@ -118,5 +107,30 @@ const DynamicSlugPage = () => {
 		</div>
 	);
 };
+
+export async function getServerSideProps(context) {
+	console.log('Inside getServerSideProps scenes');
+	try {
+		const axios = axiosInstance(context);
+		const response = await axios.post(API_ENDPOINTS.GET_ALL_SCENE_LIST, {
+			page: 1,
+		});
+		console.log('Fetched scenes:', response?.data?.data);
+		return {
+			props: {
+				scenes: response?.data?.data?.data,
+			},
+		};
+	} catch (error) {
+		console.error('Error fetching scenes:', error);
+		return {
+			props: {
+				scenes: [],
+			},
+		};
+	}
+}
+
+
 
 export default DynamicSlugPage;
