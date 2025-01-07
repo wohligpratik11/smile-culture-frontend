@@ -7,11 +7,13 @@ import { ArrowLeft } from 'lucide-react';
 import { CiSearch } from "react-icons/ci";
 import { apiService, API_ENDPOINTS } from '../../lib/api/apiService';
 import axiosInstance from '../../lib/api/axiosInstance';
+import Cookie from 'js-cookie'; // Import js-cookie
 
 const DynamicSlugPage = ({ movies }) => {
 	const router = useRouter();
+	const titleFromCookie = Cookie.get('title');
+
 	const [searchQuery, setSearchQuery] = useState('');
-	const { slug } = router.query;
 
 	const features = movies?.map(movie => ({
 		id: movie.movie_id,
@@ -20,7 +22,6 @@ const DynamicSlugPage = ({ movies }) => {
 		image: movie.thumbnail,
 		path: `/scenes/${movie.movie_id}`,
 	}));
-
 
 	const handleSearchChange = (e) => {
 		setSearchQuery(e.target.value);
@@ -31,19 +32,12 @@ const DynamicSlugPage = ({ movies }) => {
 	);
 
 	const renderHeader = () => {
-		switch (slug) {
-			case 'face-swap':
-				return <h1 className="text-2xl leading-10 text-customWhite font-medium mb-4">Face Swapping</h1>;
-			case 'lip-syncing':
-				return <h1 className="text-2xl leading-10 text-customWhite font-medium mb-4">Lip Syncing</h1>;
-			case 'multilingual':
-				return <h1 className="text-2xl leading-10 text-customWhite font-medium mb-4">Multilingual</h1>;
-			default:
-				return <h1 className="text-2xl leading-10 text-customWhite font-medium mb-4">Loading...</h1>;
+		if (titleFromCookie) {
+			const formattedTitle = titleFromCookie.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
+			return <h1 className="text-2xl leading-10 text-customWhite capitalize font-medium mb-4">{formattedTitle}</h1>;
 		}
+		return <h1 className="text-2xl leading-10 text-customWhite capitalize font-medium mb-4">Loading...</h1>;
 	};
-
-	if (!slug) return <div>Loading...</div>;
 
 	return (
 		<div className="min-h-screen p-6 h-[835px]">
@@ -76,9 +70,11 @@ const DynamicSlugPage = ({ movies }) => {
 						Choose Movie
 					</div>
 
-					<div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-6">
+					<div className={`mt-6 ${filteredFeatures.length > 0 ? 'grid grid-cols-1 md:grid-cols-4 gap-6' : ''}`}>
 						{filteredFeatures.length === 0 ? (
-							<div>No features found</div>
+							<div className="flex justify-center items-center h-full">
+								No Movie found
+							</div>
 						) : (
 							filteredFeatures.map((feature) => (
 								<div key={feature.path} className="space-y-2">
@@ -102,6 +98,14 @@ const DynamicSlugPage = ({ movies }) => {
 							))
 						)}
 					</div>
+
+				</div>
+				<div className="flex justify-end space-x-4 mt-6">
+					<button
+						className="px-4 py-2 rounded-lg bg-gradient-custom-gradient border border-buttonBorder w-52 h-12"
+					>
+						Next
+					</button>
 				</div>
 			</Card>
 		</div>
@@ -130,7 +134,5 @@ export async function getServerSideProps(context) {
 		};
 	}
 }
-
-
 
 export default DynamicSlugPage;

@@ -15,19 +15,19 @@ const SceneSelector = () => {
 			title: 'face-Swap',
 			image: '/assets/images/faceswap.webp',
 			description: 'Advanced face swapping technology',
-			path: '/movie/face-swap',
+			path: '/movie',
 		},
 		{
 			title: 'lip-syncing',
 			image: '/assets/images/lipsyncing.webp',
-			description: 'Precise lip synchronization',
-			path: '/movie/lipsync',
+			description:'Precise lip synchronization',
+			path: '/movie',
 		},
 		{
 			title: 'multilingual',
 			image: '/assets/images/multilingual.webp',
 			description: 'Support for multiple languages',
-			path: '/movie/multilingual',
+			path: '/movie',
 		},
 	];
 

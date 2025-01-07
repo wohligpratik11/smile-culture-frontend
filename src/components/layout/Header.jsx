@@ -17,8 +17,12 @@ const Header = () => {
   useEffect(() => {
     const userData = Cookies.get('userData');
     if (userData) {
-      const parsedData = JSON.parse(userData);
-      setUserEmail(parsedData);
+      try {
+        const parsedData = JSON.parse(userData);
+        setUserEmail(parsedData?.email || ''); // Ensure you extract only the necessary data
+      } catch (error) {
+        console.error('Error parsing userData from cookie:', error);
+      }
     }
   }, []);
 
