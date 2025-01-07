@@ -1,11 +1,11 @@
 import axios from 'axios';
 import { parseCookies } from 'nookies';
 
-const axiosInstance = () => {
-  const cookies = parseCookies();
+const axiosInstance = (ctx = null) => {
+  const cookies = parseCookies(ctx); 
   const userData = cookies.userData ? JSON.parse(cookies.userData) : {};
   const authToken = userData?.token?.trim();
-  console.log('authTokenm', authToken);
+
   const instance = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
     headers: {

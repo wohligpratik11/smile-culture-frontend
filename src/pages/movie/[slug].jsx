@@ -5,32 +5,21 @@ import { Card, CardContent } from '../../components/components/ui/card';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { CiSearch } from "react-icons/ci";
+import { apiService, API_ENDPOINTS } from '../../lib/api/apiService';
+import axiosInstance from '../../lib/api/axiosInstance';
 
-const DynamicSlugPage = () => {
+const DynamicSlugPage = ({ movies }) => {
 	const router = useRouter();
 	const [searchQuery, setSearchQuery] = useState('');
 	const { slug } = router.query; // Extract slug from URL
 
-	const features = [
-		{
-			id: 1,
-			title: 'Face Swapping',
-			image: '/assets/images/img2.webp',
-			path: '/scenes/face-swap',
-		},
-		{
-			id: 2,
-			title: 'Lip Syncing',
-			image: '/assets/images/img2.webp',
-			path: '/scenes/lip-syncing',
-		},
-		{
-			id: 3,
-			title: 'Multilingual',
-			image: '/assets/images/img2.webp',
-			path: '/scenes/multilingual',
-		},
-	];
+	const features = movies?.map(movie => ({
+		id: movie.movie_id,
+		title: movie.movie_name, 
+		name: movie.movie_name,
+		image: movie.thumbnail,
+		path: `/scenes/${movie.movie_id}`, 
+	}));
 
 
 	const handleSearchChange = (e) => {
@@ -38,7 +27,7 @@ const DynamicSlugPage = () => {
 	};
 
 	const filteredFeatures = features.filter((feature) =>
-		feature.title.toLowerCase().includes(searchQuery.toLowerCase())
+		feature?.title?.toLowerCase()?.includes(searchQuery.toLowerCase())
 	);
 
 	const renderHeader = () => {
@@ -93,7 +82,7 @@ const DynamicSlugPage = () => {
 						) : (
 							filteredFeatures.map((feature) => (
 								<div key={feature.path} className="space-y-2">
-									<Link href={`${feature.path}?id=${feature.id}`} passHref legacyBehavior>
+									<Link href={`${feature.path}`} passHref legacyBehavior>
 										<Card
 											className="bg-blue-800/20 border-0 backdrop-blur-sm overflow-hidden cursor-pointer transform transition-transform duration-200 hover:scale-105 mb-6"
 											aria-label={`Go to ${feature.title}`}
@@ -118,5 +107,30 @@ const DynamicSlugPage = () => {
 		</div>
 	);
 };
+
+export async function getServerSideProps(context) {
+	console.log('Inside getServerSideProps');
+	try {
+		const axios = axiosInstance(context);
+		const response = await axios.post(API_ENDPOINTS.GET_ALL_MOVIES_LIST, {
+			page: 1,
+		});
+		console.log('Fetched movies:', response?.data?.data);
+		return {
+			props: {
+				movies: response?.data?.data?.data,
+			},
+		};
+	} catch (error) {
+		console.error('Error fetching movies:', error);
+		return {
+			props: {
+				movies: [],
+			},
+		};
+	}
+}
+
+
 
 export default DynamicSlugPage;
