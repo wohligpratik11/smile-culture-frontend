@@ -11,9 +11,13 @@ import Cookie from 'js-cookie'; // Import js-cookie
 
 const DynamicSlugPage = ({ movies }) => {
 	const router = useRouter();
-	const titleFromCookie = Cookie.get('title');
-
+	const [titleFromCookie, setTitleFromCookie] = useState(null);
 	const [searchQuery, setSearchQuery] = useState('');
+
+	useEffect(() => {
+		const title = Cookie.get('title');
+		setTitleFromCookie(title);
+	}, []);
 
 	const features = movies?.map(movie => ({
 		id: movie.movie_id,
