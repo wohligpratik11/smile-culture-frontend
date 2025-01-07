@@ -1,6 +1,6 @@
 // hooks/useLogin.js
 import { useEffect } from 'react';
-import { apiService, API_ENDPOINTS } from '../lib/api/apiService';
+import { apiService, API_ENDPOINTS } from '../../lib/api/apiService';
 import Cookies from 'js-cookie';
 
 export const useLogin = () => {

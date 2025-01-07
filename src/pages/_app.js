@@ -5,7 +5,7 @@ import '../../src/styles/globals.css';
 import CustomThemeProvider from '../context/ThemeProvider';
 import Layout from '@/components/layout/Layout';
 import Cookies from 'js-cookie'; // Import the js-cookie library
-import { useLogin } from '../hooks/useLogin';
+import { useLogin } from '../../src/components/hooks/useLogin';
 
 function MyApp({ Component, pageProps }) {
   useLogin();
