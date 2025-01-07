@@ -11,14 +11,14 @@ import axiosInstance from '../../lib/api/axiosInstance';
 const DynamicSlugPage = ({ movies }) => {
 	const router = useRouter();
 	const [searchQuery, setSearchQuery] = useState('');
-	const { slug } = router.query; // Extract slug from URL
+	const { slug } = router.query;
 
 	const features = movies?.map(movie => ({
 		id: movie.movie_id,
-		title: movie.movie_name, 
+		title: movie.movie_name,
 		name: movie.movie_name,
 		image: movie.thumbnail,
-		path: `/scenes/${movie.movie_id}`, 
+		path: `/scenes/${movie.movie_id}`,
 	}));
 
 

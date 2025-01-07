@@ -12,19 +12,19 @@ const SceneSelector = () => {
 
 	const features = [
 		{
-			title: 'Face Swapping',
+			title: 'face-Swap',
 			image: '/assets/images/faceswap.webp',
 			description: 'Advanced face swapping technology',
 			path: '/movie/face-swap',
 		},
 		{
-			title: 'Lip-syncing',
+			title: 'lip-syncing',
 			image: '/assets/images/lipsyncing.webp',
 			description: 'Precise lip synchronization',
-			path: '/movie/lip-syncing',
+			path: '/movie/lipsync',
 		},
 		{
-			title: 'Multilingual',
+			title: 'multilingual',
 			image: '/assets/images/multilingual.webp',
 			description: 'Support for multiple languages',
 			path: '/movie/multilingual',
@@ -34,8 +34,13 @@ const SceneSelector = () => {
 	const handleBackClick = () => {
 		router.back();
 	};
+
 	const handleHomeBackClick = () => {
 		router.push('https://erosnow.com/');
+	};
+
+	const handleFeatureClick = (feature) => {
+		Cookies.set('title', feature?.title);
 	};
 
 	return (
@@ -77,6 +82,7 @@ const SceneSelector = () => {
 											<Card
 												className="bg-blue-800/20 border-0 backdrop-blur-sm overflow-hidden transform transition-transform duration-200 hover:scale-105 mb-6 cursor-pointer"
 												aria-label={`Go to ${feature.title}`}
+												onClick={() => handleFeatureClick(feature)}
 											>
 												<CardContent className="p-0">
 													<div className="relative aspect-video">
@@ -91,7 +97,7 @@ const SceneSelector = () => {
 										</Link>
 										<Link href={feature.path} passHref legacyBehavior>
 											<div
-												className="flex items-center justify-center text-center text-white text-lg font-medium h-14 border border-slateBlue rounded-2xl cursor-pointer"
+												className="flex items-center justify-center text-center text-white text-lg font-medium h-14 border border-slateBlue rounded-2xl cursor-pointer capitalize"
 												style={{
 													background:
 														'linear-gradient(180deg, rgba(49, 58, 91, 0) -1.11%, rgba(49, 58, 91, 0.44) 23.83%, #313A5B 99.56%)',

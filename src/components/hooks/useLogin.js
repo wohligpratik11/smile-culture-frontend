@@ -11,7 +11,6 @@ export const useLogin = () => {
           user_email: 'pratik.sawant@wohlig.in',
           password: '123',
         });
-
         Cookies.set('userData', JSON.stringify(response.data?.data), {
           expires: 7,
         });
