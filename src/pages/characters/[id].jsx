@@ -27,7 +27,7 @@ const DynamicSlugPage = ({ characters }) => {
 		name: character.character_real_name,
 		image: character.url,
 		characterMovieName: character.character_movie_name,
-		path: `/upload/${character.scene_id}`,
+		path: `/upload`,
 	}));
 
 	const handleSearchChange = (e) => {
@@ -133,10 +133,10 @@ const DynamicSlugPage = ({ characters }) => {
 };
 
 export async function getServerSideProps(context) {
-	const { slug } = context.params;
+	const { id } = context.params;
 	try {
 		const axios = axiosInstance(context);
-		const payload = { page: 1, scene_id: slug };
+		const payload = { page: 1, scene_id: id };
 		const response = await axios.post(API_ENDPOINTS.GET_ALL_CHARACTERS_LIST, payload);
 		return {
 			props: {

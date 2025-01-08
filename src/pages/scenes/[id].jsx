@@ -126,10 +126,10 @@ const DynamicSlugPage = ({ scenes }) => {
 };
 
 export async function getServerSideProps(context) {
-	const { slug } = context.params;
+	const { id } = context.params;
 	try {
 		const axios = axiosInstance(context);
-		const payload = { page: 1, movie_id: slug };
+		const payload = { page: 1, movie_id: id };
 		const response = await axios.post(API_ENDPOINTS.GET_ALL_SCENE_LIST, payload);
 		return {
 			props: {
