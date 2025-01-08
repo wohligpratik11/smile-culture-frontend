@@ -20,7 +20,7 @@ const SceneSelector = () => {
 		{
 			title: 'lip-syncing',
 			image: '/assets/images/lipsyncing.webp',
-			description:'Precise lip synchronization',
+			description: 'Precise lip synchronization',
 			path: '/movie',
 		},
 		{
@@ -46,8 +46,8 @@ const SceneSelector = () => {
 	return (
 		<div className="min-h-screen p-6 h-[835px]">
 			<Card className="bg-card-cardCustomBlue p-6">
-				<div className="space-y-4">
-					<div className="relative">
+				<div className="space-y-4 mt-4">
+					{/* <div className="relative">
 						<button
 							className="px-4 py-2 rounded-lg bg-gradient-custom-gradient border border-buttonBorder"
 							onClick={handleHomeBackClick}
@@ -55,7 +55,7 @@ const SceneSelector = () => {
 						>
 							<ArrowLeft />
 						</button>
-					</div>
+					</div> */}
 					<div className="flex justify-center space-x-4">
 						<div className="text-customWhite text-4xl font-semibold w-913 text-center">
 							Live Your Movie Dream—Step Into the Spotlight!

@@ -10,24 +10,24 @@ import axiosInstance from '../../lib/api/axiosInstance';
 import Cookie from 'js-cookie';
 import Image from 'next/image';
 
-const DynamicSlugPage = ({ scenes }) => {
+const DynamicSlugPage = ({ characters }) => {
 	const router = useRouter();
 	const [titleFromCookie, setTitleFromCookie] = useState(null);
 	const [searchQuery, setSearchQuery] = useState('');
-	const [selectedScenes, setSelectedScenes] = useState(null);
-
+	const [selectedCharacters, setSelectedCharacters] = useState([]);
+	console.log("setSelectedCharacters", selectedCharacters)
 	useEffect(() => {
 		const title = Cookie.get('title');
 		setTitleFromCookie(title);
 	}, []);
 
-	const features = scenes?.map(scene => ({
-		id: scene.movie_id,
-		title: scene.character_movie_name,
-		name: scene.character_real_name,
-		image: scene.url,
-		characterMovieName: scene.character_movie_name,
-		path: `/characters/${scene.scene_id}`,
+	const features = characters?.map(character => ({
+		id: character.character_id, // Ensure the character has a unique id
+		title: character.character_movie_name,
+		name: character.character_real_name,
+		image: character.url,
+		characterMovieName: character.character_movie_name,
+		path: `/upload/${character.scene_id}`,
 	}));
 
 	const handleSearchChange = (e) => {
@@ -38,8 +38,16 @@ const DynamicSlugPage = ({ scenes }) => {
 		feature?.title?.toLowerCase()?.includes(searchQuery.toLowerCase())
 	);
 
-	const handleScenesSelect = (scenes) => {
-		setSelectedScenes(prev => (prev?.id === scenes.id ? null : scenes));
+	const handleCharactersSelect = (character) => {
+		setSelectedCharacters(prev => {
+			if (prev.some(selected => selected.id === character.id)) {
+				// If already selected, deselect
+				return prev.filter(selected => selected.id !== character.id);
+			} else {
+				// Otherwise, select the character
+				return [...prev, character];
+			}
+		});
 	};
 
 	const renderHeader = () => {
@@ -78,21 +86,21 @@ const DynamicSlugPage = ({ scenes }) => {
 						/>
 					</div>
 					<div className="relative mt-4">
-						Choose Scenes
+						Choose Characters
 					</div>
 
 					<div className={`mt-6 ${filteredFeatures?.length > 0 ? 'grid grid-cols-1 md:grid-cols-4 gap-6' : ''}`}>
 						{filteredFeatures?.length === 0 ? (
 							<div className="flex justify-center items-center h-full">
-								No Scenes found
+								No Characters found
 							</div>
 						) : (
 							filteredFeatures?.map((feature) => (
-								<div key={feature.path} className="space-y-2">
+								<div key={feature.id} className="space-y-2">
 									<Card
-										className={`bg-blue-800/20 border-0 backdrop-blur-sm overflow-hidden cursor-pointer transform transition-transform duration-200 hover:scale-105 mb-6 ${selectedScenes?.id === feature.id ? 'border-4 border-image-gradient' : ''}`}
+										className={`bg-blue-800/20 border-0 backdrop-blur-sm overflow-hidden cursor-pointer transform transition-transform duration-200 hover:scale-105 mb-6 ${selectedCharacters.some(selected => selected.id === feature.id) ? 'border-4 border-image-gradient' : ''}`}
 										aria-label={`Select ${feature.title}`}
-										onClick={() => handleScenesSelect(feature)}
+										onClick={() => handleCharactersSelect(feature)}
 									>
 										<CardContent className="p-0">
 											<div className="relative aspect-video">
@@ -103,7 +111,6 @@ const DynamicSlugPage = ({ scenes }) => {
 													objectFit="cover"
 													priority={true}
 												/>
-
 											</div>
 										</CardContent>
 									</Card>
@@ -116,8 +123,8 @@ const DynamicSlugPage = ({ scenes }) => {
 				<div className="flex justify-end space-x-4 mt-6">
 					<button
 						className="px-4 py-2 rounded-lg bg-gradient-custom-gradient border border-buttonBorder w-52 h-12"
-						onClick={() => selectedScenes && router.push(selectedScenes.path)}
-						disabled={!selectedScenes}
+						onClick={() => selectedCharacters.length > 0 && router.push(selectedCharacters[0].path)} // Navigate to first selected character's path
+						disabled={selectedCharacters.length === 0}
 					>
 						Next
 					</button>
@@ -135,19 +142,17 @@ export async function getServerSideProps(context) {
 		const response = await axios.post(API_ENDPOINTS.GET_ALL_CHARACTERS_LIST, payload);
 		return {
 			props: {
-				scenes: response?.data?.data?.data || [],
+				characters: response?.data?.data?.data || [],
 			},
 		};
 	} catch (error) {
 		console.error('Error fetching movies:', error);
 		return {
 			props: {
-				scenes: [],
+				characters: [],
 			},
 		};
 	}
 }
-
-
 
 export default DynamicSlugPage;
