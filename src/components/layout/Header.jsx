@@ -14,13 +14,11 @@ const Header = () => {
   const router = useRouter();
 
   const [userEmail, setUserEmail] = useState(null);
-  console.log("setUserEmail", userEmail)
   useEffect(() => {
     const userData = Cookies.get('userData');
     if (userData) {
       try {
         const parsedData = JSON.parse(userData);
-        console.log("userData", parsedData);
         setUserEmail(parsedData?.user_email || ''); // Ensure you extract only the necessary data
       } catch (error) {
         console.error('Error parsing userData from cookie:', error);
