@@ -9,14 +9,31 @@ import { apiService, API_ENDPOINTS } from '../../lib/api/apiService';
 import axiosInstance from '../../lib/api/axiosInstance';
 import Cookie from 'js-cookie';
 import Image from 'next/image';
+import CryptoJS from 'crypto-js';
 
-const uploadPage = ({ movies }) => {
+const uploadPage = ({ characters }) => {
 	const router = useRouter();
 	const [titleFromCookie, setTitleFromCookie] = useState(null);
-
+	const [selectedCharacters, setSelectedCharacters] = useState([]);
+	console.log("selectedCharacters", selectedCharacters)
 	useEffect(() => {
+		// Get the title from cookies
 		const title = Cookie.get('title');
 		setTitleFromCookie(title);
+
+		// Retrieve the encrypted selected characters from cookies
+		const encryptedData = Cookie.get('selectedCharacters');
+
+		if (encryptedData) {
+			// Decrypt the data
+			const bytes = CryptoJS.AES.decrypt(encryptedData, 'your-encryption-key');
+			const decryptedData = bytes.toString(CryptoJS.enc.Utf8);
+
+			if (decryptedData) {
+				// Parse the decrypted data to an array of characters
+				setSelectedCharacters(JSON.parse(decryptedData));
+			}
+		}
 	}, []);
 
 	const renderHeader = () => {
@@ -61,23 +78,26 @@ const uploadPage = ({ movies }) => {
 		</div>
 	);
 };
-
 export async function getServerSideProps(context) {
 	try {
 		const axios = axiosInstance(context);
-		const response = await axios.post(API_ENDPOINTS.GET_ALL_MOVIES_LIST, {
-			page: 1,
-		});
+		const selectedCharactersCookie = Cookie.get('selectedCharacters');
+		const payload = selectedCharactersCookie ? {
+			selected_characters: selectedCharactersCookie,
+		} : {};
+
+
+		const response = await axios.post(API_ENDPOINTS.GET_ALL_SELECTED_CHARACTERS_LIST, payload);
 		return {
 			props: {
-				movies: response?.data?.data?.data || [],
+				characters: response?.data?.data?.data || [],
 			},
 		};
 	} catch (error) {
 		console.error('Error fetching movies:', error);
 		return {
 			props: {
-				movies: [],
+				characters: [],
 			},
 		};
 	}

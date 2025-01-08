@@ -9,20 +9,20 @@ import { apiService, API_ENDPOINTS } from '../../lib/api/apiService';
 import axiosInstance from '../../lib/api/axiosInstance';
 import Cookie from 'js-cookie';
 import Image from 'next/image';
+import CryptoJS from 'crypto-js';
 
 const CharactersPage = ({ characters }) => {
 	const router = useRouter();
 	const [titleFromCookie, setTitleFromCookie] = useState(null);
 	const [searchQuery, setSearchQuery] = useState('');
 	const [selectedCharacters, setSelectedCharacters] = useState([]);
-	console.log("setSelectedCharacters", selectedCharacters)
 	useEffect(() => {
 		const title = Cookie.get('title');
 		setTitleFromCookie(title);
 	}, []);
 
 	const features = characters?.map(character => ({
-		id: character.character_id, 
+		id: character.character_id,
 		title: character.character_movie_name,
 		name: character.character_real_name,
 		image: character.url,
@@ -47,6 +47,20 @@ const CharactersPage = ({ characters }) => {
 			}
 		});
 	};
+	const handleNextClick = () => {
+		if (selectedCharacters.length > 0) {
+			const encryptedData = CryptoJS.AES.encrypt(
+				JSON.stringify(selectedCharacters),
+				'your-encryption-key'
+			).toString();
+
+			Cookie.set('selectedCharacters', encryptedData, { secure: true });
+
+			router.push(selectedCharacters[0].path);
+		}
+	};
+
+
 
 	const renderHeader = () => {
 		if (titleFromCookie) {
@@ -121,7 +135,7 @@ const CharactersPage = ({ characters }) => {
 				<div className="flex justify-end space-x-4 mt-6">
 					<button
 						className="px-4 py-2 rounded-lg bg-gradient-custom-gradient border border-buttonBorder w-52 h-12"
-						onClick={() => selectedCharacters.length > 0 && router.push(selectedCharacters[0].path)} 
+						onClick={handleNextClick}
 						disabled={selectedCharacters.length === 0}
 					>
 						Next
