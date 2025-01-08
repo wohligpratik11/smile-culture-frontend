@@ -7,20 +7,27 @@ import { ArrowLeft } from 'lucide-react';
 import { CiSearch } from "react-icons/ci";
 import { apiService, API_ENDPOINTS } from '../../lib/api/apiService';
 import axiosInstance from '../../lib/api/axiosInstance';
+import Cookie from 'js-cookie'; // Import js-cookie
 
 const DynamicSlugPage = ({ scenes }) => {
+	console.log('DynamicSlugPage', scenes);
 	const router = useRouter();
+	const [titleFromCookie, setTitleFromCookie] = useState(null);
 	const [searchQuery, setSearchQuery] = useState('');
-	const { slug } = router.query; // Extract slug from URL
+	const [selectedScenes, setSelectedScenes] = useState(null);
 
-	const features = scenes?.map(scenes => ({
-		id: scenes.scenes_id,
-		title: scenes.scenes_name,
-		name: scenes.scenes_name,
-		image: scenes.thumbnail,
-		path: `/scenes/${scenes.scenes_id}`,
+	useEffect(() => {
+		const title = Cookie.get('title');
+		setTitleFromCookie(title);
+	}, []);
+
+	const features = scenes?.map(scene => ({
+		id: scene.scene_id,
+		title: scene.scene_name,
+		name: scene.scene_name,
+		image: scene.thumbnailUrl,
+		path: `/characters/${scene.scene_id}`,
 	}));
-
 
 	const handleSearchChange = (e) => {
 		setSearchQuery(e.target.value);
@@ -30,20 +37,18 @@ const DynamicSlugPage = ({ scenes }) => {
 		feature?.title?.toLowerCase()?.includes(searchQuery.toLowerCase())
 	);
 
-	const renderHeader = () => {
-		switch (slug) {
-			case 'face-swap':
-				return <h1 className="text-2xl leading-10 text-customWhite font-medium mb-4">Face Swapping</h1>;
-			case 'lip-syncing':
-				return <h1 className="text-2xl leading-10 text-customWhite font-medium mb-4">Lip Syncing</h1>;
-			case 'multilingual':
-				return <h1 className="text-2xl leading-10 text-customWhite font-medium mb-4">Multilingual</h1>;
-			default:
-				return <h1 className="text-2xl leading-10 text-customWhite font-medium mb-4">Loading...</h1>;
-		}
+	const handleScenesSelect = (scenes) => {
+		// Toggle selection: If the movie is already selected, deselect it. Otherwise, select it.
+		setSelectedScenes(prev => (prev?.id === scenes.id ? null : scenes));
 	};
 
-	if (!slug) return <div>Loading...</div>;
+	const renderHeader = () => {
+		if (titleFromCookie) {
+			const formattedTitle = titleFromCookie.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
+			return <h1 className="text-2xl leading-10 text-customWhite capitalize font-medium mb-4">{formattedTitle}</h1>;
+		}
+		return <h1 className="text-2xl leading-10 text-customWhite capitalize font-medium mb-4">Loading...</h1>;
+	};
 
 	return (
 		<div className="min-h-screen p-6 h-[835px]">
@@ -73,35 +78,47 @@ const DynamicSlugPage = ({ scenes }) => {
 						/>
 					</div>
 					<div className="relative mt-4">
-						Choose scenes
+						Choose Scenes
 					</div>
 
-					<div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-6">
-						{filteredFeatures?.length === 0 ? (
-							<div>No features found</div>
+					<div className={`mt-6 ${filteredFeatures.length > 0 ? 'grid grid-cols-1 md:grid-cols-4 gap-6' : ''}`}>
+						{filteredFeatures.length === 0 ? (
+							<div className="flex justify-center items-center h-full">
+								No Movie found
+							</div>
 						) : (
 							filteredFeatures?.map((feature) => (
 								<div key={feature.path} className="space-y-2">
-									<Link href={`${feature.path}`} passHref legacyBehavior>
-										<Card
-											className="bg-blue-800/20 border-0 backdrop-blur-sm overflow-hidden cursor-pointer transform transition-transform duration-200 hover:scale-105 mb-6"
-											aria-label={`Go to ${feature.title}`}
-										>
-											<CardContent className="p-0">
-												<div className="relative aspect-video">
-													<img
-														src={feature.image}
-														alt={`${feature.title} image`}
-														className="w-full h-full object-cover"
-													/>
-												</div>
-											</CardContent>
-										</Card>
-									</Link>
+									<Card
+										className={`bg-blue-800/20 border-0 backdrop-blur-sm overflow-hidden cursor-pointer transform transition-transform duration-200 hover:scale-105 mb-6 ${selectedScenes?.id === feature.id ? 'border-4 border-image-gradient' : ''}`}
+										aria-label={`Select ${feature.title}`}
+										onClick={() => handleScenesSelect(feature)} // Toggle selection
+									>
+										<CardContent className="p-0">
+											<div className="relative aspect-video">
+												<img
+													src={feature.image}
+													alt={`${feature.title} image`}
+													className="w-full h-full object-cover"
+												/>
+
+											</div>
+										</CardContent>
+									</Card>
 								</div>
 							))
 						)}
 					</div>
+
+				</div>
+				<div className="flex justify-end space-x-4 mt-6">
+					<button
+						className="px-4 py-2 rounded-lg bg-gradient-custom-gradient border border-buttonBorder w-52 h-12"
+						onClick={() => selectedScenes && router.push(selectedScenes.path)} // Navigate to selected movie
+						disabled={!selectedScenes} // Disable button if no movie is selected
+					>
+						Next
+					</button>
 				</div>
 			</Card>
 		</div>
@@ -109,20 +126,24 @@ const DynamicSlugPage = ({ scenes }) => {
 };
 
 export async function getServerSideProps(context) {
-	console.log('Inside getServerSideProps scenes');
+	console.log('Inside getServerSideProps');
+	const { slug } = context.params; // Extract the id parameter from the context
+	console.log('Extracted ID:', slug); // Log the extracted id
+
 	try {
 		const axios = axiosInstance(context);
-		const response = await axios.post(API_ENDPOINTS.GET_ALL_SCENE_LIST, {
-			page: 1,
-		});
+		const payload = { page: 1, movie_id: slug };
+		console.log('Payload sent to API:', payload); // Log the payload
+
+		const response = await axios.post(API_ENDPOINTS.GET_ALL_SCENE_LIST, payload);
 		console.log('Fetched scenes:', response?.data?.data);
 		return {
 			props: {
-				scenes: response?.data?.data?.data,
+				scenes: response?.data?.data?.data || [],
 			},
 		};
 	} catch (error) {
-		console.error('Error fetching scenes:', error);
+		console.error('Error fetching movies:', error);
 		return {
 			props: {
 				scenes: [],

@@ -13,6 +13,7 @@ const DynamicSlugPage = ({ movies }) => {
 	const router = useRouter();
 	const [titleFromCookie, setTitleFromCookie] = useState(null);
 	const [searchQuery, setSearchQuery] = useState('');
+	const [selectedMovie, setSelectedMovie] = useState(null);
 
 	useEffect(() => {
 		const title = Cookie.get('title');
@@ -23,7 +24,7 @@ const DynamicSlugPage = ({ movies }) => {
 		id: movie.movie_id,
 		title: movie.movie_name,
 		name: movie.movie_name,
-		image: movie.thumbnail,
+		image: movie.url,
 		path: `/scenes/${movie.movie_id}`,
 	}));
 
@@ -34,6 +35,11 @@ const DynamicSlugPage = ({ movies }) => {
 	const filteredFeatures = features.filter((feature) =>
 		feature?.title?.toLowerCase()?.includes(searchQuery.toLowerCase())
 	);
+
+	const handleMovieSelect = (movie) => {
+		// Toggle selection: If the movie is already selected, deselect it. Otherwise, select it.
+		setSelectedMovie(prev => (prev?.id === movie.id ? null : movie));
+	};
 
 	const renderHeader = () => {
 		if (titleFromCookie) {
@@ -82,22 +88,22 @@ const DynamicSlugPage = ({ movies }) => {
 						) : (
 							filteredFeatures.map((feature) => (
 								<div key={feature.path} className="space-y-2">
-									<Link href={`${feature.path}`} passHref legacyBehavior>
-										<Card
-											className="bg-blue-800/20 border-0 backdrop-blur-sm overflow-hidden cursor-pointer transform transition-transform duration-200 hover:scale-105 mb-6"
-											aria-label={`Go to ${feature.title}`}
-										>
-											<CardContent className="p-0">
-												<div className="relative aspect-video">
-													<img
-														src={feature.image}
-														alt={`${feature.title} image`}
-														className="w-full h-full object-cover"
-													/>
-												</div>
-											</CardContent>
-										</Card>
-									</Link>
+									<Card
+										className={`bg-blue-800/20 border-0 backdrop-blur-sm overflow-hidden cursor-pointer transform transition-transform duration-200 hover:scale-105 mb-6 ${selectedMovie?.id === feature.id ? 'border-4 border-image-gradient' : ''}`}
+										aria-label={`Select ${feature.title}`}
+										onClick={() => handleMovieSelect(feature)} // Toggle selection
+									>
+										<CardContent className="p-0">
+											<div className="relative aspect-video">
+												<img
+													src={feature.image}
+													alt={`${feature.title} image`}
+													className="w-full h-full object-cover"
+												/>
+
+											</div>
+										</CardContent>
+									</Card>
 								</div>
 							))
 						)}
@@ -107,6 +113,8 @@ const DynamicSlugPage = ({ movies }) => {
 				<div className="flex justify-end space-x-4 mt-6">
 					<button
 						className="px-4 py-2 rounded-lg bg-gradient-custom-gradient border border-buttonBorder w-52 h-12"
+						onClick={() => selectedMovie && router.push(selectedMovie.path)} // Navigate to selected movie
+						disabled={!selectedMovie} // Disable button if no movie is selected
 					>
 						Next
 					</button>
@@ -126,7 +134,7 @@ export async function getServerSideProps(context) {
 		console.log('Fetched movies:', response?.data?.data);
 		return {
 			props: {
-				movies: response?.data?.data?.data,
+				movies: response?.data?.data?.data || [],
 			},
 		};
 	} catch (error) {
