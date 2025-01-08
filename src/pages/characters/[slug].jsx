@@ -22,7 +22,7 @@ const DynamicSlugPage = ({ characters }) => {
 	}, []);
 
 	const features = characters?.map(character => ({
-		id: character.character_id, // Ensure the character has a unique id
+		id: character.character_id, 
 		title: character.character_movie_name,
 		name: character.character_real_name,
 		image: character.url,
@@ -41,10 +41,8 @@ const DynamicSlugPage = ({ characters }) => {
 	const handleCharactersSelect = (character) => {
 		setSelectedCharacters(prev => {
 			if (prev.some(selected => selected.id === character.id)) {
-				// If already selected, deselect
 				return prev.filter(selected => selected.id !== character.id);
 			} else {
-				// Otherwise, select the character
 				return [...prev, character];
 			}
 		});
@@ -123,7 +121,7 @@ const DynamicSlugPage = ({ characters }) => {
 				<div className="flex justify-end space-x-4 mt-6">
 					<button
 						className="px-4 py-2 rounded-lg bg-gradient-custom-gradient border border-buttonBorder w-52 h-12"
-						onClick={() => selectedCharacters.length > 0 && router.push(selectedCharacters[0].path)} // Navigate to first selected character's path
+						onClick={() => selectedCharacters.length > 0 && router.push(selectedCharacters[0].path)} 
 						disabled={selectedCharacters.length === 0}
 					>
 						Next

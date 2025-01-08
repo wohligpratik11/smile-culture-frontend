@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
-// import Header from '../components/layout/Header'; // Import the Header component
+// import Header from '../components/layout/Header'; 
 import Head from 'next/head';
 import '../../src/styles/globals.css';
 import CustomThemeProvider from '../context/ThemeProvider';
 import Layout from '@/components/layout/Layout';
-import Cookies from 'js-cookie'; // Import the js-cookie library
+import Cookies from 'js-cookie'; 
 import { useLogin } from '../../src/components/hooks/useLogin';
 
 function MyApp({ Component, pageProps }) {

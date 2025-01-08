@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Card, CardContent } from '../../components/components/ui/card';
 import { ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/router';
-import Cookies from 'js-cookie'; // Import the js-cookie library
+import Cookies from 'js-cookie'; 
 
 const SceneSelector = () => {
 	const router = useRouter();
