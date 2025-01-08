@@ -7,6 +7,9 @@ const nextConfig = {
       process.env.NEXT_PUBLIC_API_URL ||
       `http://localhost:${process.env.PORT || 3000}`,
   },
+  images: {
+    domains: ['storage.googleapis.com'],
+  },
 };
 
 module.exports = nextConfig;

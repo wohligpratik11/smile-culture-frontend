@@ -8,6 +8,7 @@ import { CiSearch } from "react-icons/ci";
 import { apiService, API_ENDPOINTS } from '../../lib/api/apiService';
 import axiosInstance from '../../lib/api/axiosInstance';
 import Cookie from 'js-cookie';
+import Image from 'next/image';
 
 const DynamicSlugPage = ({ scenes }) => {
 	const router = useRouter();
@@ -94,12 +95,13 @@ const DynamicSlugPage = ({ scenes }) => {
 									>
 										<CardContent className="p-0">
 											<div className="relative aspect-video">
-												<img
+												<Image
 													src={feature.image}
 													alt={`${feature.title} image`}
-													className="w-full h-full object-cover"
+													layout="fill"
+													objectFit="cover"
+													priority={true}
 												/>
-
 											</div>
 										</CardContent>
 									</Card>

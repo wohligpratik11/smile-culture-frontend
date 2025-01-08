@@ -1,54 +1,53 @@
 import { useRouter } from 'next/router';
-import { useState } from 'react';
-import { Input } from '../../components/components/ui/input';
+import { useState, useEffect } from 'react';
+import { Input } from '../../components/components/ui/input'; // Import ShadCN Input
 import { Card, CardContent } from '../../components/components/ui/card';
+import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { CiSearch } from "react-icons/ci";
-import { Checkbox } from '../../components/components/ui/checkbox';
+import { apiService, API_ENDPOINTS } from '../../lib/api/apiService';
+import axiosInstance from '../../lib/api/axiosInstance';
+import Cookie from 'js-cookie';
+import Image from 'next/image';
 
-const DynamicSlugPage = () => {
+const DynamicSlugPage = ({ scenes }) => {
 	const router = useRouter();
+	const [titleFromCookie, setTitleFromCookie] = useState(null);
 	const [searchQuery, setSearchQuery] = useState('');
-	const { slug } = router.query; // Extract slug from URL
-	const [selectedFeatures, setSelectedFeatures] = useState([]);
+	const [selectedScenes, setSelectedScenes] = useState(null);
 
-	const features = [
-		{ id: 1, title: 'Face Swapping', image: '/assets/images/raju.webp', path: '/scenes/face-swap' },
-		{ id: 2, title: 'Lip Syncing', image: '/assets/images/raju.webp', path: '/scenes/lip-syncing' },
-		{ id: 3, title: 'Multilingual', image: '/assets/images/raju.webp', path: '/scenes/multilingual' },
-	];
+	useEffect(() => {
+		const title = Cookie.get('title');
+		setTitleFromCookie(title);
+	}, []);
+
+	const features = scenes?.map(scene => ({
+		id: scene.scene_id,
+		title: scene.scene_name,
+		name: scene.scene_name,
+		image: scene.thumbnailUrl,
+		path: `/characters/${scene.scene_id}`,
+	}));
 
 	const handleSearchChange = (e) => {
 		setSearchQuery(e.target.value);
 	};
 
-	// Handle checkbox click to toggle selection
-	const handleCheckboxChange = (id) => {
-		setSelectedFeatures((prevSelected) =>
-			prevSelected.includes(id)
-				? prevSelected.filter((featureId) => featureId !== id) // Deselect
-				: [...prevSelected, id] // Select
-		);
-	};
-
-	const filteredFeatures = features.filter((feature) =>
-		feature.title.toLowerCase().includes(searchQuery.toLowerCase())
+	const filteredFeatures = features?.filter((feature) =>
+		feature?.title?.toLowerCase()?.includes(searchQuery.toLowerCase())
 	);
 
-	const renderHeader = () => {
-		switch (slug) {
-			case 'face-swap':
-				return <h1 className="text-2xl leading-10 text-customWhite font-medium mb-4">Face Swapping</h1>;
-			case 'lip-syncing':
-				return <h1 className="text-2xl leading-10 text-customWhite font-medium mb-4">Lip Syncing</h1>;
-			case 'multilingual':
-				return <h1 className="text-2xl leading-10 text-customWhite font-medium mb-4">Multilingual</h1>;
-			default:
-				return <h1 className="text-2xl leading-10 text-customWhite font-medium mb-4">Loading...</h1>;
-		}
+	const handleScenesSelect = (scenes) => {
+		setSelectedScenes(prev => (prev?.id === scenes.id ? null : scenes));
 	};
 
-	if (!slug) return <div>Loading...</div>;
+	const renderHeader = () => {
+		if (titleFromCookie) {
+			const formattedTitle = titleFromCookie.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
+			return <h1 className="text-2xl leading-10 text-customWhite capitalize font-medium mb-4">{formattedTitle}</h1>;
+		}
+		return <h1 className="text-2xl leading-10 text-customWhite capitalize font-medium mb-4">Loading...</h1>;
+	};
 
 	return (
 		<div className="min-h-screen p-6 h-[835px]">
@@ -77,50 +76,79 @@ const DynamicSlugPage = () => {
 							className="w-full pl-12 pr-3 py-3 border-none bg-blueYonder rounded-full text-customWhite placeholder-customWhite"
 						/>
 					</div>
-					<div className="relative mt-4">Choose Characters</div>
-					<div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-6">
-						{filteredFeatures.length === 0 ? (
-							<div>No features found</div>
+					<div className="relative mt-4">
+						Choose Scenes
+					</div>
+
+					<div className={`mt-6 ${filteredFeatures?.length > 0 ? 'grid grid-cols-1 md:grid-cols-4 gap-6' : ''}`}>
+						{filteredFeatures?.length === 0 ? (
+							<div className="flex justify-center items-center h-full">
+								No Scenes found
+							</div>
 						) : (
-							filteredFeatures.map((feature) => (
-								<div key={feature.id} className="space-y-2 relative">
-									<div
-										className={`overflow-hidden cursor-pointer transform transition-transform duration-200 hover:scale-105 ${selectedFeatures.includes(feature.id) ? 'border-image-gradient' : ''}`}
+							filteredFeatures?.map((feature) => (
+								<div key={feature.path} className="space-y-2">
+									<Card
+										className={`bg-blue-800/20 border-0 backdrop-blur-sm overflow-hidden cursor-pointer transform transition-transform duration-200 hover:scale-105 mb-6 ${selectedScenes?.id === feature.id ? 'border-4 border-image-gradient' : ''}`}
+										aria-label={`Select ${feature.title}`}
+										onClick={() => handleScenesSelect(feature)}
 									>
-										<CardContent className="p-0" >
+										<CardContent className="p-0">
 											<div className="relative aspect-video">
-												<img
+												<Image
 													src={feature.image}
 													alt={`${feature.title} image`}
-													className="object-cover"
+													layout="fill"
+													objectFit="cover"
+													priority={true}
 												/>
-												{/* Checkbox positioned in the top-left corner */}
-												<Checkbox
-													checked={selectedFeatures.includes(feature.id)}
-													onCheckedChange={() => handleCheckboxChange(feature.id)} // Toggle on checkbox click
-													className="absolute top-2 left-2 z-10 border-image-gradient rounded-full"
-												/>
+
 											</div>
 										</CardContent>
-									</div>
+									</Card>
 								</div>
 							))
 						)}
 					</div>
 
-					<div className="mt-6">
-						<p>Selected Features:</p>
-						<ul>
-							{selectedFeatures.map((id) => {
-								const feature = features.find((feature) => feature.id === id);
-								return <li key={id}>{feature?.title}</li>;
-							})}
-						</ul>
-					</div>
+				</div>
+				<div className="flex justify-end space-x-4 mt-6">
+					<button
+						className="px-4 py-2 rounded-lg bg-gradient-custom-gradient border border-buttonBorder w-52 h-12"
+						onClick={() => selectedScenes && router.push(selectedScenes.path)}
+						disabled={!selectedScenes}
+					>
+						Next
+					</button>
 				</div>
 			</Card>
 		</div>
 	);
 };
+
+export async function getServerSideProps(context) {
+	console.log("contextparams", context.params)
+	const { slug } = context.params;
+	console.log("slug", slug)
+	try {
+		const axios = axiosInstance(context);
+		const payload = { page: 1, scene_id: slug };
+		const response = await axios.post(API_ENDPOINTS.GET_ALL_CHARACTERS_LIST, payload);
+		return {
+			props: {
+				scenes: response?.data?.data?.data || [],
+			},
+		};
+	} catch (error) {
+		console.error('Error fetching movies:', error);
+		return {
+			props: {
+				scenes: [],
+			},
+		};
+	}
+}
+
+
 
 export default DynamicSlugPage;
