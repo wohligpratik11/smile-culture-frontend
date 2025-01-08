@@ -22,10 +22,11 @@ const DynamicSlugPage = ({ scenes }) => {
 	}, []);
 
 	const features = scenes?.map(scene => ({
-		id: scene.scene_id,
-		title: scene.scene_name,
-		name: scene.scene_name,
-		image: scene.thumbnailUrl,
+		id: scene.movie_id,
+		title: scene.character_movie_name,
+		name: scene.character_real_name,
+		image: scene.url,
+		characterMovieName: scene.character_movie_name,
 		path: `/characters/${scene.scene_id}`,
 	}));
 
@@ -127,9 +128,7 @@ const DynamicSlugPage = ({ scenes }) => {
 };
 
 export async function getServerSideProps(context) {
-	console.log("contextparams", context.params)
 	const { slug } = context.params;
-	console.log("slug", slug)
 	try {
 		const axios = axiosInstance(context);
 		const payload = { page: 1, scene_id: slug };
