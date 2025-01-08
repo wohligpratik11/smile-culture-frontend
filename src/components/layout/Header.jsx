@@ -14,21 +14,23 @@ const Header = () => {
   const router = useRouter();
 
   const [userEmail, setUserEmail] = useState(null);
+  console.log("setUserEmail", userEmail)
   useEffect(() => {
     const userData = Cookies.get('userData');
     if (userData) {
       try {
         const parsedData = JSON.parse(userData);
-        setUserEmail(parsedData?.email || ''); // Ensure you extract only the necessary data
+        console.log("userData", parsedData);
+        setUserEmail(parsedData?.user_email || ''); // Ensure you extract only the necessary data
       } catch (error) {
         console.error('Error parsing userData from cookie:', error);
       }
     }
   }, []);
 
-  const getFirstLetter = (email) => {
-    if (email) {
-      return email.charAt(0).toUpperCase();
+  const getFirstLetter = (user_email) => {
+    if (user_email) {
+      return user_email.charAt(0).toUpperCase();
     }
     return '';
   };
@@ -43,7 +45,7 @@ const Header = () => {
       </Link>
       <div className="relative mt-[3px] flex h-[61px] flex-grow items-center justify-around gap-2 rounded-full bg-gradient-custom-gradient px-8 py-2 shadow-xl shadow-shadow-500 dark:!bg-navy-800 dark:shadow-none md:flex-grow-0 md:gap-1 xl:w-[150px] xl:gap-2 text-white border border-buttonBorder !w-[100px]">
         <Avatar className="ml-auto cursor-pointer text-4xl">
-          <AvatarFallback>{userEmail ? getFirstLetter(userEmail.user_email) : 'EROSNOW'}</AvatarFallback>
+          <AvatarFallback>{userEmail ? getFirstLetter(userEmail) : ''}</AvatarFallback>
         </Avatar>
         {/* HoverCard with Avatar */}
         {/* <HoverCard>
