@@ -10,7 +10,7 @@ import axiosInstance from '../../lib/api/axiosInstance';
 import Cookie from 'js-cookie';
 import Image from 'next/image';
 
-const DynamicSlugPage = ({ scenes }) => {
+const ScenesPage = ({ scenes }) => {
 	const router = useRouter();
 	const [titleFromCookie, setTitleFromCookie] = useState(null);
 	const [searchQuery, setSearchQuery] = useState('');
@@ -148,4 +148,4 @@ export async function getServerSideProps(context) {
 
 
 
-export default DynamicSlugPage;
+export default ScenesPage;

@@ -5,7 +5,7 @@ import { ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/router';
 import Cookies from 'js-cookie'; 
 
-const SceneSelector = () => {
+const Home = () => {
 	const router = useRouter();
 	const [isLoading, setIsLoading] = useState(false);
 	const [loginMessage, setLoginMessage] = useState('');
@@ -117,4 +117,4 @@ const SceneSelector = () => {
 	);
 };
 
-export default SceneSelector;
+export default Home;
