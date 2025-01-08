@@ -7,10 +7,9 @@ import { ArrowLeft } from 'lucide-react';
 import { CiSearch } from "react-icons/ci";
 import { apiService, API_ENDPOINTS } from '../../lib/api/apiService';
 import axiosInstance from '../../lib/api/axiosInstance';
-import Cookie from 'js-cookie'; // Import js-cookie
+import Cookie from 'js-cookie';
 
 const DynamicSlugPage = ({ scenes }) => {
-	console.log('DynamicSlugPage', scenes);
 	const router = useRouter();
 	const [titleFromCookie, setTitleFromCookie] = useState(null);
 	const [searchQuery, setSearchQuery] = useState('');
@@ -38,7 +37,6 @@ const DynamicSlugPage = ({ scenes }) => {
 	);
 
 	const handleScenesSelect = (scenes) => {
-		// Toggle selection: If the movie is already selected, deselect it. Otherwise, select it.
 		setSelectedScenes(prev => (prev?.id === scenes.id ? null : scenes));
 	};
 
@@ -92,7 +90,7 @@ const DynamicSlugPage = ({ scenes }) => {
 									<Card
 										className={`bg-blue-800/20 border-0 backdrop-blur-sm overflow-hidden cursor-pointer transform transition-transform duration-200 hover:scale-105 mb-6 ${selectedScenes?.id === feature.id ? 'border-4 border-image-gradient' : ''}`}
 										aria-label={`Select ${feature.title}`}
-										onClick={() => handleScenesSelect(feature)} // Toggle selection
+										onClick={() => handleScenesSelect(feature)}
 									>
 										<CardContent className="p-0">
 											<div className="relative aspect-video">
@@ -114,8 +112,8 @@ const DynamicSlugPage = ({ scenes }) => {
 				<div className="flex justify-end space-x-4 mt-6">
 					<button
 						className="px-4 py-2 rounded-lg bg-gradient-custom-gradient border border-buttonBorder w-52 h-12"
-						onClick={() => selectedScenes && router.push(selectedScenes.path)} // Navigate to selected movie
-						disabled={!selectedScenes} // Disable button if no movie is selected
+						onClick={() => selectedScenes && router.push(selectedScenes.path)}
+						disabled={!selectedScenes}
 					>
 						Next
 					</button>
@@ -126,17 +124,11 @@ const DynamicSlugPage = ({ scenes }) => {
 };
 
 export async function getServerSideProps(context) {
-	console.log('Inside getServerSideProps');
-	const { slug } = context.params; // Extract the id parameter from the context
-	console.log('Extracted ID:', slug); // Log the extracted id
-
+	const { slug } = context.params;
 	try {
 		const axios = axiosInstance(context);
 		const payload = { page: 1, movie_id: slug };
-		console.log('Payload sent to API:', payload); // Log the payload
-
 		const response = await axios.post(API_ENDPOINTS.GET_ALL_SCENE_LIST, payload);
-		console.log('Fetched scenes:', response?.data?.data);
 		return {
 			props: {
 				scenes: response?.data?.data?.data || [],

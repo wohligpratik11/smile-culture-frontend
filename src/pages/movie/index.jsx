@@ -1,13 +1,13 @@
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
-import { Input } from '../../components/components/ui/input'; // Import ShadCN Input
+import { Input } from '../../components/components/ui/input';
 import { Card, CardContent } from '../../components/components/ui/card';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { CiSearch } from "react-icons/ci";
 import { apiService, API_ENDPOINTS } from '../../lib/api/apiService';
 import axiosInstance from '../../lib/api/axiosInstance';
-import Cookie from 'js-cookie'; // Import js-cookie
+import Cookie from 'js-cookie';
 
 const DynamicSlugPage = ({ movies }) => {
 	const router = useRouter();
@@ -37,7 +37,6 @@ const DynamicSlugPage = ({ movies }) => {
 	);
 
 	const handleMovieSelect = (movie) => {
-		// Toggle selection: If the movie is already selected, deselect it. Otherwise, select it.
 		setSelectedMovie(prev => (prev?.id === movie.id ? null : movie));
 	};
 
@@ -91,7 +90,7 @@ const DynamicSlugPage = ({ movies }) => {
 									<Card
 										className={`bg-blue-800/20 border-0 backdrop-blur-sm overflow-hidden cursor-pointer transform transition-transform duration-200 hover:scale-105 mb-6 ${selectedMovie?.id === feature.id ? 'border-4 border-image-gradient' : ''}`}
 										aria-label={`Select ${feature.title}`}
-										onClick={() => handleMovieSelect(feature)} // Toggle selection
+										onClick={() => handleMovieSelect(feature)}
 									>
 										<CardContent className="p-0">
 											<div className="relative aspect-video">
@@ -113,8 +112,8 @@ const DynamicSlugPage = ({ movies }) => {
 				<div className="flex justify-end space-x-4 mt-6">
 					<button
 						className="px-4 py-2 rounded-lg bg-gradient-custom-gradient border border-buttonBorder w-52 h-12"
-						onClick={() => selectedMovie && router.push(selectedMovie.path)} // Navigate to selected movie
-						disabled={!selectedMovie} // Disable button if no movie is selected
+						onClick={() => selectedMovie && router.push(selectedMovie.path)}
+						disabled={!selectedMovie}
 					>
 						Next
 					</button>
@@ -125,13 +124,11 @@ const DynamicSlugPage = ({ movies }) => {
 };
 
 export async function getServerSideProps(context) {
-	console.log('Inside getServerSideProps');
 	try {
 		const axios = axiosInstance(context);
 		const response = await axios.post(API_ENDPOINTS.GET_ALL_MOVIES_LIST, {
 			page: 1,
 		});
-		console.log('Fetched movies:', response?.data?.data);
 		return {
 			props: {
 				movies: response?.data?.data?.data || [],
