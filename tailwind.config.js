@@ -8,6 +8,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      borderImageLine: {
+        gradient: 'linear-gradient(180deg, #13a6e3 0%, #3bc2ba 100%)',
+      },
       borderImage: {
         'custom-gradient':
           'conic-gradient(from 180deg at 51.95% 49.81%, rgba(0, 0, 0, 0.105455) -2.11deg, rgba(51, 66, 255, 0) 131.45deg, #37F4F4 175.58deg, rgba(51, 66, 255, 0) 252.32deg, rgba(0, 0, 0, 0.0885149) 310.85deg, rgba(0, 0, 0, 0.105455) 357.89deg, rgba(51, 66, 255, 0) 491.45deg), linear-gradient(0deg, #FF5733, #FF5733)',

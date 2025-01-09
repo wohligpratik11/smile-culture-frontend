@@ -13,7 +13,7 @@ import CryptoJS from 'crypto-js';
 
 const CharactersPage = ({ characters }) => {
 	const router = useRouter();
-	const [titleFromCookie, setTitleFromCookie] = useState(null);
+	const [titleFromCookie, setTitleFromCookie] = useState('');
 	const [searchQuery, setSearchQuery] = useState('');
 	const [selectedCharacters, setSelectedCharacters] = useState([]);
 	useEffect(() => {
@@ -117,10 +117,10 @@ const CharactersPage = ({ characters }) => {
 										<CardContent className="p-0">
 											<div className="relative aspect-video">
 												<Image
-													src={feature.image}
+													src={feature.image || '/fallback-image.jpg'}
 													alt={`${feature.title} image`}
 													layout="fill"
-													objectFit="cover"
+													objectFit="contain"
 													priority={true}
 												/>
 											</div>

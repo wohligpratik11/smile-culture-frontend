@@ -12,7 +12,7 @@ import Image from 'next/image';
 
 const ScenesPage = ({ scenes }) => {
 	const router = useRouter();
-	const [titleFromCookie, setTitleFromCookie] = useState(null);
+	const [titleFromCookie, setTitleFromCookie] = useState('');
 	const [searchQuery, setSearchQuery] = useState('');
 	const [selectedScenes, setSelectedScenes] = useState(null);
 
@@ -80,8 +80,8 @@ const ScenesPage = ({ scenes }) => {
 						Choose Scenes
 					</div>
 
-					<div className={`mt-6 ${filteredFeatures.length > 0 ? 'grid grid-cols-1 md:grid-cols-4 gap-6' : ''}`}>
-						{filteredFeatures.length === 0 ? (
+					<div className={`mt-6 ${filteredFeatures?.length > 0 ? 'grid grid-cols-1 md:grid-cols-4 gap-6' : ''}`}>
+						{filteredFeatures?.length === 0 ? (
 							<div className="flex justify-center items-center h-full">
 								No Movie found
 							</div>

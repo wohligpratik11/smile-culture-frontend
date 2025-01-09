@@ -12,7 +12,7 @@ import Image from 'next/image';
 
 const MoviePage = ({ movies }) => {
 	const router = useRouter();
-	const [titleFromCookie, setTitleFromCookie] = useState(null);
+	const [titleFromCookie, setTitleFromCookie] = useState('');
 	const [searchQuery, setSearchQuery] = useState('');
 	const [selectedMovie, setSelectedMovie] = useState(null);
 
