@@ -17,20 +17,13 @@ const uploadPage = ({ characters }) => {
 	const [selectedCharacters, setSelectedCharacters] = useState([]);
 	console.log("selectedCharacters", selectedCharacters)
 	useEffect(() => {
-		// Get the title from cookies
 		const title = Cookie.get('title');
 		setTitleFromCookie(title);
-
-		// Retrieve the encrypted selected characters from cookies
 		const encryptedData = Cookie.get('selectedCharacters');
-
 		if (encryptedData) {
-			// Decrypt the data
 			const bytes = CryptoJS.AES.decrypt(encryptedData, 'your-encryption-key');
 			const decryptedData = bytes.toString(CryptoJS.enc.Utf8);
-
 			if (decryptedData) {
-				// Parse the decrypted data to an array of characters
 				setSelectedCharacters(JSON.parse(decryptedData));
 			}
 		}
