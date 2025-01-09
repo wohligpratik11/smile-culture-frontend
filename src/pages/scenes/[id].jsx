@@ -102,12 +102,14 @@ const ScenesPage = ({ scenes }) => {
 							className="w-full pl-12 pr-3 py-3 border-none bg-blueYonder rounded-full text-customWhite placeholder-customWhite"
 						/>
 					</div>
-
+					<div className="relative mt-2">
+						Choose Characters
+					</div>
 					{/* Tabs buttons outside the Tabs component */}
 					<Tabs value={selectedTab} onValueChange={setSelectedTab}>
 						{/* Image Tab Content */}
 						<TabsContent value="image">
-							<div className={`mt-6 ${filteredFeatures?.length > 0 ? 'grid grid-cols-1 md:grid-cols-4 gap-6' : ''}`}>
+							<div className={`mt-4 ${filteredFeatures?.length > 0 ? 'grid grid-cols-1 md:grid-cols-4 gap-6' : ''}`}>
 								{filteredFeatures?.length === 0 ? (
 									<div className="flex justify-center items-center h-full">
 										No Movie found
