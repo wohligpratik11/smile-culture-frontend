@@ -9,6 +9,7 @@ import { apiService, API_ENDPOINTS } from '../../lib/api/apiService';
 import axiosInstance from '../../lib/api/axiosInstance';
 import Cookie from 'js-cookie';
 import Image from 'next/image';
+import { AspectRatio } from "../../components/components/ui/aspect-ratio"
 
 const MoviePage = ({ movies }) => {
 	const router = useRouter();
@@ -54,13 +55,15 @@ const MoviePage = ({ movies }) => {
 			<Card className="bg-card-cardCustomBlue p-6">
 				<div className="space-y-4">
 					<div className="flex items-center gap-4">
-						<button
-							className="px-4 py-2 rounded-lg bg-gradient-custom-gradient border border-buttonBorder"
-							onClick={() => router.back()}
-							aria-label="Go Back"
-						>
-							<ArrowLeft />
-						</button>
+						<Link href="/">
+							<button
+								className="px-4 py-2 rounded-lg bg-gradient-custom-gradient border border-buttonBorder"
+								aria-label="Go Back"
+							>
+								<ArrowLeft />
+							</button>
+						</Link>
+
 						<div className="text-lg font-medium leading-10 mt-[17px]">
 							{renderHeader()}
 						</div>
@@ -89,21 +92,20 @@ const MoviePage = ({ movies }) => {
 							filteredFeatures.map((feature) => (
 								<div key={feature.path} className="space-y-2">
 									<Card
-										className={`bg-blue-800/20 border-0 backdrop-blur-sm overflow-hidden cursor-pointer transform transition-transform duration-200 hover:scale-105 mb-6 ${selectedMovie?.id === feature.id ? 'border-4 border-image-gradient' : ''}`}
+										className={`bg-blue-800/20 border-0 backdrop-blur-sm overflow-hidden cursor-pointer transform transition-transform duration-200 hover:scale-105 mb-6 ${selectedMovie?.id === feature.id ? 'border-buttonBorder border border-solid' : ''}`}
 										aria-label={`Select ${feature.title}`}
 										onClick={() => handleMovieSelect(feature)}
 									>
 										<CardContent className="p-0">
-											<div className="relative aspect-video">
+											<AspectRatio ratio={16 / 9} className="w-full">
 												<Image
-													src={feature.image}
+													src={feature.image || '/fallback-image.jpg'}
 													alt={`${feature.title} image`}
 													layout="fill"
-													objectFit="cover"
+													objectFit="contain"
 													priority={true}
 												/>
-
-											</div>
+											</AspectRatio>
 										</CardContent>
 									</Card>
 								</div>

@@ -10,7 +10,7 @@ import axiosInstance from '../../lib/api/axiosInstance';
 import Cookie from 'js-cookie';
 import Image from 'next/image';
 import CryptoJS from 'crypto-js';
-
+import { AspectRatio } from "../../components/components/ui/aspect-ratio"
 const CharactersPage = ({ characters }) => {
 	const router = useRouter();
 	const [titleFromCookie, setTitleFromCookie] = useState('');
@@ -75,13 +75,18 @@ const CharactersPage = ({ characters }) => {
 			<Card className="bg-card-cardCustomBlue p-6">
 				<div className="space-y-4">
 					<div className="flex items-center gap-4">
-						<button
-							className="px-4 py-2 rounded-lg bg-gradient-custom-gradient border border-buttonBorder"
-							onClick={() => router.back()}
-							aria-label="Go Back"
-						>
-							<ArrowLeft />
-						</button>
+						<Link href="#" passHref>
+							<button
+								className="px-4 py-2 rounded-lg bg-gradient-custom-gradient border border-buttonBorder"
+								onClick={(e) => {
+									e.preventDefault();
+									router.back();
+								}}
+								aria-label="Go Back"
+							>
+								<ArrowLeft />
+							</button>
+						</Link>
 						<div className="text-lg font-medium leading-10 mt-[17px]">
 							{renderHeader()}
 						</div>
@@ -110,12 +115,12 @@ const CharactersPage = ({ characters }) => {
 							filteredFeatures?.map((feature) => (
 								<div key={feature.id} className="space-y-2">
 									<Card
-										className={`bg-blue-800/20 border-0 backdrop-blur-sm overflow-hidden cursor-pointer transform transition-transform duration-200 hover:scale-105 mb-6 ${selectedCharacters.some(selected => selected.id === feature.id) ? 'border-4 border-image-gradient' : ''}`}
+										className={`bg-blue-800/20 border-0 backdrop-blur-sm overflow-hidden cursor-pointer transform transition-transform duration-200 hover:scale-105 mb-6 ${selectedCharacters.some(selected => selected.id === feature.id) ? 'border-buttonBorder border border-solid' : ''}`}
 										aria-label={`Select ${feature.title}`}
 										onClick={() => handleCharactersSelect(feature)}
 									>
 										<CardContent className="p-0">
-											<div className="relative aspect-video">
+											<AspectRatio ratio={16 / 9} className="w-full">
 												<Image
 													src={feature.image || '/fallback-image.jpg'}
 													alt={`${feature.title} image`}
@@ -123,7 +128,7 @@ const CharactersPage = ({ characters }) => {
 													objectFit="contain"
 													priority={true}
 												/>
-											</div>
+											</AspectRatio>
 										</CardContent>
 									</Card>
 								</div>

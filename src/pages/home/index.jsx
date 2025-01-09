@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Card, CardContent } from '../../components/components/ui/card';
 import { ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/router';
-import Cookies from 'js-cookie'; 
+import Cookies from 'js-cookie';
 
 const Home = () => {
 	const router = useRouter();

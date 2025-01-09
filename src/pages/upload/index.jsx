@@ -47,13 +47,18 @@ const uploadPage = ({ characters }) => {
 			<Card className="bg-card-cardCustomBlue p-6">
 				<div className="space-y-4">
 					<div className="flex items-center gap-4">
-						<button
-							className="px-4 py-2 rounded-lg bg-gradient-custom-gradient border border-buttonBorder"
-							onClick={() => router.back()}
-							aria-label="Go Back"
-						>
-							<ArrowLeft />
-						</button>
+						<Link href="#" passHref>
+							<button
+								className="px-4 py-2 rounded-lg bg-gradient-custom-gradient border border-buttonBorder"
+								onClick={(e) => {
+									e.preventDefault();
+									router.back();
+								}}
+								aria-label="Go Back"
+							>
+								<ArrowLeft />
+							</button>
+						</Link>
 						<div className="text-lg font-medium leading-10 mt-[17px]">
 							{renderHeader()}
 						</div>

@@ -66,3 +66,8 @@ body {
   border-image-source: linear-gradient(180deg, #13a6e3 0%, #3bc2ba 100%);
   border-image-slice: 1;
 }
+@layer utilities {
+  .border-gradient {
+    border-image-source: linear-gradient(180deg, #13a6e3 0%, #3bc2ba 100%);
+  }
+}
