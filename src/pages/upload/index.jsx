@@ -9,12 +9,15 @@ import CryptoJS from 'crypto-js';
 import SelectImage from "../../../public/assets/images/image.webp";
 import Video from "../../../public/assets/images/video.webp";
 import UploadImages from "../../../public/assets/images/uploadImages.webp";
+import MediaUploader from '../../components/components/ui/UppyUploader';
+import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription } from '../../components/components/ui/dialog'; // Import Dialog components
 
-const uploadPage = ({ characters }) => {
+const UploadPage = ({ characters }) => {
 	const router = useRouter();
 	const [titleFromCookie, setTitleFromCookie] = useState('');
 	const [selectedCharacters, setSelectedCharacters] = useState([]);
-	const [selectedMode, setSelectedMode] = useState(null); // Track selected mode
+	const [selectedMode, setSelectedMode] = useState(null);
+	const [isModalOpen, setIsModalOpen] = useState(false);
 
 	useEffect(() => {
 		const title = Cookie.get('title');
@@ -29,6 +32,14 @@ const uploadPage = ({ characters }) => {
 		}
 	}, []);
 
+	const openModal = () => {
+		setIsModalOpen(true);
+	};
+
+	const closeModal = () => {
+		setIsModalOpen(false);
+	};
+
 	const renderHeader = () => {
 		if (titleFromCookie) {
 			const formattedTitle = titleFromCookie.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
@@ -37,7 +48,6 @@ const uploadPage = ({ characters }) => {
 		return <h1 className="text-2xl leading-10 text-customWhite capitalize font-medium mb-4">Loading...</h1>;
 	};
 
-	// Handle tab selection
 	const handleModeSelect = (mode) => {
 		setSelectedMode(mode);
 	};
@@ -63,7 +73,6 @@ const uploadPage = ({ characters }) => {
 							{renderHeader()}
 						</div>
 					</div>
-
 					<h2 className="text-white text-xl mb-4">Select Mode</h2>
 					<div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 max-w-xs sm:max-w-sm">
 						<Card
@@ -78,6 +87,7 @@ const uploadPage = ({ characters }) => {
 								<span className="text-white text-sm sm:text-base">Image</span>
 							</div>
 						</Card>
+
 
 						<Card
 							className={`p-4 sm:p-6 cursor-pointer transition-all h-[122px] w-full sm:w-[172px] rounded-xl ${selectedMode === 'video'
@@ -101,27 +111,38 @@ const uploadPage = ({ characters }) => {
 								? 'bg-gradient-custom-gradient border border-buttonBorder rounded-lg'
 								: 'bg-blueYonder'
 								}`}
-							onClick={() => handleModeSelect('image')}
+							onClick={openModal}
 						>
 							<div className="flex flex-col items-center gap-2">
 								<Image src={UploadImages} alt="Image Icon" className="w-10 sm:w-12 h-10 sm:h-12" />
-								<div className="flex items-center space-x-2">
+								<div className="flex items-center space-x-2" onClick={openModal}>
 									<ArrowUpFromLine size={20} strokeWidth={3} absoluteStrokeWidth />
 									<span className="text-white font-medium text-xs">Upload Image</span>
 								</div>
-
 							</div>
 						</Card>
-
 					</div>
+
+					<Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+						<DialogTrigger asChild>
+							{/* Trigger Component */}
+						</DialogTrigger>
+						<DialogContent className="mx-auto max-w-4xl p-4 !bg-deepNavy rounded-lg">
+							<DialogTitle className="text-xl font-medium">Upload Selfie Image</DialogTitle>
+							<MediaUploader />
+						</DialogContent>
+					</Dialog>
+
+
+
 				</div>
 				<div className="flex justify-end space-x-4 mt-6">
 					<button
 						className="px-4 py-2 bg-gradient-custom-gradient border border-buttonBorder rounded-lg w-52 h-12"
-						disabled={!selectedMode} // Disable if no mode is selected
+						disabled={!selectedMode}
 						onClick={() => {
 							if (selectedMode) {
-								router.push(`/next-step?mode=${selectedMode}`); // Pass the selected mode in the query
+								router.push(`/next-step?mode=${selectedMode}`);
 							}
 						}}
 					>
@@ -135,10 +156,9 @@ const uploadPage = ({ characters }) => {
 
 export async function getServerSideProps(context) {
 	try {
-		// Fetch your data here (unchanged)
 		return {
 			props: {
-				characters: [], // Example prop, replace as needed
+				characters: [],
 			},
 		};
 	} catch (error) {
@@ -151,5 +171,4 @@ export async function getServerSideProps(context) {
 	}
 }
 
-export default uploadPage;
-
+export default UploadPage;

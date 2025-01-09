@@ -20,6 +20,7 @@ module.exports = {
         1004: '1004px',
       },
       colors: {
+        deepNavy: '#434E80',
         customWhite: '#F5F5F5',
         buttonBorder: ' #56e5f6',
         vividSkyBlue: '#10A3E7',

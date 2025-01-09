@@ -1,4 +1,3 @@
-// next.config.js
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   env: {
@@ -10,6 +9,13 @@ const nextConfig = {
   images: {
     domains: ['storage.googleapis.com'],
   },
+  transpilePackages: [
+    '@uppy/core',
+    '@uppy/dashboard',
+    '@uppy/react',
+    '@uppy/webcam',
+    '@uppy/image-editor',
+  ],
 };
 
 module.exports = nextConfig;

@@ -71,3 +71,67 @@ body {
     border-image-source: linear-gradient(180deg, #13a6e3 0%, #3bc2ba 100%);
   }
 }
+/* Buttons */
+.uppy-u-reset.uppy-c-btn.uppy-StatusBar-actionBtn.uppy-StatusBar-actionBtn--upload.uppy-c-btn-primary {
+  padding: 0.5rem 1rem !important; /* px-4 py-2 */
+  background: linear-gradient(
+    90deg,
+    #0ca1ea,
+    #3ec5b6
+  ) !important; /* Gradient */
+  border: 1px solid #56e5f6 !important; /* Updated border color */
+  border-radius: 0.5rem !important; /* rounded-lg */
+  width: 13rem !important; /* w-52 */
+  height: 3rem !important; /* h-12 */
+  color: #fff !important; /* Adjust text color */
+  text-align: center;
+}
+
+.uppy-u-reset.uppy-c-btn.uppy-Dashboard-browse {
+  color: #0075ff !important;
+}
+
+/* Dashboard */
+.uppy-Dashboard-innerWrap,
+.uppy-DashboardContent-bar,
+.uppy-Webcam-footer,
+.uppy-StatusBar-actions {
+  background-color: #434e80 !important;
+}
+
+.uppy-Dashboard-AddFiles-title,
+.uppy-DashboardTab-name,
+.uppy-DashboardContent-back,
+.uppy-DashboardContent-save,
+.uppy-Dashboard-note,
+.uppy-DashboardContent-title {
+  color: #ffffff !important;
+}
+
+.uppy-Dashboard-Item {
+  background-color: #ffffff !important;
+  padding: 8px !important;
+}
+
+.uppy-u-reset.uppy-Dashboard-Item-action.uppy-Dashboard-Item-action--remove {
+  top: 0px !important;
+  right: 5px !important;
+}
+
+/* Webcam */
+.uppy-Webcam-footer {
+  display: flex !important; /* Ensures the child elements are aligned */
+  justify-content: center !important; /* Centers content horizontally */
+  align-items: center !important; /* Centers content vertically */
+  text-align: center !important; /* Optional for centering text */
+}
+
+.uppy-Webcam-videoSourceContainer,
+.uppy-Webcam-recordingLength {
+  display: none !important;
+}
+
+/* StatusBar */
+.uppy-StatusBar-actions {
+  justify-content: end;
+}
