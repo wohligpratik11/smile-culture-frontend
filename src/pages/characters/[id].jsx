@@ -35,7 +35,7 @@ const CharactersPage = ({ characters }) => {
 	};
 
 	const filteredFeatures = features?.filter((feature) =>
-		feature?.title?.toLowerCase()?.includes(searchQuery.toLowerCase())
+		feature?.name?.toLowerCase()?.includes(searchQuery.toLowerCase())
 	);
 
 	const handleCharactersSelect = (character) => {

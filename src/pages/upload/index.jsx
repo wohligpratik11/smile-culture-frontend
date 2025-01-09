@@ -64,69 +64,11 @@ const uploadPage = ({ characters }) => {
 						</div>
 					</div>
 
-					<h2 className="text-white text-xl mb-4">Select Mode</h2>
-					<div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 max-w-xs sm:max-w-sm">
-						<Card
-							className={`p-4 sm:p-6 cursor-pointer transition-all h-[122px] w-full sm:w-[172px] rounded-xl ${selectedMode === 'image'
-								? 'bg-gradient-custom-gradient border border-buttonBorder rounded-lg'
-								: 'bg-blueYonder'
-								}`}
-							onClick={() => handleModeSelect('image')}
-						>
-							<div className="flex flex-col items-center gap-2">
-								<Image src={SelectImage} alt="Image Icon" className="w-10 sm:w-12 h-10 sm:h-12" />
-								<span className="text-white text-sm sm:text-base">Image</span>
-							</div>
-						</Card>
-
-						<Card
-							className={`p-4 sm:p-6 cursor-pointer transition-all h-[122px] w-full sm:w-[172px] rounded-xl ${selectedMode === 'video'
-								? 'bg-gradient-custom-gradient border border-buttonBorder'
-								: 'bg-blueYonder'
-								}`}
-							onClick={() => handleModeSelect('video')}
-						>
-							<div className="flex flex-col items-center gap-2">
-								<Image src={Video} alt="Video Icon" className="w-10 sm:w-12 h-10 sm:h-12" />
-								<span className="text-white text-sm sm:text-base">Video</span>
-							</div>
-						</Card>
+					<div className="flex flex-col items-center justify-center mt-8">
+						<h2 className="text-2xl text-white font-semibold mb-4">
+							File Upload Feature Coming Soon – Stay Tuned for Updates!
+						</h2>
 					</div>
-
-					<h2 className="text-white text-xl mb-4">Upload Selfie</h2>
-					<span className="text-white text-xl mb-4">character 1</span>
-					<div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 max-w-xs sm:max-w-sm">
-						<Card
-							className={`p-4 sm:p-6 cursor-pointer transition-all h-[122px] w-full sm:w-[172px] rounded-xl ${selectedMode === 'image'
-								? 'bg-gradient-custom-gradient border border-buttonBorder rounded-lg'
-								: 'bg-blueYonder'
-								}`}
-							onClick={() => handleModeSelect('image')}
-						>
-							<div className="flex flex-col items-center gap-2">
-								<Image src={UploadImages} alt="Image Icon" className="w-10 sm:w-12 h-10 sm:h-12" />
-								<div className="flex items-center space-x-2">
-									<ArrowUpFromLine size={20} strokeWidth={3} absoluteStrokeWidth />
-									<span className="text-white font-medium text-xs">Upload Image</span>
-								</div>
-
-							</div>
-						</Card>
-
-					</div>
-				</div>
-				<div className="flex justify-end space-x-4 mt-6">
-					<button
-						className="px-4 py-2 bg-gradient-custom-gradient border border-buttonBorder rounded-lg w-52 h-12"
-						disabled={!selectedMode} // Disable if no mode is selected
-						onClick={() => {
-							if (selectedMode) {
-								router.push(`/next-step?mode=${selectedMode}`); // Pass the selected mode in the query
-							}
-						}}
-					>
-						Next
-					</button>
 				</div>
 			</Card>
 		</div>
