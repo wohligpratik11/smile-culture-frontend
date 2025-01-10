@@ -1,8 +1,11 @@
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/router'
+import React from 'react'; // Add this line to define React;
 import { useState, useEffect } from 'react';
 import { Card } from '../../components/components/ui/card';
 import Link from 'next/link';
 import { ArrowLeft, ArrowUpFromLine } from 'lucide-react';
+import { apiService, API_ENDPOINTS } from '../../lib/api/apiService';
+import axiosInstance from '../../lib/api/axiosInstance';
 import Cookie from 'js-cookie';
 import Image from 'next/image';
 import CryptoJS from 'crypto-js';
@@ -11,8 +14,9 @@ import Video from "../../../public/assets/images/video.webp";
 import UploadImages from "../../../public/assets/images/uploadImages.webp";
 import MediaUploader from '../../components/components/ui/UppyUploader';
 import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription } from '../../components/components/ui/dialog'; // Import Dialog components
+import { AspectRatio } from "../../components/components/ui/aspect-ratio"
 
-const UploadPage = ({ characters }) => {
+const UploadPage = ({ characters, movies }) => {
 	const router = useRouter();
 	const [titleFromCookie, setTitleFromCookie] = useState('');
 	const [selectedCharacters, setSelectedCharacters] = useState([]);
@@ -73,62 +77,53 @@ const UploadPage = ({ characters }) => {
 							{renderHeader()}
 						</div>
 					</div>
-					<h2 className="text-white text-xl mb-4">Select Mode</h2>
-					<div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 max-w-xs sm:max-w-sm">
-						<Card
-							className={`p-4 sm:p-6 cursor-pointer transition-all h-[122px] w-full sm:w-[172px] rounded-xl ${selectedMode === 'image'
-								? 'bg-gradient-custom-gradient border border-buttonBorder rounded-lg'
-								: 'bg-blueYonder'
-								}`}
-							onClick={() => handleModeSelect('image')}
-						>
-							<div className="flex flex-col items-center gap-2">
-								<Image src={SelectImage} alt="Image Icon" className="w-10 sm:w-12 h-10 sm:h-12" />
-								<span className="text-white text-sm sm:text-base">Image</span>
-							</div>
-						</Card>
+
+					<h2 className="text-white mb-4 font-medium text-lg">Upload Selfie</h2>
+					<span className="text-white mb-4 font-medium text-sm">character 1</span>
+					<div className="grid grid-cols-4 gap-4">
+						{movies.map((movie, index) => (
+							<div key={index} className="flex gap-2">
+								{/* First Card */}
+								<Card
+									className={`p-4 sm:p-6 cursor-pointer transition-all h-[122px] w-full sm:w-[172px] rounded-xl ${selectedMode === 'image'
+										? 'bg-gradient-custom-gradient border border-buttonBorder rounded-lg'
+										: 'bg-blueYonder'
+										}`}
+									onClick={openModal}
+								>
+									<div className="flex flex-col items-center gap-2">
+										<Image
+											src={UploadImages} // Placeholder or dynamic image for this card
+											alt="Image Icon"
+											className="w-10 sm:w-12 h-10 sm:h-12"
+										/>
+										<div className="flex items-center space-x-2">
+											<ArrowUpFromLine size={20} strokeWidth={3} absoluteStrokeWidth />
+											<span className="text-white font-medium text-xs">{movie.title || 'Upload Image'}</span>
+										</div>
+									</div>
+								</Card>
 
 
-						<Card
-							className={`p-4 sm:p-6 cursor-pointer transition-all h-[122px] w-full sm:w-[172px] rounded-xl ${selectedMode === 'video'
-								? 'bg-gradient-custom-gradient border border-buttonBorder'
-								: 'bg-blueYonder'
-								}`}
-							onClick={() => handleModeSelect('video')}
-						>
-							<div className="flex flex-col items-center gap-2">
-								<Image src={Video} alt="Video Icon" className="w-10 sm:w-12 h-10 sm:h-12" />
-								<span className="text-white text-sm sm:text-base">Video</span>
-							</div>
-						</Card>
-					</div>
-
-					<h2 className="text-white text-xl mb-4">Upload Selfie</h2>
-					<span className="text-white text-xl mb-4">character 1</span>
-					<div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 max-w-xs sm:max-w-sm">
-						<Card
-							className={`p-4 sm:p-6 cursor-pointer transition-all h-[122px] w-full sm:w-[172px] rounded-xl ${selectedMode === 'image'
-								? 'bg-gradient-custom-gradient border border-buttonBorder rounded-lg'
-								: 'bg-blueYonder'
-								}`}
-							onClick={openModal}
-						>
-							<div className="flex flex-col items-center gap-2">
-								<Image src={UploadImages} alt="Image Icon" className="w-10 sm:w-12 h-10 sm:h-12" />
-								<div className="flex items-center space-x-2" onClick={openModal}>
-									<ArrowUpFromLine size={20} strokeWidth={3} absoluteStrokeWidth />
-									<span className="text-white font-medium text-xs">Upload Image</span>
+								<div className="flex flex-col items-center gap-2 mt-6 ">
+									<Image
+										src={movie.url || UploadImages}
+										alt={movie.title || 'Movie Image'}
+										width={172}
+										height={122}
+										className="object-contain rounded-2xl"
+									/>
 								</div>
 							</div>
-						</Card>
+						))}
 					</div>
 
 					<Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
 						<DialogTrigger asChild>
 							{/* Trigger Component */}
 						</DialogTrigger>
-						<DialogContent className="mx-auto max-w-4xl p-4 !bg-deepNavy rounded-lg">
-							<DialogTitle className="text-xl font-medium">Upload Selfie Image</DialogTitle>
+						<DialogContent className="mx-auto max-w-4xl p-2 !bg-deepNavy rounded-lg mb-2">
+							<DialogTitle className="text-xl font-medium ml-1.5">Upload Selfie Image</DialogTitle>
 							<MediaUploader />
 						</DialogContent>
 					</Dialog>
@@ -156,19 +151,48 @@ const UploadPage = ({ characters }) => {
 
 export async function getServerSideProps(context) {
 	try {
+		const { req } = context;
+		const cookies = req.cookies;
+		let selectedCharacters = [];
+
+		if (cookies.selectedCharacters) {
+			try {
+				const bytes = CryptoJS.AES.decrypt(cookies.selectedCharacters, 'your-encryption-key');
+				const decryptedData = bytes.toString(CryptoJS.enc.Utf8);
+				if (decryptedData) {
+					selectedCharacters = JSON.parse(decryptedData);
+				}
+			} catch (error) {
+				console.error('Decryption error:', error);
+			}
+		} else {
+			console.log('selectedCharacters cookie is missing or empty');
+		}
+		const selectedCharacterIds = selectedCharacters.map(character => character.id);
+		const payload = {
+			character_ids: selectedCharacterIds, // or selectedCharacterIds if you just need IDs
+		};
+		console.log('Payload:', payload);
+		const axios = axiosInstance(context);
+		const response = await axios.post(API_ENDPOINTS.GET_ALL_SELECTED_CHARACTERS_LIST, payload);
+		console.log('API Response:', response?.data?.data);
+
 		return {
 			props: {
-				characters: [],
+				movies: response?.data?.data || [],
 			},
 		};
 	} catch (error) {
-		console.error('Error fetching data:', error);
+		console.error('Error fetching movies:', error);
 		return {
 			props: {
-				characters: [],
+				movies: [],
 			},
 		};
 	}
 }
+
+
+
 
 export default UploadPage;

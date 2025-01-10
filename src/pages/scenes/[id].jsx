@@ -103,7 +103,7 @@ const ScenesPage = ({ scenes }) => {
 						/>
 					</div>
 					<div className="relative mt-2">
-						Choose Characters
+						Choose Scenes
 					</div>
 					{/* Tabs buttons outside the Tabs component */}
 					<Tabs value={selectedTab} onValueChange={setSelectedTab}>

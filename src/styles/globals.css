@@ -135,3 +135,9 @@ body {
 .uppy-StatusBar-actions {
   justify-content: end;
 }
+.uppy-Dashboard-inner {
+  border-style: none !important;
+}
+.uppy-DashboardTab {
+  
+}
