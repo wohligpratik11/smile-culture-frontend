@@ -16,6 +16,26 @@ const nextConfig = {
     '@uppy/webcam',
     '@uppy/image-editor',
   ],
+  experimental: {
+    optimizeCss: true, // Enables CSS optimization for performance
+  },
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          { key: 'X-Robots-Tag', value: 'index, follow' }, // Default for SEO
+        ],
+      },
+    ];
+  },
+  webpack(config) {
+    config.plugins
+      .push
+      // Add any webpack plugins you need for SEO-related tasks
+      ();
+    return config;
+  },
 };
 
 module.exports = nextConfig;
