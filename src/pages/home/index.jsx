@@ -94,12 +94,12 @@ const Home = () => {
                 dialogue and create unforgettable moments!
               </div>
             </div>
-            <div className="mt-6 flex justify-center space-x-4">
+            {/* <div className="mt-6 flex justify-center space-x-4">
               <button className="bg-gradient-custom-gradient h-12 w-52 rounded-lg border border-buttonBorder px-4 py-2">
                 Get Started
               </button>
-            </div>
-            <div className="flex items-center justify-center">
+            </div> */}
+            <div className="flex items-center justify-center mt-4">
               <div className="mx-auto max-w-7xl">
                 <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-3">
                   {features.map((feature) => (

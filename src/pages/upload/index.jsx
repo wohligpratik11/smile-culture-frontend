@@ -35,7 +35,6 @@ const UploadPage = ({ characters, movies }) => {
 			}
 		}
 	}, []);
-
 	const openModal = () => {
 		setIsModalOpen(true);
 	};
@@ -55,6 +54,16 @@ const UploadPage = ({ characters, movies }) => {
 	const handleModeSelect = (mode) => {
 		setSelectedMode(mode);
 	};
+	const handleUploadComplete = (formData) => {
+		console.log("Received formData in onUploadComplete: ", formData);
+
+		// Iterate through the formData to check the uploaded files
+		for (let pair of formData.entries()) {
+			console.log(pair[0] + ': ' + pair[1]);
+		}
+	};
+
+
 
 	return (
 		<div className="min-h-screen p-6 h-[835px]">
@@ -79,40 +88,43 @@ const UploadPage = ({ characters, movies }) => {
 					</div>
 
 					<h2 className="text-white mb-4 font-medium text-lg">Upload Selfie</h2>
-					<span className="text-white mb-4 font-medium text-sm">character 1</span>
 					<div className="grid grid-cols-4 gap-4">
 						{movies.map((movie, index) => (
-							<div key={index} className="flex gap-2">
-								{/* First Card */}
-								<Card
-									className={`p-4 sm:p-6 cursor-pointer transition-all h-[122px] w-full sm:w-[172px] rounded-xl ${selectedMode === 'image'
-										? 'bg-gradient-custom-gradient border border-buttonBorder rounded-lg'
-										: 'bg-blueYonder'
-										}`}
-									onClick={openModal}
-								>
-									<div className="flex flex-col items-center gap-2">
-										<Image
-											src={UploadImages} // Placeholder or dynamic image for this card
-											alt="Image Icon"
-											className="w-10 sm:w-12 h-10 sm:h-12"
-										/>
-										<div className="flex items-center space-x-2">
-											<ArrowUpFromLine size={20} strokeWidth={3} absoluteStrokeWidth />
-											<span className="text-white font-medium text-xs">{movie.title || 'Upload Image'}</span>
+							<div>	Character Name:<span className="ml-3 text-white font-medium text-sm">
+								{movie.character_real_name || "Character Name Not Available"}
+							</span>
+								<div key={index} className="flex gap-2 mt-2">
+
+									<Card
+										className={`p-4 sm:p-6 cursor-pointer transition-all h-[122px] w-full sm:w-[172px] rounded-xl ${selectedMode === 'image'
+											? 'bg-gradient-custom-gradient border border-buttonBorder rounded-lg'
+											: 'bg-blueYonder'
+											}`}
+										onClick={openModal}
+									>
+										<div className="flex flex-col items-center gap-2">
+											<Image
+												src={UploadImages} // Placeholder or dynamic image for this card
+												alt="Image Icon"
+												className="w-10 sm:w-12 h-10 sm:h-12"
+											/>
+											<div className="flex items-center space-x-2">
+												<ArrowUpFromLine size={20} strokeWidth={3} absoluteStrokeWidth />
+												<span className="text-white font-medium text-xs">{movie.title || 'Upload Image'}</span>
+											</div>
 										</div>
+									</Card>
+
+
+									<div className="flex flex-col items-center gap-2 mt-6 ">
+										<Image
+											src={movie.url || UploadImages}
+											alt={movie.title || 'Movie Image'}
+											width={172}
+											height={122}
+											className="object-contain rounded-2xl"
+										/>
 									</div>
-								</Card>
-
-
-								<div className="flex flex-col items-center gap-2 mt-6 ">
-									<Image
-										src={movie.url || UploadImages}
-										alt={movie.title || 'Movie Image'}
-										width={172}
-										height={122}
-										className="object-contain rounded-2xl"
-									/>
 								</div>
 							</div>
 						))}
@@ -124,7 +136,7 @@ const UploadPage = ({ characters, movies }) => {
 						</DialogTrigger>
 						<DialogContent className="mx-auto max-w-4xl p-2 !bg-deepNavy rounded-lg mb-2">
 							<DialogTitle className="text-xl font-medium ml-1.5">Upload Selfie Image</DialogTitle>
-							<MediaUploader />
+							<MediaUploader onUploadComplete={handleUploadComplete} />
 						</DialogContent>
 					</Dialog>
 

@@ -20,10 +20,10 @@ const Dashboard = dynamic(
   }
 );
 
-const MediaUploader = () => {
+const MediaUploader = ({ onUploadComplete }) => {
   const [isClient, setIsClient] = useState(false);
   const [uppyInstance, setUppyInstance] = useState(null);
-  console.log("Uploading", uppyInstance)
+
   useEffect(() => {
     const initUppy = async () => {
       const Uppy = (await import('@uppy/core')).default;
@@ -47,27 +47,27 @@ const MediaUploader = () => {
         .use(ImageEditor, {
           quality: 0.8,
         });
-
       uppy.on('complete', (result) => {
         const files = result.successful;
+        console.log("files: ", files);
+
         const formData = new FormData();
         files.forEach((file) => {
-          formData.append('files', file.data);
+          console.log("file object: ", file);
+          const fileData = file?.data[0].data;
+          formData.append('files', fileData);
         });
 
-        fetch('/api/upload', {
-          method: 'POST',
-          body: formData,
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            console.log('Upload successful:', data);
-          })
-          .catch((error) => {
-            console.error('Upload failed:', error);
-          });
-      });
+        console.log("FormData after appending files: ");
+        for (let pair of formData.entries()) {
+          console.log(pair[0] + ': ' + pair[1]);
+        }
 
+        if (onUploadComplete) {
+          console.log("Sending formData to onUploadComplete: ");
+          onUploadComplete(formData);
+        }
+      });
       setUppyInstance(uppy);
     };
 
@@ -80,11 +80,10 @@ const MediaUploader = () => {
     };
   }, []);
 
-
   return (
     <div>
       {isClient && uppyInstance ? (
-        <div className="relative bg-deepNavy" >
+        <div className="relative bg-deepNavy">
           <Dashboard
             uppy={uppyInstance}
             plugins={['Webcam']}
@@ -101,10 +100,7 @@ const MediaUploader = () => {
         </div>
       )}
     </div>
-
   );
 };
 
 export default MediaUploader;
-
-
