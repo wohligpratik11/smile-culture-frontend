@@ -37,5 +37,15 @@ const nextConfig = {
     return config;
   },
 };
+// next.config.js
+const withPWA = require('next-pwa')({
+  dest: 'public', // Where the service worker and assets will be generated
+});
+
+module.exports = withPWA({
+  // Other Next.js config options
+  reactStrictMode: true,
+  swcMinify: true,
+});
 
 module.exports = nextConfig;
