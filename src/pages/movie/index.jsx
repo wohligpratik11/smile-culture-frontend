@@ -4,23 +4,58 @@ import { Input } from '../../components/components/ui/input';
 import { Card, CardContent } from '../../components/components/ui/card';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
+import { ChevronLeft } from 'lucide-react';
 import { CiSearch } from "react-icons/ci";
 import { apiService, API_ENDPOINTS } from '../../lib/api/apiService';
 import axiosInstance from '../../lib/api/axiosInstance';
 import Cookie from 'js-cookie';
 import Image from 'next/image';
-import { AspectRatio } from "../../components/components/ui/aspect-ratio"
+import { AspectRatio } from "../../components/components/ui/aspect-ratio";
 
-const MoviePage = ({ movies }) => {
+const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 	const router = useRouter();
 	const [titleFromCookie, setTitleFromCookie] = useState('');
 	const [searchQuery, setSearchQuery] = useState('');
 	const [selectedMovie, setSelectedMovie] = useState(null);
+	const [movies, setMovies] = useState(initialMovies);
+	const [currentPage, setCurrentPage] = useState(initialPage); 
+	const [totalPages, setTotalPages] = useState(Math.ceil(totalCount / 8));
 
 	useEffect(() => {
 		const title = Cookie.get('title');
 		setTitleFromCookie(title);
 	}, []);
+
+	// Re-fetch movies whenever the page changes
+	useEffect(() => {
+		const { page } = router.query;
+		if (page && parseInt(page) !== currentPage) {
+			handlePageChange(parseInt(page));
+		}
+	}, [router.query.page]);
+
+	// Fetch new movies when page changes
+	const handlePageChange = async (page) => {
+		if (page < 1 || page > totalPages) return; 
+
+		router.push({
+			pathname: router.pathname,
+			query: { ...router.query, page }, 
+		}, undefined, { shallow: true });
+
+		setCurrentPage(page); 
+
+		try {
+			const axios = axiosInstance();
+			const response = await axios.post(API_ENDPOINTS.GET_ALL_MOVIES_LIST, { page });
+
+			setMovies(response?.data?.data?.data || []);
+			setTotalPages(Math.ceil(response?.data?.data?.totalCount / 8)); // Recalculate total pages
+		} catch (error) {
+			console.error('Error fetching movies:', error);
+		}
+	};
 
 	const features = movies?.map(movie => ({
 		id: movie.movie_id,
@@ -112,16 +147,54 @@ const MoviePage = ({ movies }) => {
 							))
 						)}
 					</div>
-
 				</div>
-				<div className="flex justify-end space-x-4 mt-6">
-					<button
-						className="px-4 py-2 rounded-lg bg-gradient-custom-gradient border border-buttonBorder w-52 h-12"
-						onClick={() => selectedMovie && router.push(selectedMovie.path)}
-						disabled={!selectedMovie}
-					>
-						Next
-					</button>
+
+				<div className="flex justify-between items-center mt-6">
+					<div className={`flex justify-center items-center space-x-2 flex-1 ${selectedMovie ? 'ml-36' : ''}`}>
+						<button
+							className={`px-4 py-2 rounded-md bg-gradient-custom-gradient border border-buttonBorder text-white transition-all duration-200 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 ${currentPage <= 1 ? 'opacity-50 cursor-not-allowed' : ''
+								}`}
+							onClick={() => handlePageChange(currentPage - 1)}
+							disabled={currentPage <= 1}
+						>
+							<ChevronLeft className="w-5 h-5" /> 
+						</button>
+
+						{[...Array(totalPages)].map((_, index) => {
+							const page = index + 1;
+							const isActive = currentPage === page;
+							return (
+								<button
+									key={page}
+									onClick={() => handlePageChange(page)}
+									className={`px-4 py-2 rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-300 ${isActive
+										? 'bg-gradient-custom-gradient border border-buttonBorder text-white'
+										: 'bg-white text-blue-600 hover:bg-blue-100 hover:border hover:border-blue-500'
+										}`}
+								>
+									{page}
+								</button>
+							);
+						})}
+
+						<button
+							className={`px-4 py-2 rounded-md bg-gradient-custom-gradient border border-buttonBorder text-white transition-all duration-200 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 ${currentPage >= totalPages ? 'opacity-50 cursor-not-allowed' : ''
+								}`}
+							onClick={() => handlePageChange(currentPage + 1)}
+							disabled={currentPage >= totalPages}
+						>
+							<ChevronRight className="w-5 h-5" /> 
+						</button>
+					</div>
+
+					{selectedMovie && (
+						<button
+							className="px-4 py-2 rounded-lg bg-gradient-custom-gradient border border-buttonBorder w-52 h-12 ml-4"
+							onClick={() => router.push(selectedMovie.path)}
+						>
+							Next
+						</button>
+					)}
 				</div>
 			</Card>
 		</div>
@@ -129,21 +202,27 @@ const MoviePage = ({ movies }) => {
 };
 
 export async function getServerSideProps(context) {
+	const { query } = context;
+	const page = query.page || 1; 
+
 	try {
 		const axios = axiosInstance(context);
-		const response = await axios.post(API_ENDPOINTS.GET_ALL_MOVIES_LIST, {
-			page: 1,
-		});
+		const response = await axios.post(API_ENDPOINTS.GET_ALL_MOVIES_LIST, { page });
+
 		return {
 			props: {
-				movies: response?.data?.data?.data || [],
+				initialMovies: response?.data?.data?.data || [],
+				totalCount: response?.data?.data?.totalCount || 0,
+				page: parseInt(page, 10),
 			},
 		};
 	} catch (error) {
 		console.error('Error fetching movies:', error);
 		return {
 			props: {
-				movies: [],
+				initialMovies: [],
+				totalCount: 0,
+				page: 1,
 			},
 		};
 	}
