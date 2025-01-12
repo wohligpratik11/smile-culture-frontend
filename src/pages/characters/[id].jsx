@@ -65,6 +65,7 @@ const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, 
 	);
 	const handleNextClick = () => {
 		if (selectedCharacters) {
+			console.log("selected", selectedCharacters);
 			// Encrypt the selected characters and store them in a cookie
 			const encryptedData = CryptoJS.AES.encrypt(
 				JSON.stringify(selectedCharacters),
@@ -74,12 +75,13 @@ const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, 
 			// Set the encrypted data in a cookie
 			Cookie.set('selectedCharacters', encryptedData, { secure: true });
 
-			// Navigate to the next page (e.g., `/upload`)
-			router.push('/upload');
+			// Navigate to the next page (e.g., `/upload/${character_id}`)
+			router.push(`/upload/${selectedCharacters.character_id}`);
 		} else {
 			console.warn('No characters selected.');
 		}
 	};
+
 
 
 	const handleCharactersSelect = (character) => {
@@ -206,10 +208,7 @@ const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, 
 						<button
 							className="px-4 py-2 rounded-lg bg-gradient-custom-gradient border border-buttonBorder w-52 h-12 ml-4"
 							onClick={() => {
-								handleNextClick(); // Called regardless of selectedCharacters
-								if (selectedCharacters) {
-									router.push(`/upload`);
-								}
+								handleNextClick();
 							}}
 							disabled={!selectedCharacters}
 						>
