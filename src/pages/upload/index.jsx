@@ -1,6 +1,5 @@
 import { useRouter } from 'next/router'
-import React from 'react'; // Add this line to define React;
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react'; // Add useCallback here
 import { Card } from '../../components/components/ui/card';
 import Link from 'next/link';
 import { ArrowLeft, ArrowUpFromLine } from 'lucide-react';
@@ -43,6 +42,49 @@ const UploadPage = ({ characters, movies }) => {
 		setIsModalOpen(true);
 	};
 
+
+	const handleUploadComplete = async (files) => {
+		console.log("Files received:", files);
+
+		if (!files || files.length === 0) {
+			alert('No files selected');
+			return;
+		}
+
+		try {
+			// Since files is already an array from FormData.getAll(), we take the first item
+			const firstFile = files[0];
+			console.log("Processing file:", firstFile);
+
+			// Create new FormData instance
+			const formData = new FormData();
+			formData.append('user_image', firstFile);
+
+			// Log FormData entries to verify content
+			for (let pair of formData.entries()) {
+				console.log('FormData contains:', pair[0], pair[1]);
+			}
+
+			const axios = axiosInstance();
+			const response = await axios.post(API_ENDPOINTS.VALIDATION_TO_IMAGE, formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data', // Add this header
+				},
+			});
+
+			if (response.status === 200) {
+				alert('File uploaded successfully!');
+			} else {
+				console.error('Error:', response.status, response.data);
+				alert('Error uploading file. Status code: ' + response.status);
+			}
+		} catch (error) {
+			console.error('Error uploading file:', error);
+			alert('Error uploading file. Please try again.');
+		}
+	};
+
+
 	const closeSelfieInstructions = () => {
 		setShowSelfieInstructions(false);  // This will hide the Selfie Instructions modal
 	};
@@ -62,12 +104,6 @@ const UploadPage = ({ characters, movies }) => {
 
 	const handleModeSelect = (mode) => {
 		setSelectedMode(mode);
-	};
-	const handleUploadComplete = (formData) => {
-		console.log("Received formData in onUploadComplete: ", formData);
-		for (let pair of formData.entries()) {
-			console.log(pair[0] + ': ' + pair[1]);
-		}
 	};
 
 
@@ -146,7 +182,7 @@ const UploadPage = ({ characters, movies }) => {
 							</DialogTrigger>
 							<DialogContent className="mx-auto max-w-4xl p-2 !bg-deepNavy rounded-lg mb-2">
 								<DialogTitle className="text-xl font-medium ml-1.5">Upload Selfie Image</DialogTitle>
-								<UppyUploader stopUploading={stopUploading} />
+								<UppyUploader stopUploading={stopUploading} onUploadComplete={handleUploadComplete} />
 							</DialogContent>
 						</Dialog>
 					)}

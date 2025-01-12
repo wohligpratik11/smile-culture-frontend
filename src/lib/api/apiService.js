@@ -7,14 +7,28 @@ const apiService = {
     return axios.get(url, { params });
   },
 
-  post: async (url, data) => {
+  post: async (url, data, headers = {}) => {
     const axios = axiosInstance();
-    return axios.post(url, data);
+    return axios.post(url, data, {
+      headers: {
+        ...headers,
+        ...(data instanceof FormData && {
+          'Content-Type': 'multipart/form-data',
+        }),
+      },
+    });
   },
 
-  put: async (url, data) => {
+  put: async (url, data, headers = {}) => {
     const axios = axiosInstance();
-    return axios.put(url, data);
+    return axios.put(url, data, {
+      headers: {
+        ...headers,
+        ...(data instanceof FormData && {
+          'Content-Type': 'multipart/form-data',
+        }),
+      },
+    });
   },
 
   delete: async (url) => {
