@@ -5,14 +5,18 @@ import { useState } from 'react';
 import { Button } from "../../components/components/ui/button";
 import { CheckCircle2, XCircle } from 'lucide-react';
 
-export default function SelfieInstructions() {
+export default function SelfieInstructions({ closeModal, uploadImageData }) {
 	const [currentStep, setCurrentStep] = useState(1);
 	const [isVisible, setIsVisible] = useState(true); // State to manage visibility
 
 	if (!isVisible) return null; // Return null if the modal is not visible
 
+	const handleTakeSelfie = () => {
+		closeModal(); // Close the modal
+		uploadImageData(); // Call the upload image function
+	};
 	return (
-		<div className="min-h-screen bg-slate-900 flex items-center justify-center p-4">
+		<div className="min-h-screen flex items-center justify-center p-4">
 			<div className="w-full max-w-2xl bg-[#3B4374] rounded-3xl p-8 relative">
 				<div className="space-y-8">
 					<h1 className="text-white text-3xl font-semibold text-center">
@@ -109,10 +113,11 @@ export default function SelfieInstructions() {
 						<Button
 							variant="link"
 							className="text-white hover:text-white/80"
-							onClick={() => setIsVisible(false)} // Close on skip
+							onClick={() => closeModal()}
 						>
 							Skip
 						</Button>
+
 						{currentStep === 1 && (
 							<Button
 								className="bg-[#22D3EE] hover:bg-[#22D3EE]/90 text-white"
@@ -132,7 +137,7 @@ export default function SelfieInstructions() {
 								</Button>
 								<Button
 									className="bg-[#22D3EE] hover:bg-[#22D3EE]/90 text-white"
-									onClick={() => setCurrentStep(2)}
+									onClick={handleTakeSelfie}
 								>
 									Take Selfie
 								</Button>

@@ -12,7 +12,9 @@ import CryptoJS from 'crypto-js';
 import SelectImage from "../../../public/assets/images/image.webp";
 import Video from "../../../public/assets/images/video.webp";
 import UploadImages from "../../../public/assets/images/uploadImages.webp";
-import MediaUploader from '../../components/components/ui/UppyUploader';
+import UppyUploader from '../../components/components/ui/UppyUploader';
+import SelfieInstruction from '../upload/selfieInstruction';
+
 import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription } from '../../components/components/ui/dialog'; // Import Dialog components
 import { AspectRatio } from "../../components/components/ui/aspect-ratio"
 
@@ -22,6 +24,8 @@ const UploadPage = ({ characters, movies }) => {
 	const [selectedCharacters, setSelectedCharacters] = useState([]);
 	const [selectedMode, setSelectedMode] = useState(null);
 	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [showSelfieInstructions, setShowSelfieInstructions] = useState(false);
+	const [isUploading, setIsUploading] = useState(false);
 
 	useEffect(() => {
 		const title = Cookie.get('title');
@@ -39,10 +43,15 @@ const UploadPage = ({ characters, movies }) => {
 		setIsModalOpen(true);
 	};
 
-	const closeModal = () => {
-		setIsModalOpen(false);
+	const closeSelfieInstructions = () => {
+		setShowSelfieInstructions(false);  // This will hide the Selfie Instructions modal
 	};
-
+	const uploadImageData = () => {
+		setIsUploading(true);
+	};
+	const stopUploading = () => {
+		setIsUploading(false);
+	};
 	const renderHeader = () => {
 		if (titleFromCookie) {
 			const formattedTitle = titleFromCookie.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
@@ -97,7 +106,7 @@ const UploadPage = ({ characters, movies }) => {
 											? 'bg-gradient-custom-gradient border border-buttonBorder rounded-lg'
 											: 'bg-blueYonder'
 											}`}
-										onClick={openModal}
+										onClick={() => setShowSelfieInstructions(true)}
 									>
 										<div className="flex flex-col items-center gap-2">
 											<Image
@@ -126,19 +135,21 @@ const UploadPage = ({ characters, movies }) => {
 							</div>
 						))}
 					</div>
-
-					<Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-						<DialogTrigger asChild>
-							{/* Trigger Component */}
-						</DialogTrigger>
-						<DialogContent className="mx-auto max-w-4xl p-2 !bg-deepNavy rounded-lg mb-2">
-							<DialogTitle className="text-xl font-medium ml-1.5">Upload Selfie Image</DialogTitle>
-							<MediaUploader onUploadComplete={handleUploadComplete} />
-						</DialogContent>
-					</Dialog>
-
-
-
+					{showSelfieInstructions && (
+						<div className="fixed inset-0 bg-opacity-50 flex items-center justify-center">
+							<SelfieInstruction closeModal={closeSelfieInstructions} uploadImageData={uploadImageData} />
+						</div>
+					)}
+					{isUploading && (
+						<Dialog open={isUploading} onOpenChange={stopUploading}>
+							<DialogTrigger asChild>
+							</DialogTrigger>
+							<DialogContent className="mx-auto max-w-4xl p-2 !bg-deepNavy rounded-lg mb-2">
+								<DialogTitle className="text-xl font-medium ml-1.5">Upload Selfie Image</DialogTitle>
+								<UppyUploader stopUploading={stopUploading} />
+							</DialogContent>
+						</Dialog>
+					)}
 				</div>
 				<div className="flex justify-end space-x-4 mt-6">
 					<button
