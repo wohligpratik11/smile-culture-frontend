@@ -13,7 +13,6 @@ import Video from "../../../public/assets/images/video.webp";
 import UploadImages from "../../../public/assets/images/uploadImages.webp";
 import UppyUploader from '../../components/components/ui/UppyUploader';
 import SelfieInstruction from '../upload/selfieInstruction';
-
 import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription } from '../../components/components/ui/dialog'; // Import Dialog components
 import { AspectRatio } from "../../components/components/ui/aspect-ratio"
 
@@ -66,11 +65,7 @@ const UploadPage = ({ characters, movies }) => {
 			}
 
 			const axios = axiosInstance();
-			const response = await axios.post(API_ENDPOINTS.VALIDATION_TO_IMAGE, formData, {
-				headers: {
-					'Content-Type': 'multipart/form-data', // Add this header
-				},
-			});
+			const response = await axios.post(API_ENDPOINTS.VALIDATION_TO_IMAGE, formData);
 
 			if (response.status === 200) {
 				alert('File uploaded successfully!');

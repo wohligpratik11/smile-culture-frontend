@@ -1,5 +1,6 @@
 import axiosInstance from './axiosInstance';
 import { API_ENDPOINTS } from './endpoints';
+import { getHeaders } from '../../utils/getHeaders'; // Import the utility
 
 const apiService = {
   get: async (url, params) => {
@@ -9,26 +10,14 @@ const apiService = {
 
   post: async (url, data, headers = {}) => {
     const axios = axiosInstance();
-    return axios.post(url, data, {
-      headers: {
-        ...headers,
-        ...(data instanceof FormData && {
-          'Content-Type': 'multipart/form-data',
-        }),
-      },
-    });
+    const finalHeaders = getHeaders(data, headers); // Use the utility to get headers
+    return axios.post(url, data, { headers: finalHeaders });
   },
 
   put: async (url, data, headers = {}) => {
     const axios = axiosInstance();
-    return axios.put(url, data, {
-      headers: {
-        ...headers,
-        ...(data instanceof FormData && {
-          'Content-Type': 'multipart/form-data',
-        }),
-      },
-    });
+    const finalHeaders = getHeaders(data, headers); // Use the utility to get headers
+    return axios.put(url, data, { headers: finalHeaders });
   },
 
   delete: async (url) => {
