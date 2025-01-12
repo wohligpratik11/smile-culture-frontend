@@ -65,13 +65,13 @@ const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, 
 		feature?.character_real_name?.toLowerCase()?.includes(searchQuery.toLowerCase())
 	);
 	const handleNextClick = () => {
-		if (selectedCharacters?.length > 0) {
+		if (selectedCharacters.length > 0) {
 			console.log("selected", selectedCharacters);
-			// Encrypt the selected characters and store them in a cookie
 			const encryptedData = CryptoJS.AES.encrypt(
-				JSON.stringify(selectedCharacters?.character_id),
+				JSON.stringify(selectedCharacters),
 				'your-encryption-key'
 			).toString();
+
 			Cookie.set('selectedCharacters', encryptedData, { secure: true });
 			router.push(`/upload`);
 		} else {
@@ -80,19 +80,16 @@ const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, 
 	};
 
 
-
-
 	const handleCharactersSelect = (character) => {
 		setSelectedCharacters((prevSelected) => {
-			const isSelected = prevSelected.some((c) => c.character_id === character.character_id);
+			const isSelected = prevSelected.includes(character.character_id);
 			if (isSelected) {
-				return prevSelected.filter((c) => c.character_id !== character.character_id);
+				return prevSelected.filter((id) => id !== character.character_id);
 			} else {
-				return [...prevSelected, character];
+				return [...prevSelected, character.character_id];
 			}
 		});
 	};
-
 
 
 	const renderHeader = () => {
@@ -149,7 +146,8 @@ const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, 
 							filteredFeatures.map((feature) => (
 								<div key={feature.path} className="space-y-2">
 									<Card
-										className={`bg-blue-800/20 border-0 backdrop-blur-sm overflow-hidden cursor-pointer transform transition-transform duration-200 hover:scale-105 mb-6 ${selectedCharacters.some(c => c.character_id === feature.character_id) ? 'border-buttonBorder border border-solid' : ''}`}
+										className={`bg-blue-800/20 border-0 backdrop-blur-sm overflow-hidden cursor-pointer transform transition-transform duration-200 hover:scale-105 mb-6 ${selectedCharacters.includes(feature.character_id) ? 'border-buttonBorder border border-solid' : ''
+											}`}
 										aria-label={`Select ${feature.character_real_name}`}
 										onClick={() => handleCharactersSelect(feature)}
 									>

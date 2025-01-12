@@ -56,8 +56,6 @@ const UploadPage = ({ characters, movies }) => {
 	};
 	const handleUploadComplete = (formData) => {
 		console.log("Received formData in onUploadComplete: ", formData);
-
-		// Iterate through the formData to check the uploaded files
 		for (let pair of formData.entries()) {
 			console.log(pair[0] + ': ' + pair[1]);
 		}
@@ -86,7 +84,6 @@ const UploadPage = ({ characters, movies }) => {
 							{renderHeader()}
 						</div>
 					</div>
-
 					<h2 className="text-white mb-4 font-medium text-lg">Upload Selfie</h2>
 					<div className="grid grid-cols-4 gap-4">
 						{movies.map((movie, index) => (
@@ -167,12 +164,15 @@ export async function getServerSideProps(context) {
 		const cookies = req.cookies;
 		let selectedCharacters = [];
 
+		// Parse and decrypt the selectedCharacters from cookies
 		if (cookies.selectedCharacters) {
 			try {
 				const bytes = CryptoJS.AES.decrypt(cookies.selectedCharacters, 'your-encryption-key');
 				const decryptedData = bytes.toString(CryptoJS.enc.Utf8);
+
 				if (decryptedData) {
 					selectedCharacters = JSON.parse(decryptedData);
+					console.log('Parsed Selected Characters:', selectedCharacters);
 				}
 			} catch (error) {
 				console.error('Decryption error:', error);
@@ -180,13 +180,18 @@ export async function getServerSideProps(context) {
 		} else {
 			console.log('selectedCharacters cookie is missing or empty');
 		}
-		const selectedCharacterIds = selectedCharacters.map(character => character.id);
+
+		// Prepare the payload with selectedCharacters as character_ids
 		const payload = {
-			character_ids: selectedCharacterIds, // or selectedCharacterIds if you just need IDs
+			character_ids: selectedCharacters, // Directly use selectedCharacters (array of ids)
 		};
-		console.log('Payload:', payload);
+
+		console.log('Payload to API:', payload);
+
+		// Send the payload to the API
 		const axios = axiosInstance(context);
 		const response = await axios.post(API_ENDPOINTS.GET_ALL_SELECTED_CHARACTERS_LIST, payload);
+
 		console.log('API Response:', response?.data?.data);
 
 		return {
@@ -196,6 +201,7 @@ export async function getServerSideProps(context) {
 		};
 	} catch (error) {
 		console.error('Error fetching movies:', error);
+
 		return {
 			props: {
 				movies: [],
