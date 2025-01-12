@@ -76,7 +76,7 @@ const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, 
 			Cookie.set('selectedCharacters', encryptedData, { secure: true });
 
 			// Navigate to the next page (e.g., `/upload/${character_id}`)
-			router.push(`/upload/${selectedCharacters.character_id}`);
+			router.push(`/upload`);
 		} else {
 			console.warn('No characters selected.');
 		}

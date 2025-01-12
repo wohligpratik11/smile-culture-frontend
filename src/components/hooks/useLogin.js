@@ -1,4 +1,4 @@
-// hooks/useLogin.js
+// hooks/useLogin.jsx
 import { useEffect } from 'react';
 import { apiService, API_ENDPOINTS } from '../../lib/api/apiService';
 import Cookies from 'js-cookie';
@@ -19,6 +19,9 @@ export const useLogin = () => {
       }
     };
 
-    handleLogin();
+    const userData = Cookies.get('userData');
+    if (!userData || userData === 'undefined' || userData === 'null') {
+      handleLogin();
+    }
   }, []);
 };
