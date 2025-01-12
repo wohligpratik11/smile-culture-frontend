@@ -84,14 +84,10 @@ const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, 
 
 	const handleCharactersSelect = (character) => {
 		setSelectedCharacters((prevSelected) => {
-			// Check if the character is already selected
 			const isSelected = prevSelected.some((c) => c.character_id === character.character_id);
-
 			if (isSelected) {
-				// If selected, remove it from the list
 				return prevSelected.filter((c) => c.character_id !== character.character_id);
 			} else {
-				// If not selected, add it to the list
 				return [...prevSelected, character];
 			}
 		});
