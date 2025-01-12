@@ -17,11 +17,12 @@ const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, 
 	const router = useRouter();
 	const [titleFromCookie, setTitleFromCookie] = useState('');
 	const [searchQuery, setSearchQuery] = useState('');
-	const [selectedCharacters, setSelectedCharacters] = useState(null);
 	const [characters, setCharacters] = useState(initialCharacters);
 	console.log("characters", characters)
 	const [currentPage, setCurrentPage] = useState(initialPage);
 	const [totalPages, setTotalPages] = useState(Math.ceil(totalCount / 8));
+	const [selectedCharacters, setSelectedCharacters] = useState([]);
+	console.log("selectedCharacters", selectedCharacters)
 
 	useEffect(() => {
 		const title = Cookie.get('title');
@@ -64,18 +65,14 @@ const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, 
 		feature?.character_real_name?.toLowerCase()?.includes(searchQuery.toLowerCase())
 	);
 	const handleNextClick = () => {
-		if (selectedCharacters) {
+		if (selectedCharacters?.length > 0) {
 			console.log("selected", selectedCharacters);
 			// Encrypt the selected characters and store them in a cookie
 			const encryptedData = CryptoJS.AES.encrypt(
-				JSON.stringify(selectedCharacters),
+				JSON.stringify(selectedCharacters?.character_id),
 				'your-encryption-key'
 			).toString();
-
-			// Set the encrypted data in a cookie
 			Cookie.set('selectedCharacters', encryptedData, { secure: true });
-
-			// Navigate to the next page (e.g., `/upload/${character_id}`)
 			router.push(`/upload`);
 		} else {
 			console.warn('No characters selected.');
@@ -84,8 +81,20 @@ const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, 
 
 
 
+
 	const handleCharactersSelect = (character) => {
-		setSelectedCharacters(prev => (prev?.character_id === character.character_id ? null : character));
+		setSelectedCharacters((prevSelected) => {
+			// Check if the character is already selected
+			const isSelected = prevSelected.some((c) => c.character_id === character.character_id);
+
+			if (isSelected) {
+				// If selected, remove it from the list
+				return prevSelected.filter((c) => c.character_id !== character.character_id);
+			} else {
+				// If not selected, add it to the list
+				return [...prevSelected, character];
+			}
+		});
 	};
 
 
@@ -144,10 +153,11 @@ const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, 
 							filteredFeatures.map((feature) => (
 								<div key={feature.path} className="space-y-2">
 									<Card
-										className={`bg-blue-800/20 border-0 backdrop-blur-sm overflow-hidden cursor-pointer transform transition-transform duration-200 hover:scale-105 mb-6 ${selectedCharacters?.character_id === feature.character_id ? 'border-buttonBorder border border-solid' : ''}`}
+										className={`bg-blue-800/20 border-0 backdrop-blur-sm overflow-hidden cursor-pointer transform transition-transform duration-200 hover:scale-105 mb-6 ${selectedCharacters.some(c => c.character_id === feature.character_id) ? 'border-buttonBorder border border-solid' : ''}`}
 										aria-label={`Select ${feature.character_real_name}`}
 										onClick={() => handleCharactersSelect(feature)}
 									>
+
 										<CardContent className="p-0">
 											<AspectRatio ratio={16 / 9} className="w-full">
 												<Image
