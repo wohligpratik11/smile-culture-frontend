@@ -13,11 +13,11 @@ import { AuthProvider } from '../context/AuthContext';
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
   useLogin();
-  useEffect(() => {
-    if (router.pathname !== '/upload') {
-      Cookies.remove('selectedCharacters');
-    }
-  }, [router.pathname]);
+  // useEffect(() => {
+  //   if (router.pathname !== '/upload') {
+  //     Cookies.remove('selectedCharacters');
+  //   }
+  // }, [router.pathname]);
 
   return (
     <>

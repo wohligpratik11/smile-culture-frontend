@@ -22,11 +22,12 @@ const UploadPage = ({ characters, movies, characterId }) => {
 	const [titleFromCookie, setTitleFromCookie] = useState('');
 	const [selectedCharacters, setSelectedCharacters] = useState([]);
 	const [selectedMode, setSelectedMode] = useState(null);
-	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [showSelfieInstructions, setShowSelfieInstructions] = useState(false);
 	const [isUploading, setIsUploading] = useState(false);
 	const [uploadedData, setUploadedData] = useState(null);
-	const { setUploadDataState, setCharacterId } = useUploadContext();
+	const { setUploadDataFileState, setCharacterId } = useUploadContext();
+	const [filePreview, setFilePreview] = useState(null);
+
 	useEffect(() => {
 		const title = Cookie.get('title');
 		setTitleFromCookie(title);
@@ -39,9 +40,7 @@ const UploadPage = ({ characters, movies, characterId }) => {
 			}
 		}
 	}, []);
-	const openModal = () => {
-		setIsModalOpen(true);
-	};
+	;
 
 	useEffect(() => {
 		if (uploadedData) {
@@ -55,27 +54,38 @@ const UploadPage = ({ characters, movies, characterId }) => {
 			alert('No files selected');
 			return;
 		}
+
 		try {
 			const firstFile = files[0];
+
+			// Create a preview URL for the selected file
+			const previewUrl = URL.createObjectURL(firstFile);
+
 			const formData = new FormData();
 			formData.append('user_image', firstFile);
-			for (let pair of formData.entries()) {
-				console.log('FormData contains:', pair[0], pair[1]);
+
+			if (typeof setUploadDataFileState === 'function') {
+				// Store only metadata or relevant information, not the FormData object itself
+				setUploadDataFileState({ fileName: firstFile.name, fileType: firstFile.type });
+			} else {
+				console.error('setUploadDataFileState is not defined.');
 			}
+
 			const axios = axiosInstance();
 			const response = await axios.post(API_ENDPOINTS.VALIDATION_TO_IMAGE, formData);
+
 			if (response.status === 200) {
 				alert('File uploaded successfully!');
-				setUploadedData(response.data.data);
-				setUploadDataState(response.data.data);  // Store the uploaded data
+				setUploadedData(response?.data?.data?.final_response);
 				if (selectedCharacters.length > 0) {
 					console.log("Selected Character ID:", selectedCharacters);  // Log the character_id
 					setCharacterId(selectedCharacters);  // Set the character ID from selected characters
 				} else {
 					console.log("No selected characters found.");
 				}
-				toast.success(response.data.data);
-				router.push('/viewupload');
+				toast.success(response?.data?.data?.final_response);
+				setFilePreview(previewUrl); // Store the preview URL
+				stopUploading();
 			} else {
 				console.error('Error:', response.status, response.data);
 				alert('Error uploading file. Status code: ' + response.status);
@@ -86,6 +96,7 @@ const UploadPage = ({ characters, movies, characterId }) => {
 			alert('Error uploading file. Please try again.');
 		}
 	};
+
 
 
 
@@ -140,20 +151,34 @@ const UploadPage = ({ characters, movies, characterId }) => {
 								<div key={index} className="flex gap-2 mt-2">
 
 									<Card
-										className={`p-4 sm:p-6 cursor-pointer transition-all h-[122px] w-full sm:w-[172px] rounded-xl ${selectedMode === 'image'
-											? 'bg-gradient-custom-gradient border border-buttonBorder rounded-lg'
-											: 'bg-blueYonder'
+										className={`cursor-pointer transition-all h-[122px] w-full sm:w-[172px] rounded-xl ${filePreview ? 'p-1' : 'p-4 sm:p-4'
 											}`}
 										onClick={() => {
 											setShowSelfieInstructions(true);
 											setCharacterId(movie.character_id);
-										}}									>
+										}}
+
+									>
 										<div className="flex flex-col items-center gap-2">
-											<Image
-												src={UploadImages}
-												alt="Image Icon"
-												className="w-10 sm:w-12 h-10 sm:h-12"
-											/>
+											{filePreview && (
+												<div >
+													<Image
+														src={filePreview}
+														alt="Selected File"
+														width={70}
+														height={70}
+														className="rounded-lg"
+													/>
+												</div>
+											)}
+											{!filePreview && (
+												<Image
+													src={UploadImages}
+													alt="Image Icon"
+													className="w-10 sm:w-12 h-10 sm:h-12"
+												/>
+											)}
+
 											<div className="flex items-center space-x-2">
 												<ArrowUpFromLine size={20} strokeWidth={3} absoluteStrokeWidth />
 												<span className="text-white font-medium text-xs">{movie.title || 'Upload Image'}</span>
@@ -194,11 +219,8 @@ const UploadPage = ({ characters, movies, characterId }) => {
 				<div className="flex justify-end space-x-4 mt-6">
 					<button
 						className="px-4 py-2 bg-gradient-custom-gradient border border-buttonBorder rounded-lg w-52 h-12"
-						disabled={!selectedMode}
 						onClick={() => {
-							if (selectedMode) {
-								router.push(`/next-step?mode=${selectedMode}`);
-							}
+							router.push('/viewupload');
 						}}
 					>
 						Next
