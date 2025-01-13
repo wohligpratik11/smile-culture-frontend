@@ -17,7 +17,7 @@ export default function SelfieInstructions({ closeModal, uploadImageData }) {
 	};
 	return (
 		<div className="min-h-screen flex items-center justify-center p-4">
-			<div className="w-full max-w-2xl bg-[#3B4374] rounded-3xl p-8 relative">
+			<div className="w-full max-w-2xl bg-[#3B4374] rounded-3xl p-6 relative">
 				<div className="space-y-8">
 					<h1 className="text-white text-3xl font-semibold text-center">
 						Selfie Instructions
