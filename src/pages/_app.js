@@ -8,6 +8,7 @@ import Cookies from 'js-cookie';
 import { useLogin } from '../../src/components/hooks/useLogin';
 import { useRouter } from 'next/router'; // Import useRouter
 import { UploadProvider } from '../context/UploadContext';
+import { AuthProvider } from '../context/AuthContext';
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
@@ -21,14 +22,16 @@ function MyApp({ Component, pageProps }) {
   return (
     <>
       <CustomThemeProvider>
-        <UploadProvider>
-          <Layout>
-            <Head>
-              <title>Eros Now</title>
-            </Head>
-            <Component {...pageProps} />
-          </Layout>
-        </UploadProvider>
+        <AuthProvider>
+          <UploadProvider>
+            <Layout>
+              <Head>
+                <title>Eros Now</title>
+              </Head>
+              <Component {...pageProps} />
+            </Layout>
+          </UploadProvider>
+        </AuthProvider>
       </CustomThemeProvider>
     </>
   );
