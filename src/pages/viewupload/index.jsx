@@ -18,12 +18,15 @@ import { AspectRatio } from "../../components/components/ui/aspect-ratio"
 import { Button } from "../../components/components/ui/button"
 import { RotateCcw, Share } from 'lucide-react'
 import ShareLink from '../../components/components/ui/shareLink'
+import { useUploadContext } from '../../context/UploadContext';
+
 const UploadPage = ({ characters, movies }) => {
 	const router = useRouter();
 	const [titleFromCookie, setTitleFromCookie] = useState('');
 	const [selectedCharacters, setSelectedCharacters] = useState([]);
 	const [selectedMode, setSelectedMode] = useState(null);
 	const [isModalOpen, setIsModalOpen] = useState(false);
+	const { uploadData, selectedCharacterId } = useUploadContext();
 
 	useEffect(() => {
 		const title = Cookie.get('title');
@@ -68,7 +71,7 @@ const UploadPage = ({ characters, movies }) => {
 
 
 	return (
-		<div className="min-h-screen p-6 h-[835px]">
+		<div className="min-h-screen p-4 h-[835px]">
 			<Card className="bg-card-cardCustomBlue p-6">
 				<div className="space-y-4">
 					<div className="flex items-center gap-4">
@@ -90,8 +93,24 @@ const UploadPage = ({ characters, movies }) => {
 					</div>
 
 					<div className="mx-auto max-w-5xl space-y-12">
-						{/* Before/After Section */}
-						{/* Explore Section */}
+						<div>
+							<h1>Upload View</h1>
+							{uploadData ? (
+								<>
+									<p>Uploaded File: {uploadData}</p>
+
+									uploadData
+									<p className='text-black'>Character ID: {selectedCharacterId}</p>
+
+									<p>Uploaded File: {uploadData?.file?.name}</p>
+									<p>Uploaded File: {uploadData?.characterIds}</p>
+
+									<p>Character IDs: {uploadData?.characterIds?.join(', ')}</p>
+								</>
+							) : (
+								<p>No upload data available.</p>
+							)}
+						</div>
 						<div className="space-y-6 flex flex-col items-center justify-center">
 							<Card className="group relative overflow-hidden border-0 bg-transparent shadow-2xl !w-[550px] !h-[316.93px]">
 								<div className="relative aspect-video overflow-hidden rounded-xl">

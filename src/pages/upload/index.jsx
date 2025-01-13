@@ -16,8 +16,8 @@ import SelfieInstruction from '../upload/selfieInstruction';
 import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription } from '../../components/components/ui/dialog'; // Import Dialog components
 import { AspectRatio } from "../../components/components/ui/aspect-ratio"
 import { toast } from 'react-toastify';
-
-const UploadPage = ({ characters, movies }) => {
+import { useUploadContext } from '../../context/UploadContext';
+const UploadPage = ({ characters, movies, characterId }) => {
 	const router = useRouter();
 	const [titleFromCookie, setTitleFromCookie] = useState('');
 	const [selectedCharacters, setSelectedCharacters] = useState([]);
@@ -26,6 +26,7 @@ const UploadPage = ({ characters, movies }) => {
 	const [showSelfieInstructions, setShowSelfieInstructions] = useState(false);
 	const [isUploading, setIsUploading] = useState(false);
 	const [uploadedData, setUploadedData] = useState(null);
+	const { setUploadDataState, setCharacterId } = useUploadContext();  // Access context values
 
 	useEffect(() => {
 		const title = Cookie.get('title');
@@ -75,6 +76,14 @@ const UploadPage = ({ characters, movies }) => {
 			if (response.status === 200) {
 				alert('File uploaded successfully!');
 				setUploadedData(response.data.data);
+				setUploadDataState(response.data.data);  // Store the uploaded data
+				if (selectedCharacters.length > 0) {
+					console.log("Selected Character ID:", selectedCharacters);  // Log the character_id
+					setCharacterId(selectedCharacters);  // Set the character ID from selected characters
+				} else {
+					console.log("No selected characters found.");
+				}
+
 				toast.success(response.data.data);
 				router.push('/viewupload');
 			} else {
@@ -147,11 +156,13 @@ const UploadPage = ({ characters, movies }) => {
 											? 'bg-gradient-custom-gradient border border-buttonBorder rounded-lg'
 											: 'bg-blueYonder'
 											}`}
-										onClick={() => setShowSelfieInstructions(true)}
-									>
+										onClick={() => {
+											setShowSelfieInstructions(true);
+											setCharacterId(movie.character_id);
+										}}									>
 										<div className="flex flex-col items-center gap-2">
 											<Image
-												src={UploadImages} // Placeholder or dynamic image for this card
+												src={UploadImages}
 												alt="Image Icon"
 												className="w-10 sm:w-12 h-10 sm:h-12"
 											/>

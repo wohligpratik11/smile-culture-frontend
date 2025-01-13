@@ -7,6 +7,7 @@ import Layout from '@/components/layout/Layout';
 import Cookies from 'js-cookie';
 import { useLogin } from '../../src/components/hooks/useLogin';
 import { useRouter } from 'next/router'; // Import useRouter
+import { UploadProvider } from '../context/UploadContext';
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
@@ -20,12 +21,14 @@ function MyApp({ Component, pageProps }) {
   return (
     <>
       <CustomThemeProvider>
-        <Layout>
-          <Head>
-            <title>Eros Now</title>
-          </Head>
-          <Component {...pageProps} />
-        </Layout>
+        <UploadProvider>
+          <Layout>
+            <Head>
+              <title>Eros Now</title>
+            </Head>
+            <Component {...pageProps} />
+          </Layout>
+        </UploadProvider>
       </CustomThemeProvider>
     </>
   );
