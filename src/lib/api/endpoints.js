@@ -6,4 +6,5 @@ export const API_ENDPOINTS = {
   GET_ALL_SELECTED_CHARACTERS_LIST:
     'api/characters/getAllSelectedCharactersThumbnail',
   VALIDATION_TO_IMAGE: 'api/imageValidation/imageValidation',
+  CREATE_NEW_STORE_DATA: 'api/storedData/createNewStoredData',
 };

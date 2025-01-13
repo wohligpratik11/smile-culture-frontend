@@ -17,7 +17,7 @@ import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription } 
 import { AspectRatio } from "../../components/components/ui/aspect-ratio"
 import { Button } from "../../components/components/ui/button"
 import { RotateCcw, Share } from 'lucide-react'
-
+import ShareLink from '../../components/components/ui/shareLink'
 const UploadPage = ({ characters, movies }) => {
 	const router = useRouter();
 	const [titleFromCookie, setTitleFromCookie] = useState('');
@@ -91,42 +91,20 @@ const UploadPage = ({ characters, movies }) => {
 
 					<div className="mx-auto max-w-5xl space-y-12">
 						{/* Before/After Section */}
-						<div className="grid gap-8 md:grid-cols-2">
-							{/* Before Card */}
-							<div className="space-y-3">
-								<h2 className="text-center text-xl font-medium text-white/90">Before</h2>
-								<Card className="overflow-hidden border-0 bg-transparent shadow-2xl">
-									<div className="relative aspect-video overflow-hidden rounded-xl">
-										<Image
-											src="/assets/images/boy.webp"
-											alt="Before preview"
-											fill
-											className="object-cover"
-											priority
-										/>
-									</div>
-								</Card>
-							</div>
-
-							{/* After Card */}
-							<div className="space-y-3">
-								<h2 className="text-center text-xl font-medium text-white/90">After</h2>
-								<Card className="group relative overflow-hidden border-0 bg-transparent shadow-2xl">
-									<div className="relative aspect-video overflow-hidden rounded-xl">
-										<Image
-											src="/assets/images/boy.webp"
-											alt="After preview"
-											fill
-											className="object-cover"
-											priority
-										/>
-									</div>
-								</Card>
-							</div>
-						</div>
-
 						{/* Explore Section */}
-						<div className="space-y-6">
+						<div className="space-y-6 flex flex-col items-center justify-center">
+							<Card className="group relative overflow-hidden border-0 bg-transparent shadow-2xl !w-[550px] !h-[316.93px]">
+								<div className="relative aspect-video overflow-hidden rounded-xl">
+									<Image
+										src="/assets/images/boy.webp"
+										alt="After preview"
+										fill
+										className="object-cover"
+										priority
+									/>
+								</div>
+							</Card>
+
 							<h2 className="text-center text-3xl font-semibold text-white">Explore</h2>
 							<div className="flex flex-wrap justify-center gap-4">
 								<Button
@@ -144,26 +122,27 @@ const UploadPage = ({ characters, movies }) => {
 							</div>
 						</div>
 
+						<ShareLink />
 						{/* Action Buttons */}
-						<div className="flex justify-end gap-4 pt-4">
-							<Button
-								variant="outline"
-								size="lg"
-								className="min-w-[140px] border-white/10 bg-white/5 text-white backdrop-blur-sm hover:bg-white/10 hover:text-white"
-							>
-								<RotateCcw className="mr-2 h-4 w-4" />
-								Restart
-							</Button>
-							<Button
-								size="lg"
-								className="min-w-[140px] bg-cyan-400 font-medium text-white hover:bg-cyan-500"
-							>
-								<Share className="mr-2 h-4 w-4" />
-								Share
-							</Button>
-						</div>
-					</div>
 
+					</div>
+					<div className="flex justify-end gap-4 pt-4">
+						<Button
+							variant="outline"
+							size="lg"
+							className="min-w-[140px] border-white/10 bg-white/5 text-white backdrop-blur-sm hover:bg-white/10 hover:text-white"
+						>
+							<RotateCcw className="mr-2 h-4 w-4" />
+							Restart
+						</Button>
+						<Button
+							size="lg"
+							className="min-w-[140px] bg-cyan-400 font-medium text-white hover:bg-cyan-500"
+						>
+							<Share className="mr-2 h-4 w-4" />
+							Share
+						</Button>
+					</div>
 				</div>
 			</Card>
 		</div>
