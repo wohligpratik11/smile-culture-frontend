@@ -15,6 +15,7 @@ import UppyUploader from '../../components/components/ui/UppyUploader';
 import SelfieInstruction from '../upload/selfieInstruction';
 import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription } from '../../components/components/ui/dialog'; // Import Dialog components
 import { AspectRatio } from "../../components/components/ui/aspect-ratio"
+import { toast } from 'react-toastify';
 
 const UploadPage = ({ characters, movies }) => {
 	const router = useRouter();
@@ -24,6 +25,7 @@ const UploadPage = ({ characters, movies }) => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [showSelfieInstructions, setShowSelfieInstructions] = useState(false);
 	const [isUploading, setIsUploading] = useState(false);
+	const [uploadedData, setUploadedData] = useState(null);
 
 	useEffect(() => {
 		const title = Cookie.get('title');
@@ -41,7 +43,12 @@ const UploadPage = ({ characters, movies }) => {
 		setIsModalOpen(true);
 	};
 
-
+	useEffect(() => {
+		if (uploadedData) {
+			console.log('Uploaded Data:', uploadedData);
+			// Add additional logic here, e.g., updating the UI or making another API call
+		}
+	}, [uploadedData]);
 	const handleUploadComplete = async (files) => {
 		console.log("Files received:", files);
 
@@ -51,11 +58,9 @@ const UploadPage = ({ characters, movies }) => {
 		}
 
 		try {
-			// Since files is already an array from FormData.getAll(), we take the first item
 			const firstFile = files[0];
 			console.log("Processing file:", firstFile);
 
-			// Create new FormData instance
 			const formData = new FormData();
 			formData.append('user_image', firstFile);
 
@@ -69,15 +74,20 @@ const UploadPage = ({ characters, movies }) => {
 
 			if (response.status === 200) {
 				alert('File uploaded successfully!');
+				setUploadedData(response.data.data);
+				toast.success(response.data.data);
+				router.push('/viewupload');
 			} else {
 				console.error('Error:', response.status, response.data);
 				alert('Error uploading file. Status code: ' + response.status);
 			}
 		} catch (error) {
+			toast.error('Upload failed!');
 			console.error('Error uploading file:', error);
 			alert('Error uploading file. Please try again.');
 		}
 	};
+
 
 
 	const closeSelfieInstructions = () => {

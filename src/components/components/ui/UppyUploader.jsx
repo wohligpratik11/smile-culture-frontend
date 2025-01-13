@@ -37,7 +37,6 @@ const MediaUploader = ({ onUploadComplete }) => {
         .use(Webcam, { modes: ['picture', 'video'] })
         .use(ImageEditor);
 
-
       uppy.on('complete', (result) => {
         const files = result.successful;
 
@@ -56,8 +55,15 @@ const MediaUploader = ({ onUploadComplete }) => {
 
     initUppy();
 
+    // Cleanup function
     return () => {
-      uppyInstance?.close();
+      if (uppyInstance) {
+        try {
+          uppyInstance.close({ reason: 'unmount' });
+        } catch (error) {
+          console.warn('Error closing Uppy instance:', error);
+        }
+      }
     };
   }, [onUploadComplete]);
 
@@ -82,5 +88,3 @@ const MediaUploader = ({ onUploadComplete }) => {
 };
 
 export default MediaUploader;
-
-
