@@ -33,7 +33,7 @@ export default function SelfieInstructions({ closeModal, uploadImageData }) {
 						<div className="w-24 border-t-2 border-dashed border-white/40"></div>
 						<div
 							className={`w-10 h-10 rounded-full ${currentStep === 2 ? 'bg-white text-[#3B4374]' : 'bg-white/30 text-white'} flex items-center justify-center font-semibold shadow-[0_0_12px_rgba(255,255,255,0.4)] cursor-pointer`}
-							onClick={() => setCurrentStep(2)}
+							// onClick={() => setCurrentStep(2)}
 						>
 							2
 						</div>
