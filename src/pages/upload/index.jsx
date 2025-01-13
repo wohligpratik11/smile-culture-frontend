@@ -26,8 +26,7 @@ const UploadPage = ({ characters, movies, characterId }) => {
 	const [showSelfieInstructions, setShowSelfieInstructions] = useState(false);
 	const [isUploading, setIsUploading] = useState(false);
 	const [uploadedData, setUploadedData] = useState(null);
-	const { setUploadDataState, setCharacterId } = useUploadContext();  // Access context values
-
+	const { setUploadDataState, setCharacterId } = useUploadContext();
 	useEffect(() => {
 		const title = Cookie.get('title');
 		setTitleFromCookie(title);
@@ -52,27 +51,19 @@ const UploadPage = ({ characters, movies, characterId }) => {
 	}, [uploadedData]);
 	const handleUploadComplete = async (files) => {
 		console.log("Files received:", files);
-
 		if (!files || files.length === 0) {
 			alert('No files selected');
 			return;
 		}
-
 		try {
 			const firstFile = files[0];
-			console.log("Processing file:", firstFile);
-
 			const formData = new FormData();
 			formData.append('user_image', firstFile);
-
-			// Log FormData entries to verify content
 			for (let pair of formData.entries()) {
 				console.log('FormData contains:', pair[0], pair[1]);
 			}
-
 			const axios = axiosInstance();
 			const response = await axios.post(API_ENDPOINTS.VALIDATION_TO_IMAGE, formData);
-
 			if (response.status === 200) {
 				alert('File uploaded successfully!');
 				setUploadedData(response.data.data);
@@ -83,7 +74,6 @@ const UploadPage = ({ characters, movies, characterId }) => {
 				} else {
 					console.log("No selected characters found.");
 				}
-
 				toast.success(response.data.data);
 				router.push('/viewupload');
 			} else {
@@ -100,7 +90,7 @@ const UploadPage = ({ characters, movies, characterId }) => {
 
 
 	const closeSelfieInstructions = () => {
-		setShowSelfieInstructions(false);  // This will hide the Selfie Instructions modal
+		setShowSelfieInstructions(false);
 	};
 	const uploadImageData = () => {
 		setIsUploading(true);
@@ -119,8 +109,6 @@ const UploadPage = ({ characters, movies, characterId }) => {
 	const handleModeSelect = (mode) => {
 		setSelectedMode(mode);
 	};
-
-
 
 	return (
 		<div className="min-h-screen p-6 h-[835px]">
@@ -174,7 +162,7 @@ const UploadPage = ({ characters, movies, characterId }) => {
 									</Card>
 
 
-									<div className="flex flex-col items-center gap-2 mt-6 ">
+									<div className="flex flex-col items-center gap-2 ">
 										<Image
 											src={movie.url || UploadImages}
 											alt={movie.title || 'Movie Image'}
@@ -227,7 +215,6 @@ export async function getServerSideProps(context) {
 		const cookies = req.cookies;
 		let selectedCharacters = [];
 
-		// Parse and decrypt the selectedCharacters from cookies
 		if (cookies.selectedCharacters) {
 			try {
 				const bytes = CryptoJS.AES.decrypt(cookies.selectedCharacters, 'your-encryption-key');
@@ -244,9 +231,8 @@ export async function getServerSideProps(context) {
 			console.log('selectedCharacters cookie is missing or empty');
 		}
 
-		// Prepare the payload with selectedCharacters as character_ids
 		const payload = {
-			character_ids: selectedCharacters, // Directly use selectedCharacters (array of ids)
+			character_ids: selectedCharacters,
 		};
 
 		console.log('Payload to API:', payload);
