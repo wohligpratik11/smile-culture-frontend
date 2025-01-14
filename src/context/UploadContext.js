@@ -6,16 +6,20 @@ const UploadContext = createContext();
 export const useUploadContext = () => useContext(UploadContext);
 
 export const UploadProvider = ({ children }) => {
-  const [uploadData, setUploadData] = useState(null); // Store uploaded file data
+  const [uploadFileData, setUploadFileData] = useState(null); // Store uploaded file data
   const [selectedCharacterId, setSelectedCharacterId] = useState(null); // Store selected character id
+  const [selectedUploadFile, setSelectedUploadFile] = useState(null); // Store selected character id
 
   useEffect(() => {
-    console.log('Upload Data in context:', uploadData);
+    console.log('Upload Data in context:', selectedUploadFile);
+    console.log('Upload File Data in context:', uploadFileData);
     console.log('Selected Character ID in context:', selectedCharacterId);
-  }, [uploadData, selectedCharacterId]);
-  const setUploadDataState = (data) => {
-    setUploadData(data);
+  }, [uploadFileData, selectedCharacterId]);
+  const setUploadDataFileState = (data) => {
+    console.log('Data received in context:', data);
+    setUploadFileData(data);
   };
+
 
   const setCharacterId = (id) => {
     setSelectedCharacterId(id);
@@ -24,10 +28,11 @@ export const UploadProvider = ({ children }) => {
   return (
     <UploadContext.Provider
       value={{
-        uploadData,
-        setUploadDataState,
+        uploadFileData,
+        setUploadDataFileState,
         selectedCharacterId,
         setCharacterId,
+        selectedUploadFile,
       }}
     >
       {children}

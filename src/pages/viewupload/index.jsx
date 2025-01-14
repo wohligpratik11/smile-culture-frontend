@@ -26,7 +26,7 @@ const UploadPage = ({ characters, movies }) => {
 	const [selectedCharacters, setSelectedCharacters] = useState([]);
 	const [selectedMode, setSelectedMode] = useState(null);
 	const [isModalOpen, setIsModalOpen] = useState(false);
-	const { uploadData, selectedCharacterId } = useUploadContext();
+	const { uploadFileData, selectedCharacterId } = useUploadContext();
 
 	useEffect(() => {
 		const title = Cookie.get('title');
@@ -95,21 +95,21 @@ const UploadPage = ({ characters, movies }) => {
 					<div className="mx-auto max-w-5xl space-y-12">
 						<div>
 							<h1>Upload View</h1>
-							{uploadData ? (
+							{/* {uploadFileData ? (
 								<>
-									<p>Uploaded File: {uploadData}</p>
+									<p>Uploaded File: {uploadFileData}</p>
 
 									uploadData
 									<p className='text-black'>Character ID: {selectedCharacterId}</p>
 
-									<p>Uploaded File: {uploadData?.file?.name}</p>
-									<p>Uploaded File: {uploadData?.characterIds}</p>
+									<p>Uploaded File: {uploadFileData?.file?.name}</p>
+									<p>Uploaded File: {uploadFileData?.characterIds}</p>
 
-									<p>Character IDs: {uploadData?.characterIds?.join(', ')}</p>
+									<p>Character IDs: {uploadFileData?.characterIds?.join(', ')}</p>
 								</>
 							) : (
 								<p>No upload data available.</p>
-							)}
+							)} */}
 						</div>
 						<div className="space-y-6 flex flex-col items-center justify-center">
 							<Card className="group relative overflow-hidden border-0 bg-transparent shadow-2xl !w-[550px] !h-[316.93px]">
@@ -168,6 +168,42 @@ const UploadPage = ({ characters, movies }) => {
 	);
 };
 
+export async function getServerSideProps(context) {
+	const cookies = context.req.cookies;
+	try {
+		const newUploadFileData = uploadFileData;
+		const formData = new FormData();
+		const titleFromCookie = cookies.title || '';
+		const selectedCharacterIdCookie = JSON.parse(cookies.selectedCharacterIds || '[]');
+
+		// Append other form data
+		formData.append('feature_used', titleFromCookie);
+		formData.append('character_ids', JSON.stringify(selectedCharacterIdCookie));
+
+		// Append the uploadFileData to the formData under 'user_images'
+		if (newUploadFileData) {
+			formData.append('user_images', newUploadFileData);
+		}
+
+		const axios = axiosInstance(context);
+		const response = await axios.post(API_ENDPOINTS.CREATE_NEW_STORE_DATA, formData);
+
+		return {
+			props: {
+				initialMovies: response?.data?.data || [],
+				uploadedDataFile: response?.data?.uploadedDataFile || [],
+			},
+		};
+	} catch (error) {
+		console.error('Error fetching data:', error);
+		return {
+			props: {
+				initialMovies: [],
+				uploadedDataFile: [],
+			},
+		};
+	}
+}
 
 
 
