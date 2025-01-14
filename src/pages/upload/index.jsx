@@ -13,24 +13,27 @@ import Video from "../../../public/assets/images/video.webp";
 import UploadImages from "../../../public/assets/images/uploadImages.webp";
 import UppyUploader from '../../components/components/ui/UppyUploader';
 import SelfieInstruction from '../upload/selfieInstruction';
-import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription } from '../../components/components/ui/dialog'; // Import Dialog components
+import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription } from '../../components/components/ui/dialog';
 import { AspectRatio } from "../../components/components/ui/aspect-ratio"
 import { toast } from 'react-toastify';
 import { useUploadContext } from '../../context/UploadContext';
 import ViewUpload from './viewupload'
 const UploadPage = ({ characters, movies }) => {
 	const router = useRouter();
-	// const { setFormData, setCharacterId } = useUploadContext([]);
 	const [titleFromCookie, setTitleFromCookie] = useState('');
 	const [characterId, setArrayCharacterId] = useState([]);
-	console.log("characterId11222333", characterId)
+	console.log(":characterId", characterId)
+
 	const [selectedCharacters, setSelectedCharacters] = useState([]);
+	console.log(":selectedCharacters", selectedCharacters)
+
 	const [selectedMode, setSelectedMode] = useState(null);
 	const [showSelfieInstructions, setShowSelfieInstructions] = useState(false);
 	const [isUploading, setIsUploading] = useState(false);
-	// const { setUploadDataFileState, setCharacterId } = useUploadContext();
 	const [filePreview, setFilePreview] = useState(null);
 	const [uploadedData, setUploadedData] = useState(null);
+	const [selectedImages, setSelectedImages] = useState([]);
+	console.log(":11212313131313", selectedImages)
 	useEffect(() => {
 		const title = Cookie.get('title');
 		setTitleFromCookie(title);
@@ -48,10 +51,9 @@ const UploadPage = ({ characters, movies }) => {
 	useEffect(() => {
 		if (uploadedData) {
 			console.log('Uploaded Data:', uploadedData);
-			// Add additional logic here, e.g., updating the UI or making another API call
 		}
 	}, [uploadedData]);
-	const handleUploadComplete = async (files) => {
+	const handleUploadComplete = useCallback(async (files) => {
 		console.log("Files received:", files);
 		if (!files || files.length === 0) {
 			alert('No files selected');
@@ -64,22 +66,36 @@ const UploadPage = ({ characters, movies }) => {
 
 			const newFormData = new FormData();
 			newFormData.append('user_image', firstFile);
-			console.log("newFormData before setting state:", newFormData);
 
 			const axios = axiosInstance();
 			const response = await axios.post(API_ENDPOINTS.VALIDATION_TO_IMAGE, newFormData);
 
 			if (response.status === 200) {
 				const uploadedUrl = response?.data?.data?.url;
-				setUploadedData(uploadedUrl); // Update the state with the uploaded URL
 				setFilePreview(uploadedUrl);
-				stopUploading();
 
+				// Add the uploaded image URL and characterId to the selectedImages array
+				setSelectedImages(prevSelectedImages => [
+					...prevSelectedImages,
+					{ characterId, uploadedUrl }
+				]);
+
+				// Update the cookie with uploaded data
 				const existingUploadedData = Cookie.get('uploadedData');
 				let uploadedDataArray = existingUploadedData ? JSON.parse(existingUploadedData) : [];
 				uploadedDataArray.push(uploadedUrl);
 				Cookie.set('uploadedData', JSON.stringify(uploadedDataArray));
-				Cookie.set('characterId', JSON.stringify(characterId));
+
+				// Add the current characterId to the array and update the cookie
+				const existingCharacterIds = Cookie.get('characterId');
+				let updatedCharacterIds = existingCharacterIds ? JSON.parse(existingCharacterIds) : [];
+
+				// Ensure characterId is unique and append if not already present
+				if (!updatedCharacterIds.includes(characterId)) {
+					updatedCharacterIds.push(characterId);
+					Cookie.set('characterId', JSON.stringify(updatedCharacterIds));
+				}
+
 				toast.success(response?.data?.data?.final_response);
 			} else {
 				console.error('Error:', response.status, response.data);
@@ -90,7 +106,14 @@ const UploadPage = ({ characters, movies }) => {
 			console.error('Error uploading file:', error);
 			alert('Error uploading file. Please try again.');
 		}
-	};
+	}, [characterId]);  // Add characterId to dependencies
+
+
+
+
+
+
+
 
 
 
@@ -252,9 +275,6 @@ export async function getServerSideProps(context) {
 		const payload = {
 			character_ids: selectedCharacters,
 		};
-
-		console.log('Payload to API:', payload);
-
 		// Send the payload to the API
 		const axios = axiosInstance(context);
 		const response = await axios.post(API_ENDPOINTS.GET_ALL_SELECTED_CHARACTERS_LIST, payload);
