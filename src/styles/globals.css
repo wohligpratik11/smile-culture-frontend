@@ -139,5 +139,7 @@ body {
   border-style: none !important;
 }
 .uppy-DashboardTab {
-  
+}
+.hidden {
+  display: none !important;
 }

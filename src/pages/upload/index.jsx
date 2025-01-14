@@ -17,17 +17,21 @@ import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription } 
 import { AspectRatio } from "../../components/components/ui/aspect-ratio"
 import { toast } from 'react-toastify';
 import { useUploadContext } from '../../context/UploadContext';
-const UploadPage = ({ characters, movies, characterId }) => {
+import ViewUpload from './viewupload'
+const UploadPage = ({ characters, movies }) => {
 	const router = useRouter();
 	const [titleFromCookie, setTitleFromCookie] = useState('');
 	const [selectedCharacters, setSelectedCharacters] = useState([]);
 	const [selectedMode, setSelectedMode] = useState(null);
 	const [showSelfieInstructions, setShowSelfieInstructions] = useState(false);
 	const [isUploading, setIsUploading] = useState(false);
-	const [uploadedData, setUploadedData] = useState(null);
-	const { setUploadDataFileState, setCharacterId } = useUploadContext();
+	// const { setUploadDataFileState, setCharacterId } = useUploadContext();
 	const [filePreview, setFilePreview] = useState(null);
-
+	const [uploadedData, setUploadedData] = useState(null);
+	const [formData, setFormData] = useState(null);
+	console.log("formData111", formData)
+	const [characterId, setCharacterId] = useState(null);
+	console.log("characterId1111", characterId)
 	useEffect(() => {
 		const title = Cookie.get('title');
 		setTitleFromCookie(title);
@@ -57,34 +61,25 @@ const UploadPage = ({ characters, movies, characterId }) => {
 
 		try {
 			const firstFile = files[0];
-
-			// Create a preview URL for the selected file
 			const previewUrl = URL.createObjectURL(firstFile);
 
-			const formData = new FormData();
-			formData.append('user_image', firstFile);
+			const newFormData = new FormData();
+			newFormData.append('user_image', firstFile);
+			console.log("newFormData before setting state:", newFormData);
 
-			if (typeof setUploadDataFileState === 'function') {
-				// Store only metadata or relevant information, not the FormData object itself
-				setUploadDataFileState({ fileName: firstFile.name, fileType: firstFile.type });
-			} else {
-				console.error('setUploadDataFileState is not defined.');
-			}
 
 			const axios = axiosInstance();
-			const response = await axios.post(API_ENDPOINTS.VALIDATION_TO_IMAGE, formData);
+			const response = await axios.post(API_ENDPOINTS.VALIDATION_TO_IMAGE, newFormData);
 
 			if (response.status === 200) {
+				setFormData(firstFile);
 				alert('File uploaded successfully!');
 				setUploadedData(response?.data?.data?.final_response);
 				if (selectedCharacters.length > 0) {
-					console.log("Selected Character ID:", selectedCharacters);  // Log the character_id
-					setCharacterId(selectedCharacters);  // Set the character ID from selected characters
-				} else {
-					console.log("No selected characters found.");
+					setCharacterId(selectedCharacters);
 				}
 				toast.success(response?.data?.data?.final_response);
-				setFilePreview(previewUrl); // Store the preview URL
+				setFilePreview(previewUrl);
 				stopUploading();
 			} else {
 				console.error('Error:', response.status, response.data);
@@ -96,8 +91,6 @@ const UploadPage = ({ characters, movies, characterId }) => {
 			alert('Error uploading file. Please try again.');
 		}
 	};
-
-
 
 
 	const closeSelfieInstructions = () => {
@@ -145,7 +138,7 @@ const UploadPage = ({ characters, movies, characterId }) => {
 					<h2 className="text-white mb-4 font-medium text-lg">Upload Selfie</h2>
 					<div className="grid grid-cols-4 gap-4">
 						{movies.map((movie, index) => (
-							<div>	Character Name:<span className="ml-3 text-white font-medium text-sm">
+							<div>   Character Name:<span className="ml-3 text-white font-medium text-sm">
 								{movie.character_real_name || "Character Name Not Available"}
 							</span>
 								<div key={index} className="flex gap-2 mt-2">
@@ -205,6 +198,10 @@ const UploadPage = ({ characters, movies, characterId }) => {
 							<SelfieInstruction closeModal={closeSelfieInstructions} uploadImageData={uploadImageData} />
 						</div>
 					)}
+
+					<div style={{ display: 'none' }}>
+						<ViewUpload formData={formData} characterId={characterId} />
+					</div>
 					{isUploading && (
 						<Dialog open={isUploading} onOpenChange={stopUploading}>
 							<DialogTrigger asChild>
@@ -220,7 +217,8 @@ const UploadPage = ({ characters, movies, characterId }) => {
 					<button
 						className="px-4 py-2 bg-gradient-custom-gradient border border-buttonBorder rounded-lg w-52 h-12"
 						onClick={() => {
-							router.push('/viewupload');
+							router.push('/upload/viewupload');
+
 						}}
 					>
 						Next
@@ -285,3 +283,4 @@ export async function getServerSideProps(context) {
 
 
 export default UploadPage;
+
