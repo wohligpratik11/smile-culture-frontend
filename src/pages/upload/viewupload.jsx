@@ -20,20 +20,13 @@ import { RotateCcw, Share } from 'lucide-react'
 import ShareLink from '../../components/components/ui/shareLink'
 import { useUploadContext } from '../../context/UploadContext';
 
-const ViewUpload = ({ characters, movies, formData, characterId }) => {
+const ViewUpload = ({ characters, movies }) => {
 	const router = useRouter();
 	const [titleFromCookie, setTitleFromCookie] = useState('');
 	const [selectedCharacters, setSelectedCharacters] = useState([]);
 	const [selectedMode, setSelectedMode] = useState(null);
 	const [isModalOpen, setIsModalOpen] = useState(false);
-	// const { uploadFileData, selectedCharacterId } = useUploadContext();
-	console.log("Received formData:", formData);
-	console.log("Received characterId:", characterId);
-	useEffect(() => {
 
-		console.log("Form Data:11112222333", formData);
-		console.log("Character ID:3334252535", characterId);
-	}, [formData, characterId]);
 
 	useEffect(() => {
 		const title = Cookie.get('title');
@@ -100,25 +93,6 @@ const ViewUpload = ({ characters, movies, formData, characterId }) => {
 					</div>
 
 					<div className="mx-auto max-w-5xl space-y-12">
-						<div>
-							<p>Character ID: {characterId}</p>
-							<p>Form Data: {JSON.stringify(formData)}</p>
-							{/* {uploadFileData ? (
-                                <>
-                                    <p>Uploaded File: {uploadFileData}</p>
-
-                                    uploadData
-                                    <p className='text-black'>Character ID: {selectedCharacterId}</p>
-
-                                    <p>Uploaded File: {uploadFileData?.file?.name}</p>
-                                    <p>Uploaded File: {uploadFileData?.characterIds}</p>
-
-                                    <p>Character IDs: {uploadFileData?.characterIds?.join(', ')}</p>
-                                </>
-                            ) : (
-                                <p>No upload data available.</p>
-                            )} */}
-						</div>
 						<div className="space-y-6 flex flex-col items-center justify-center">
 							<Card className="group relative overflow-hidden border-0 bg-transparent shadow-2xl !w-[550px] !h-[316.93px]">
 								<div className="relative aspect-video overflow-hidden rounded-xl">
@@ -177,17 +151,29 @@ const ViewUpload = ({ characters, movies, formData, characterId }) => {
 };
 
 export async function getServerSideProps(context) {
+	// Retrieve cookies from the request
 	const cookies = context.req.cookies;
+	const uploadedFileData = cookies.uploadedData || '';
+	console.log("uploadedFileData", uploadedFileData)
+	const titleFromCookie = cookies.title.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
+	const characterId = cookies.characterId || '';
+	const formData = new FormData();
+	formData.append('feature_used', titleFromCookie);
+
+	if (characterId) {
+		const characterIdArray = Array.isArray(characterId) ? characterId : [characterId];
+		formData.append('character_ids', JSON.stringify(characterIdArray));
+	}
+
+	if (uploadedFileData) {
+		formData.append('user_images', uploadedFileData);
+	}
+
 	try {
-		// const newUploadFileData =;
-		const titleFromCookie = cookies.title || '';
-
-		formData.append('feature_used', titleFromCookie);
-		formData.append('character_ids', characterId);
-
 		const axios = axiosInstance(context);
 		const response = await axios.post(API_ENDPOINTS.CREATE_NEW_STORE_DATA, formData);
 
+		// Return the data as props
 		return {
 			props: {
 				initialMovies: response?.data?.data || [],
@@ -204,9 +190,6 @@ export async function getServerSideProps(context) {
 		};
 	}
 }
-
-
-
 
 export default ViewUpload;
 

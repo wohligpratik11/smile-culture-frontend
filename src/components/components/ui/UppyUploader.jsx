@@ -4,14 +4,14 @@ import '@uppy/core/dist/style.css';
 import '@uppy/dashboard/dist/style.css';
 import '@uppy/webcam/dist/style.css';
 import '@uppy/image-editor/dist/style.css';
-
+import ErosNow from "../../../../public/assets/images/erosnow.webp";
 const Dashboard = dynamic(
   () => import('@uppy/react').then((mod) => mod.Dashboard),
   {
     ssr: false,
     loading: () => (
-      <div className="w-full h-[400px] bg-gray-100 rounded-lg flex items-center justify-center">
-        <div className="text-gray-500">Loading uploader...</div>
+      <div className="w-full h-[400px] bg-deepNavy rounded-lg flex items-center justify-center">
+        <div className="text-white">Loading uploader...</div>
       </div>
     ),
   }
@@ -79,8 +79,8 @@ const MediaUploader = ({ onUploadComplete }) => {
           note="Images and videos only, up to 10MB each"
         />
       ) : (
-        <div className="w-full h-[400px] bg-gray-100 flex items-center justify-center">
-          <div className="text-gray-500">Initializing uploader...</div>
+        <div className="w-full h-[400px] bg-deepNavy flex items-center justify-center">
+          <div className="text-white">Initializing uploader...</div>
         </div>
       )}
     </div>

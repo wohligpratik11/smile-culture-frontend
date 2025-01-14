@@ -20,7 +20,10 @@ import { useUploadContext } from '../../context/UploadContext';
 import ViewUpload from './viewupload'
 const UploadPage = ({ characters, movies }) => {
 	const router = useRouter();
+	// const { setFormData, setCharacterId } = useUploadContext([]);
 	const [titleFromCookie, setTitleFromCookie] = useState('');
+	const [characterId, setArrayCharacterId] = useState([]);
+	console.log("characterId11222333", characterId)
 	const [selectedCharacters, setSelectedCharacters] = useState([]);
 	const [selectedMode, setSelectedMode] = useState(null);
 	const [showSelfieInstructions, setShowSelfieInstructions] = useState(false);
@@ -28,10 +31,6 @@ const UploadPage = ({ characters, movies }) => {
 	// const { setUploadDataFileState, setCharacterId } = useUploadContext();
 	const [filePreview, setFilePreview] = useState(null);
 	const [uploadedData, setUploadedData] = useState(null);
-	const [formData, setFormData] = useState(null);
-	console.log("formData111", formData)
-	const [characterId, setCharacterId] = useState(null);
-	console.log("characterId1111", characterId)
 	useEffect(() => {
 		const title = Cookie.get('title');
 		setTitleFromCookie(title);
@@ -67,20 +66,21 @@ const UploadPage = ({ characters, movies }) => {
 			newFormData.append('user_image', firstFile);
 			console.log("newFormData before setting state:", newFormData);
 
-
 			const axios = axiosInstance();
 			const response = await axios.post(API_ENDPOINTS.VALIDATION_TO_IMAGE, newFormData);
 
 			if (response.status === 200) {
-				setFormData(firstFile);
-				alert('File uploaded successfully!');
-				setUploadedData(response?.data?.data?.final_response);
-				if (selectedCharacters.length > 0) {
-					setCharacterId(selectedCharacters);
-				}
-				toast.success(response?.data?.data?.final_response);
-				setFilePreview(previewUrl);
+				const uploadedUrl = response?.data?.data?.url;
+				setUploadedData(uploadedUrl); // Update the state with the uploaded URL
+				setFilePreview(uploadedUrl);
 				stopUploading();
+
+				const existingUploadedData = Cookie.get('uploadedData');
+				let uploadedDataArray = existingUploadedData ? JSON.parse(existingUploadedData) : [];
+				uploadedDataArray.push(uploadedUrl);
+				Cookie.set('uploadedData', JSON.stringify(uploadedDataArray));
+				Cookie.set('characterId', JSON.stringify(characterId));
+				toast.success(response?.data?.data?.final_response);
 			} else {
 				console.error('Error:', response.status, response.data);
 				alert('Error uploading file. Status code: ' + response.status);
@@ -91,6 +91,8 @@ const UploadPage = ({ characters, movies }) => {
 			alert('Error uploading file. Please try again.');
 		}
 	};
+
+
 
 
 	const closeSelfieInstructions = () => {
@@ -148,7 +150,7 @@ const UploadPage = ({ characters, movies }) => {
 											}`}
 										onClick={() => {
 											setShowSelfieInstructions(true);
-											setCharacterId(movie.character_id);
+											setArrayCharacterId(movie.character_id);
 										}}
 
 									>
@@ -198,10 +200,6 @@ const UploadPage = ({ characters, movies }) => {
 							<SelfieInstruction closeModal={closeSelfieInstructions} uploadImageData={uploadImageData} />
 						</div>
 					)}
-
-					<div style={{ display: 'none' }}>
-						<ViewUpload formData={formData} characterId={characterId} />
-					</div>
 					{isUploading && (
 						<Dialog open={isUploading} onOpenChange={stopUploading}>
 							<DialogTrigger asChild>
