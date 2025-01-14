@@ -171,7 +171,7 @@ const UploadPage = ({ characters, movies }) => {
 export async function getServerSideProps(context) {
 	const cookies = context.req.cookies;
 	try {
-		const newUploadFileData = uploadFileData;
+		// const newUploadFileData =;
 		const formData = new FormData();
 		const titleFromCookie = cookies.title || '';
 		const selectedCharacterIdCookie = JSON.parse(cookies.selectedCharacterIds || '[]');
