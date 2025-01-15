@@ -13,6 +13,8 @@ import Video from "../../../public/assets/images/video.webp";
 import UploadImages from "../../../public/assets/images/uploadImages.webp";
 import UppyUploader from '../../components/components/ui/UppyUploader';
 import SelfieInstruction from '../upload/selfieInstruction';
+import { useSpinner } from '../../context/spinnerContext'
+
 import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription } from '../../components/components/ui/dialog';
 import { AspectRatio } from "../../components/components/ui/aspect-ratio"
 import { toast } from 'react-toastify';
@@ -31,7 +33,8 @@ const UploadPage = ({ characters, movies }) => {
 	const [filePreview, setFilePreview] = useState(null);
 	const [uploadedData, setUploadedData] = useState(null);
 	const [selectedImages, setSelectedImages] = useState([]);
-	console.log(":11212313131313", selectedImages)
+	const { showSpinner, hideSpinner } = useSpinner()
+
 	useEffect(() => {
 		const title = Cookie.get('title');
 		setTitleFromCookie(title);
@@ -59,6 +62,8 @@ const UploadPage = ({ characters, movies }) => {
 		}
 
 		try {
+			showSpinner();
+			console.log('Spinner shown');
 			const firstFile = files[0];
 			const previewUrl = URL.createObjectURL(firstFile);
 
@@ -98,7 +103,14 @@ const UploadPage = ({ characters, movies }) => {
 			console.error('Error uploading file:', error);
 			alert('Error uploading file. Please try again.');
 		}
-	}, [characterId]); 
+		finally {
+			// Stop showing the spinner after the process finishes (either success or failure)
+			hideSpinner();
+			console.log('Spinner hidden');
+
+		}
+
+	}, [characterId, showSpinner, hideSpinner]);
 
 	const closeSelfieInstructions = () => {
 		setShowSelfieInstructions(false);
@@ -157,7 +169,7 @@ const UploadPage = ({ characters, movies }) => {
 
 									>
 										<div className="flex flex-col items-center gap-2">
-											{filePreview && (
+											{/* {filePreview && (
 												<div >
 													<Image
 														src={filePreview}
@@ -167,15 +179,19 @@ const UploadPage = ({ characters, movies }) => {
 														className="rounded-lg"
 													/>
 												</div>
-											)}
-											{!filePreview && (
+											)} */}
+											{/* {filePreview && (
 												<Image
 													src={UploadImages}
 													alt="Image Icon"
 													className="w-10 sm:w-12 h-10 sm:h-12"
 												/>
-											)}
-
+											)} */}
+											<Image
+												src={UploadImages}
+												alt="Image Icon"
+												className="w-10 sm:w-12 h-10 sm:h-12"
+											/>
 											<div className="flex items-center space-x-2">
 												<ArrowUpFromLine size={20} strokeWidth={3} absoluteStrokeWidth />
 												<span className="text-white font-medium text-xs">{movie.title || 'Upload Image'}</span>
@@ -276,6 +292,8 @@ export async function getServerSideProps(context) {
 		};
 	}
 }
+
+
 
 
 

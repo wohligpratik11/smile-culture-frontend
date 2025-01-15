@@ -10,6 +10,7 @@ import { useRouter } from 'next/router'; // Import useRouter
 import { UploadProvider } from '../context/UploadContext';
 import { AuthProvider } from '../context/AuthContext';
 import { ToasterProvider } from '../components/common/toaster';
+import { SpinnerProvider } from '../context/spinnerContext';
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
   useLogin();
@@ -33,14 +34,16 @@ function MyApp({ Component, pageProps }) {
       <CustomThemeProvider>
         <AuthProvider>
           <UploadProvider>
-            <ToasterProvider>
-              <Layout>
-                <Head>
-                  <title>Eros Now</title>
-                </Head>
-                <Component {...pageProps} />
-              </Layout>
-            </ToasterProvider>
+            <SpinnerProvider>
+              <ToasterProvider>
+                <Layout>
+                  <Head>
+                    <title>Eros Now</title>
+                  </Head>
+                  <Component {...pageProps} />
+                </Layout>
+              </ToasterProvider>
+            </SpinnerProvider>
           </UploadProvider>
         </AuthProvider>
       </CustomThemeProvider>

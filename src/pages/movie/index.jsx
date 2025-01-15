@@ -150,12 +150,12 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 					</div>
 
 				</div>
-
-				<div className="flex justify-between items-center mt-6">
-					<div className={`flex justify-center items-center space-x-2 flex-1 ${selectedMovie ? 'ml-36' : ''}`}>
+				<div className="flex justify-between items-center mt-6 flex-col sm:flex-row">
+					<div
+						className={`flex justify-center items-center space-x-2 sm:flex-1 ${selectedMovie ? 'ml-36' : ''} flex-wrap sm:space-x-2`}
+					>
 						<button
-							className={`px-4 py-2 rounded-md bg-gradient-custom-gradient border border-buttonBorder text-white transition-all duration-200 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 ${currentPage <= 1 ? 'opacity-50 cursor-not-allowed' : ''
-								}`}
+							className={`px-4 py-2 rounded-md bg-gradient-custom-gradient border border-buttonBorder text-white transition-all duration-200 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 ${currentPage <= 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
 							onClick={() => handlePageChange(currentPage - 1)}
 							disabled={currentPage <= 1}
 						>
@@ -180,8 +180,7 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 						})}
 
 						<button
-							className={`px-4 py-2 rounded-md bg-gradient-custom-gradient border border-buttonBorder text-white transition-all duration-200 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 ${currentPage >= totalPages ? 'opacity-50 cursor-not-allowed' : ''
-								}`}
+							className={`px-4 py-2 rounded-md bg-gradient-custom-gradient border border-buttonBorder text-white transition-all duration-200 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 ${currentPage >= totalPages ? 'opacity-50 cursor-not-allowed' : ''}`}
 							onClick={() => handlePageChange(currentPage + 1)}
 							disabled={currentPage >= totalPages}
 						>
@@ -191,13 +190,14 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 
 					{selectedMovie && (
 						<button
-							className="px-4 py-2 rounded-lg bg-gradient-custom-gradient border border-buttonBorder w-52 h-12 ml-4"
+							className="px-4 py-2 rounded-lg bg-gradient-custom-gradient border border-buttonBorder w-52 h-12 mt-4 sm:ml-4 sm:mt-0"
 							onClick={() => router.push(selectedMovie.path)}
 						>
 							Next
 						</button>
 					)}
 				</div>
+
 			</Card>
 		</div>
 	);
