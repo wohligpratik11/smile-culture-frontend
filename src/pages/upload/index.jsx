@@ -77,17 +77,12 @@ const UploadPage = ({ characters, movies }) => {
 					{ characterId, uploadedUrl }
 				]);
 
-				// Update the cookie with uploaded data
 				const existingUploadedData = Cookie.get('uploadedData');
 				let uploadedDataArray = existingUploadedData ? JSON.parse(existingUploadedData) : [];
 				uploadedDataArray.push(uploadedUrl);
 				Cookie.set('uploadedData', JSON.stringify(uploadedDataArray));
-
-				// Add the current characterId to the array and update the cookie
 				const existingCharacterIds = Cookie.get('characterId');
 				let updatedCharacterIds = existingCharacterIds ? JSON.parse(existingCharacterIds) : [];
-
-				// Ensure characterId is unique and append if not already present
 				if (!updatedCharacterIds.includes(characterId)) {
 					updatedCharacterIds.push(characterId);
 					Cookie.set('characterId', JSON.stringify(updatedCharacterIds));
@@ -103,7 +98,7 @@ const UploadPage = ({ characters, movies }) => {
 			console.error('Error uploading file:', error);
 			alert('Error uploading file. Please try again.');
 		}
-	}, [characterId]);  // Add characterId to dependencies
+	}, [characterId]); 
 
 	const closeSelfieInstructions = () => {
 		setShowSelfieInstructions(false);
