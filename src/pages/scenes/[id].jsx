@@ -20,7 +20,7 @@ const ScenesPage = ({ initialScenes, totalCount, page: initialPage, id, prefetch
 	const [scenes, setScenes] = useState(initialScenes);
 	const [currentPage, setCurrentPage] = useState(initialPage);
 	const [totalPages, setTotalPages] = useState(Math.ceil(totalCount / 8));
-	const [selectedTab, setSelectedTab] = useState('image');
+	const [selectedTab, setSelectedTab] = useState('scene');
 	useEffect(() => {
 		const title = Cookie.get('title');
 		setTitleFromCookie(title);
@@ -118,16 +118,16 @@ const ScenesPage = ({ initialScenes, totalCount, page: initialPage, id, prefetch
 						{/* Right Aligned Buttons */}
 						<div className="flex space-x-2">
 							<button
-								className={`px-6 py-2 rounded-full text-white font-semibold transition-colors duration-200 ${selectedTab === 'image' ? 'bg-gradient-custom-gradient border border-buttonBorder' : 'border border-slateBlue cursor-pointer transition-all bg-blueYonder'}`}
-								onClick={() => setSelectedTab('image')}
-							>
-								View Images
-							</button>
-							<button
 								className={`px-6 py-2 rounded-full text-white font-semibold transition-colors duration-200 ${selectedTab === 'scene' ? 'bg-gradient-custom-gradient border border-buttonBorder' : 'border border-slateBlue cursor-pointer transition-all bg-blueYonder'}`}
 								onClick={() => setSelectedTab('scene')}
 							>
 								View Scenes
+							</button>
+							<button
+								className={`px-6 py-2 rounded-full text-white font-semibold transition-colors duration-200 ${selectedTab === 'image' ? 'bg-gradient-custom-gradient border border-buttonBorder' : 'border border-slateBlue cursor-pointer transition-all bg-blueYonder'}`}
+								onClick={() => setSelectedTab('image')}
+							>
+								View Images
 							</button>
 						</div>
 					</div>
