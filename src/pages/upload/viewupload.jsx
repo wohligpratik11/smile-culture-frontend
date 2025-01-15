@@ -20,7 +20,8 @@ import { RotateCcw, Share } from 'lucide-react'
 import ShareLink from '../../components/components/ui/shareLink'
 import { useUploadContext } from '../../context/UploadContext';
 
-const ViewUpload = ({ characters, movies }) => {
+const ViewUpload = ({ characters, movies, selectedImages }) => {
+	console.log("Uploading", selectedImages)
 	const router = useRouter();
 	const [titleFromCookie, setTitleFromCookie] = useState('');
 	const [selectedCharacters, setSelectedCharacters] = useState([]);
@@ -75,20 +76,9 @@ const ViewUpload = ({ characters, movies }) => {
 			<Card className="bg-card-cardCustomBlue p-6">
 				<div className="space-y-4">
 					<div className="flex items-center gap-4">
-						<Link href="#" passHref>
-							<button
-								className="px-4 py-2 rounded-lg bg-gradient-custom-gradient border border-buttonBorder"
-								onClick={(e) => {
-									e.preventDefault();
-									router.back();
-								}}
-								aria-label="Go Back"
-							>
-								<ArrowLeft />
-							</button>
-						</Link>
+
 						<div className="text-lg font-medium leading-10 mt-[17px]">
-							{renderHeader()}
+
 						</div>
 					</div>
 
@@ -128,14 +118,16 @@ const ViewUpload = ({ characters, movies }) => {
 
 					</div>
 					<div className="flex justify-end gap-4 pt-4">
-						<Button
-							variant="outline"
-							size="lg"
-							className="min-w-[140px] border-white/10 bg-white/5 text-white backdrop-blur-sm hover:bg-white/10 hover:text-white"
-						>
-							<RotateCcw className="mr-2 h-4 w-4" />
-							Restart
-						</Button>
+						<Link href="/">
+							<Button
+								variant="outline"
+								size="lg"
+								className="min-w-[140px] border-white/10 bg-white/5 text-white backdrop-blur-sm hover:bg-white/10 hover:text-white"
+							>
+								<RotateCcw className="mr-2 h-4 w-4" />
+								Restart
+							</Button>
+						</Link>
 						<Button
 							size="lg"
 							className="min-w-[140px] bg-cyan-400 font-medium text-white hover:bg-cyan-500"
