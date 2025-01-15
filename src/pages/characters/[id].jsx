@@ -144,9 +144,9 @@ const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, 
 							</div>
 						) : (
 							filteredFeatures.map((feature) => (
-								<div key={feature.path} className="space-y-2">
+								<div key={feature.path} className="space-y-2 text-center">
 									<Card
-										className={`bg-blue-800/20 border-0 backdrop-blur-sm overflow-hidden cursor-pointer transform transition-transform duration-200 hover:scale-105 mb-6 ${selectedCharacters.includes(feature.character_id) ? 'border-buttonBorder border border-solid' : ''
+										className={`bg-blue-800/20 border-0 backdrop-blur-sm overflow-hidden cursor-pointer transform transition-transform duration-200 hover:scale-105  ${selectedCharacters.includes(feature.character_id) ? 'border-buttonBorder border border-solid' : ''
 											}`}
 										aria-label={`Select ${feature.character_real_name}`}
 										onClick={() => handleCharactersSelect(feature)}
@@ -164,7 +164,7 @@ const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, 
 											</AspectRatio>
 										</CardContent>
 									</Card>
-									<p className="text-sm text-customWhite font-bold">{feature.character_real_name}</p>
+									<p className="text-sm text-customWhite font-bold mt-2">{feature.character_real_name}</p>
 								</div>
 							))
 						)}
