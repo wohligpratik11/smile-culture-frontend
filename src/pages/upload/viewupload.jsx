@@ -158,8 +158,6 @@ export async function getServerSideProps(context) {
 		console.log("characterId", characterId);
 		formData.append('character_ids', characterId);
 	}
-
-
 	if (uploadedFileData) {
 		formData.append('user_images', uploadedFileData);
 	}

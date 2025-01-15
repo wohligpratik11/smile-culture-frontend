@@ -19,7 +19,7 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 	const [searchQuery, setSearchQuery] = useState('');
 	const [selectedMovie, setSelectedMovie] = useState(null);
 	const [movies, setMovies] = useState(initialMovies);
-	const [currentPage, setCurrentPage] = useState(initialPage); 
+	const [currentPage, setCurrentPage] = useState(initialPage);
 	const [totalPages, setTotalPages] = useState(Math.ceil(totalCount / 8));
 
 	useEffect(() => {
@@ -37,14 +37,14 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 
 	// Fetch new movies when page changes
 	const handlePageChange = async (page) => {
-		if (page < 1 || page > totalPages) return; 
+		if (page < 1 || page > totalPages) return;
 
 		router.push({
 			pathname: router.pathname,
-			query: { ...router.query, page }, 
+			query: { ...router.query, page },
 		}, undefined, { shallow: true });
 
-		setCurrentPage(page); 
+		setCurrentPage(page);
 
 		try {
 			const axios = axiosInstance();
@@ -59,7 +59,7 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 
 	const features = movies?.map(movie => ({
 		id: movie.movie_id,
-		title: movie.movie_name,
+		title: movie.movie_name.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase()),
 		name: movie.movie_name,
 		image: movie.url,
 		path: `/scenes/${movie.movie_id}`,
@@ -125,9 +125,9 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 							</div>
 						) : (
 							filteredFeatures.map((feature) => (
-								<div key={feature.path} className="space-y-2">
+								<div key={feature.path} className="space-y-2 text-center">
 									<Card
-										className={`bg-blue-800/20 border-0 backdrop-blur-sm overflow-hidden cursor-pointer transform transition-transform duration-200 hover:scale-105 mb-6 ${selectedMovie?.id === feature.id ? 'border-buttonBorder border border-solid' : ''}`}
+										className={`bg-blue-800/20 border-0 backdrop-blur-sm overflow-hidden cursor-pointer transform transition-transform duration-200 hover:scale-105 mb-2 relative ${selectedMovie?.id === feature.id ? 'border-buttonBorder border border-solid' : ''}`}
 										aria-label={`Select ${feature.title}`}
 										onClick={() => handleMovieSelect(feature)}
 									>
@@ -143,10 +143,12 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 											</AspectRatio>
 										</CardContent>
 									</Card>
+									<p className="text-sm text-customWhite font-bold">{feature.title}</p>
 								</div>
 							))
 						)}
 					</div>
+
 				</div>
 
 				<div className="flex justify-between items-center mt-6">
@@ -157,7 +159,7 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 							onClick={() => handlePageChange(currentPage - 1)}
 							disabled={currentPage <= 1}
 						>
-							<ChevronLeft className="w-5 h-5" /> 
+							<ChevronLeft className="w-5 h-5" />
 						</button>
 
 						{[...Array(totalPages)].map((_, index) => {
@@ -183,7 +185,7 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 							onClick={() => handlePageChange(currentPage + 1)}
 							disabled={currentPage >= totalPages}
 						>
-							<ChevronRight className="w-5 h-5" /> 
+							<ChevronRight className="w-5 h-5" />
 						</button>
 					</div>
 
@@ -203,7 +205,7 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 
 export async function getServerSideProps(context) {
 	const { query } = context;
-	const page = query.page || 1; 
+	const page = query.page || 1;
 
 	try {
 		const axios = axiosInstance(context);

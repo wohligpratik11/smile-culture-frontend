@@ -51,7 +51,7 @@ const ScenesPage = ({ initialScenes, totalCount, page: initialPage, id, prefetch
 			setScenes(response?.data?.data?.data || []);
 			setTotalPages(Math.ceil(response?.data?.data?.totalCount / 8));
 		} catch (error) {
-			console.error('Error fetching Scenes:', error);
+			console.error('Error fetching Scene:', error);
 		}
 	}, [router, totalPages, id]);
 
@@ -110,72 +110,71 @@ const ScenesPage = ({ initialScenes, totalCount, page: initialPage, id, prefetch
 							className="w-full pl-12 pr-3 py-3 border-none bg-blueYonder rounded-full text-customWhite placeholder-customWhite"
 						/>
 					</div>
+					<div className="flex space-x-2">
+						<button
+							className={`px-6 py-2 rounded-full text-white font-semibold transition-colors duration-200 ${selectedTab === 'scene' ? 'bg-gradient-custom-gradient border border-buttonBorder' : 'border border-slateBlue cursor-pointer transition-all bg-blueYonder'}`}
+							onClick={() => {
+								setSelectedTab('scene');
+								Cookie.set('mode', 'video');
+							}}
+
+						>
+							Scene
+						</button>
+						<button
+							className={`px-6 py-2 rounded-full text-white font-semibold transition-colors duration-200 ${selectedTab === 'image' ? 'bg-gradient-custom-gradient border border-buttonBorder' : 'border border-slateBlue cursor-pointer transition-all bg-blueYonder'}`}
+							onClick={() => {
+								setSelectedTab('image');
+								Cookie.set('mode', 'image');
+							}}	>
+							Image
+						</button>
+					</div>
 					<div className="flex items-center justify-between mt-4">
 						{/* Left Aligned Text */}
 						<div className="text-lg font-semibold">
-							Choose Scenes
+							Choose Scene
 						</div>
 
-						{/* Right Aligned Buttons */}
-						<div className="flex space-x-2">
-							<button
-								className={`px-6 py-2 rounded-full text-white font-semibold transition-colors duration-200 ${selectedTab === 'scene' ? 'bg-gradient-custom-gradient border border-buttonBorder' : 'border border-slateBlue cursor-pointer transition-all bg-blueYonder'}`}
-								onClick={() => {
-									setSelectedTab('scene');
-									Cookie.set('mode', 'video');
-								}}
 
-							>
-								View Scenes
-							</button>
-							<button
-								className={`px-6 py-2 rounded-full text-white font-semibold transition-colors duration-200 ${selectedTab === 'image' ? 'bg-gradient-custom-gradient border border-buttonBorder' : 'border border-slateBlue cursor-pointer transition-all bg-blueYonder'}`}
-								onClick={() => {
-									setSelectedTab('image');
-									Cookie.set('mode', 'image');
-								}}	>
-								View Images
-							</button>
-						</div>
 					</div>
 
 					{selectedTab === 'image' ? (
 						<div className={`mt-6 ${filteredFeatures.length > 0 ? 'grid grid-cols-1 md:grid-cols-4 gap-6' : ''}`}>
-							{filteredFeatures.length === 0 ? (
-								<div className="flex justify-center items-center h-full">No Scenes found</div>
-							) : (
-								filteredFeatures.map((feature) => (
-									<div key={feature.path} className="space-y-2">
-										<Card
-											className={`bg-blue-800/20 border-0 backdrop-blur-sm overflow-hidden cursor-pointer transform transition-transform duration-200 hover:scale-105 mb-6 ${selectedScenes?.scene_id === feature.scene_id ? 'border-buttonBorder border border-solid' : ''}`}
-											aria-label={`Select ${feature.scene_name}`}
-											onClick={() => handleScenesSelect(feature)}
-										>
-											<CardContent className="p-0">
-												<AspectRatio ratio={16 / 9} className="w-full">
-													<Image
-														src={feature.thumbnailUrl || '/fallback-image.jpg'}
-														alt={`${feature.scene_name} image`}
-														layout="fill"
-														objectFit="contain"
-														priority={true}
-													/>
-												</AspectRatio>
-											</CardContent>
-										</Card>
-									</div>
-								))
-							)}
+							{filteredFeatures.map((feature) => (
+								<div key={feature.path} className="space-y-2">
+									<Card
+										className={`bg-blue-800/20 border-0 backdrop-blur-sm overflow-hidden cursor-pointer transform transition-transform duration-200 hover:scale-105 mb-2 ${selectedScenes?.scene_id === feature.scene_id ? 'border-buttonBorder border border-solid' : ''}`}
+										aria-label={`Select ${feature.scene_name}`}
+										onClick={() => handleScenesSelect(feature)}
+									>
+										<CardContent className="p-0">
+											<AspectRatio ratio={16 / 9} className="w-full">
+												<Image
+													src={feature.thumbnailUrl || '/fallback-image.jpg'}
+													alt={`${feature.scene_name} image`}
+													layout="fill"
+													objectFit="contain"
+													priority={true}
+												/>
+
+											</AspectRatio>
+										</CardContent>
+									</Card>
+									<p className="text-sm text-customWhite font-bold text-center">{feature.scene_name}</p>
+								</div>
+							))}
+
 						</div>
 					) : (
 						<div className={`mt-6 ${filteredFeatures.length > 0 ? 'grid grid-cols-1 md:grid-cols-4 gap-6' : ''}`}>
 							{filteredFeatures.length === 0 ? (
-								<div className="flex justify-center items-center h-full">No Scenes found</div>
+								<div className="flex justify-center items-center h-full">No Scene found</div>
 							) : (
 								filteredFeatures.map((feature) => (
 									<div key={feature.path} className="space-y-2">
 										<Card
-											className={`bg-blue-800/20 border-0 backdrop-blur-sm overflow-hidden cursor-pointer transform transition-transform duration-200 hover:scale-105 mb-6 ${selectedScenes?.scene_id === feature.scene_id ? 'border-buttonBorder border border-solid' : ''}`}
+											className={`bg-blue-800/20 border-0 backdrop-blur-sm overflow-hidden cursor-pointer transform transition-transform duration-200 hover:scale-105 mb-2 ${selectedScenes?.scene_id === feature.scene_id ? 'border-buttonBorder border border-solid' : ''}`}
 											aria-label={`Select ${feature.scene_name}`}
 											onClick={() => handleScenesSelect(feature)}
 										>
@@ -192,8 +191,11 @@ const ScenesPage = ({ initialScenes, totalCount, page: initialPage, id, prefetch
 												</AspectRatio>
 											</CardContent>
 										</Card>
+										{/* Scene name displayed below the card */}
+										<p className="text-sm text-customWhite font-bold text-center">{feature.scene_name}</p>
 									</div>
 								))
+
 							)}
 						</div>
 					)}

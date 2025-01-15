@@ -10,7 +10,6 @@ import { useRouter } from 'next/router'; // Import useRouter
 import { UploadProvider } from '../context/UploadContext';
 import { AuthProvider } from '../context/AuthContext';
 import { ToasterProvider } from '../components/common/toaster';
-
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
   useLogin();
