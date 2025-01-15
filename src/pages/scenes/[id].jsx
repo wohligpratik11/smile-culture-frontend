@@ -24,6 +24,7 @@ const ScenesPage = ({ initialScenes, totalCount, page: initialPage, id, prefetch
 	useEffect(() => {
 		const title = Cookie.get('title');
 		setTitleFromCookie(title);
+		Cookie.set('mode', 'video');
 	}, []);
 
 	useEffect(() => {
@@ -119,14 +120,20 @@ const ScenesPage = ({ initialScenes, totalCount, page: initialPage, id, prefetch
 						<div className="flex space-x-2">
 							<button
 								className={`px-6 py-2 rounded-full text-white font-semibold transition-colors duration-200 ${selectedTab === 'scene' ? 'bg-gradient-custom-gradient border border-buttonBorder' : 'border border-slateBlue cursor-pointer transition-all bg-blueYonder'}`}
-								onClick={() => setSelectedTab('scene')}
+								onClick={() => {
+									setSelectedTab('scene');
+									Cookie.set('mode', 'video');
+								}}
+
 							>
 								View Scenes
 							</button>
 							<button
 								className={`px-6 py-2 rounded-full text-white font-semibold transition-colors duration-200 ${selectedTab === 'image' ? 'bg-gradient-custom-gradient border border-buttonBorder' : 'border border-slateBlue cursor-pointer transition-all bg-blueYonder'}`}
-								onClick={() => setSelectedTab('image')}
-							>
+								onClick={() => {
+									setSelectedTab('image');
+									Cookie.set('mode', 'image');
+								}}	>
 								View Images
 							</button>
 						</div>
@@ -244,8 +251,8 @@ const ScenesPage = ({ initialScenes, totalCount, page: initialPage, id, prefetch
 						</button>
 					)}
 				</div>
-			</Card>
-		</div>
+			</Card >
+		</div >
 	);
 };
 
