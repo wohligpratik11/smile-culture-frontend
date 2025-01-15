@@ -9,6 +9,7 @@ import { useLogin } from '../../src/components/hooks/useLogin';
 import { useRouter } from 'next/router'; // Import useRouter
 import { UploadProvider } from '../context/UploadContext';
 import { AuthProvider } from '../context/AuthContext';
+import { ToasterProvider } from '../components/common/toaster';
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
@@ -19,17 +20,28 @@ function MyApp({ Component, pageProps }) {
   //   }
   // }, [router.pathname]);
 
+  useEffect(() => {
+    if (router.pathname === '/') {
+      Cookies.remove('characterId');
+      Cookies.remove('mode');
+      Cookies.remove('selectedCharacters');
+      Cookies.remove('uploadedData');
+      Cookies.remove('title');
+    }
+  }, [router.pathname]);
   return (
     <>
       <CustomThemeProvider>
         <AuthProvider>
           <UploadProvider>
-            <Layout>
-              <Head>
-                <title>Eros Now</title>
-              </Head>
-              <Component {...pageProps} />
-            </Layout>
+            <ToasterProvider>
+              <Layout>
+                <Head>
+                  <title>Eros Now</title>
+                </Head>
+                <Component {...pageProps} />
+              </Layout>
+            </ToasterProvider>
           </UploadProvider>
         </AuthProvider>
       </CustomThemeProvider>

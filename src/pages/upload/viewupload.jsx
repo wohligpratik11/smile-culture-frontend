@@ -150,9 +150,10 @@ export async function getServerSideProps(context) {
 	console.log("uploadedFileData", uploadedFileData)
 	const titleFromCookie = cookies.title.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
 	const characterId = cookies.characterId || '';
+	const selectMode = cookies.mode || '';
 	const formData = new FormData();
 	formData.append('feature_used', titleFromCookie);
-
+	formData.append('mode', selectMode)
 	if (characterId) {
 		console.log("characterId", characterId);
 		formData.append('character_ids', characterId);

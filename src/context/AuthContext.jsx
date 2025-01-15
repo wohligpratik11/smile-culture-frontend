@@ -12,7 +12,7 @@ export const AuthProvider = ({ children }) => {
 		const handleLogin = async () => {
 			try {
 				const response = await apiService.post(API_ENDPOINTS.LOGIN, {
-					user_email: 'pratik.sawant@wohlig.in',
+					user_email: 'jainam.nisar@wohlig.in',
 					password: '123',
 				});
 				const userData = response.data?.data;

@@ -74,7 +74,6 @@ const UploadPage = ({ characters, movies }) => {
 				const uploadedUrl = response?.data?.data?.url;
 				setFilePreview(uploadedUrl);
 
-				// Add the uploaded image URL and characterId to the selectedImages array
 				setSelectedImages(prevSelectedImages => [
 					...prevSelectedImages,
 					{ characterId, uploadedUrl }
@@ -163,7 +162,7 @@ const UploadPage = ({ characters, movies }) => {
 					<h2 className="text-white mb-4 font-medium text-lg">Upload Selfie</h2>
 					<div className="grid grid-cols-4 gap-4">
 						{movies.map((movie, index) => (
-							<div>   Character Name:<span className="ml-3 text-white font-medium text-sm">
+						<div>Character Name:<span className="ml-3 text-white font-medium text-sm">
 								{movie.character_real_name || "Character Name Not Available"}
 							</span>
 								<div key={index} className="flex gap-2 mt-2">

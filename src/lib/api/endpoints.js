@@ -1,5 +1,5 @@
 export const API_ENDPOINTS = {
-  LOGIN: '/api/login/login',
+  LOGIN: '/api/auth/login',
   GET_ALL_MOVIES_LIST: '/api/movies/getAllMoviesList',
   GET_ALL_SCENE_LIST: '/api/scenes/getAllSceneList',
   GET_ALL_CHARACTERS_LIST: 'api/characters/getAllCharactersList',
