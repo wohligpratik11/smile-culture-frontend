@@ -154,7 +154,8 @@ export async function getServerSideProps(context) {
 	formData.append('feature_used', titleFromCookie);
 
 	if (characterId) {
-		formData.append('character_ids', JSON.stringify([].concat(characterId)));
+		console.log("characterId", characterId);
+		formData.append('character_ids', characterId);
 	}
 
 
