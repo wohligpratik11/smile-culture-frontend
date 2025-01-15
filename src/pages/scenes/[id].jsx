@@ -21,6 +21,7 @@ const ScenesPage = ({ initialScenes, totalCount, page: initialPage, id, prefetch
 	const [currentPage, setCurrentPage] = useState(initialPage);
 	const [totalPages, setTotalPages] = useState(Math.ceil(totalCount / 8));
 	const [selectedTab, setSelectedTab] = useState('scene');
+
 	useEffect(() => {
 		const title = Cookie.get('title');
 		setTitleFromCookie(title);
@@ -66,6 +67,19 @@ const ScenesPage = ({ initialScenes, totalCount, page: initialPage, id, prefetch
 	const handleScenesSelect = (scene) => {
 		setSelectedScenes(prev => (prev?.scene_id === scene.scene_id ? null : scene));
 	};
+	const handleTabChange = (tab) => {
+		setSelectedTab(tab);
+		setSelectedScenes(null);
+	};
+	useEffect(() => {
+		if (selectedTab === 'scene') {
+			Cookie.set('mode', 'video');
+		} else if (selectedTab === 'image') {
+			Cookie.set('mode', 'image');
+		}
+
+		setSelectedScenes(null);
+	}, [selectedTab]);
 
 
 
@@ -110,6 +124,7 @@ const ScenesPage = ({ initialScenes, totalCount, page: initialPage, id, prefetch
 							className="w-full pl-12 pr-3 py-3 border-none bg-blueYonder rounded-full text-customWhite placeholder-customWhite"
 						/>
 					</div>
+
 					<div className="flex space-x-2">
 						<button
 							className={`px-6 py-2 rounded-full text-white font-semibold transition-colors duration-200 ${selectedTab === 'scene' ? 'bg-gradient-custom-gradient border border-buttonBorder' : 'border border-slateBlue cursor-pointer transition-all bg-blueYonder'}`}
@@ -126,17 +141,17 @@ const ScenesPage = ({ initialScenes, totalCount, page: initialPage, id, prefetch
 							onClick={() => {
 								setSelectedTab('image');
 								Cookie.set('mode', 'image');
-							}}	>
+							}}
+
+						>
 							Image
 						</button>
 					</div>
+
 					<div className="flex items-center justify-between mt-4">
-						{/* Left Aligned Text */}
 						<div className="text-lg font-semibold">
 							{selectedTab === 'scene' ? 'Choose Scene' : 'Choose Image'}
 						</div>
-
-
 					</div>
 
 					{selectedTab === 'image' ? (
@@ -157,14 +172,12 @@ const ScenesPage = ({ initialScenes, totalCount, page: initialPage, id, prefetch
 													objectFit="contain"
 													priority={true}
 												/>
-
 											</AspectRatio>
 										</CardContent>
 									</Card>
 									<p className="text-sm text-customWhite font-bold text-center">{feature.scene_name}</p>
 								</div>
 							))}
-
 						</div>
 					) : (
 						<div className={`mt-6 ${filteredFeatures.length > 0 ? 'grid grid-cols-1 md:grid-cols-4 gap-6' : ''}`}>
@@ -191,11 +204,9 @@ const ScenesPage = ({ initialScenes, totalCount, page: initialPage, id, prefetch
 												</AspectRatio>
 											</CardContent>
 										</Card>
-										{/* Scene name displayed below the card */}
 										<p className="text-sm text-customWhite font-bold text-center">{feature.scene_name}</p>
 									</div>
 								))
-
 							)}
 						</div>
 					)}
@@ -253,10 +264,11 @@ const ScenesPage = ({ initialScenes, totalCount, page: initialPage, id, prefetch
 						</button>
 					)}
 				</div>
-			</Card >
-		</div >
+			</Card>
+		</div>
 	);
 };
+
 
 export async function getServerSideProps(context) {
 	const { query } = context;
