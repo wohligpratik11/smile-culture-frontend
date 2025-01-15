@@ -23,10 +23,8 @@ const UploadPage = ({ characters, movies }) => {
 	const [titleFromCookie, setTitleFromCookie] = useState('');
 	const [characterId, setArrayCharacterId] = useState([]);
 	console.log(":characterId", characterId)
-
 	const [selectedCharacters, setSelectedCharacters] = useState([]);
 	console.log(":selectedCharacters", selectedCharacters)
-
 	const [selectedMode, setSelectedMode] = useState(null);
 	const [showSelfieInstructions, setShowSelfieInstructions] = useState(false);
 	const [isUploading, setIsUploading] = useState(false);
@@ -94,8 +92,8 @@ const UploadPage = ({ characters, movies }) => {
 					updatedCharacterIds.push(characterId);
 					Cookie.set('characterId', JSON.stringify(updatedCharacterIds));
 				}
-
 				toast.success(response?.data?.data?.final_response);
+				stopUploading();
 			} else {
 				console.error('Error:', response.status, response.data);
 				alert('Error uploading file. Status code: ' + response.status);
@@ -106,16 +104,6 @@ const UploadPage = ({ characters, movies }) => {
 			alert('Error uploading file. Please try again.');
 		}
 	}, [characterId]);  // Add characterId to dependencies
-
-
-
-
-
-
-
-
-
-
 
 	const closeSelfieInstructions = () => {
 		setShowSelfieInstructions(false);
@@ -162,11 +150,8 @@ const UploadPage = ({ characters, movies }) => {
 					<h2 className="text-white mb-4 font-medium text-lg">Upload Selfie</h2>
 					<div className="grid grid-cols-4 gap-4">
 						{movies.map((movie, index) => (
-						<div>Character Name:<span className="ml-3 text-white font-medium text-sm">
-								{movie.character_real_name || "Character Name Not Available"}
-							</span>
-								<div key={index} className="flex gap-2 mt-2">
-
+							<div>
+								<div key={index} className="flex gap-2">
 									<Card
 										className={`cursor-pointer transition-all h-[122px] w-full sm:w-[172px] rounded-xl ${filePreview ? 'p-1' : 'p-4 sm:p-4'
 											}`}
@@ -202,16 +187,17 @@ const UploadPage = ({ characters, movies }) => {
 											</div>
 										</div>
 									</Card>
-
-
 									<div className="flex flex-col items-center gap-2 ">
 										<Image
 											src={movie.url || UploadImages}
 											alt={movie.title || 'Movie Image'}
-											width={172}
+											width={155}
 											height={122}
 											className="object-contain rounded-2xl"
 										/>
+										<span className="ml-3 text-white font-medium text-sm">
+											{movie.character_real_name || "Character Name Not Available"}
+										</span>
 									</div>
 								</div>
 							</div>
