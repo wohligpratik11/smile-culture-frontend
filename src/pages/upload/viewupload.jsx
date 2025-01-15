@@ -19,6 +19,7 @@ import { Button } from "../../components/components/ui/button"
 import { RotateCcw, Share } from 'lucide-react'
 import ShareLink from '../../components/components/ui/shareLink'
 import { useUploadContext } from '../../context/UploadContext';
+// import { useToaster } from '../../'
 
 const ViewUpload = ({ characters, movies, selectedImages }) => {
 	console.log("Uploading", selectedImages)
@@ -153,9 +154,9 @@ export async function getServerSideProps(context) {
 	formData.append('feature_used', titleFromCookie);
 
 	if (characterId) {
-		const characterIdArray = Array.isArray(characterId) ? characterId : [characterId];
-		formData.append('character_ids', JSON.stringify(characterIdArray));
+		formData.append('character_ids', JSON.stringify([].concat(characterId)));
 	}
+
 
 	if (uploadedFileData) {
 		formData.append('user_images', uploadedFileData);
