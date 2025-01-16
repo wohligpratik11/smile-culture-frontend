@@ -20,6 +20,8 @@ import { AspectRatio } from "../../components/components/ui/aspect-ratio"
 import { toast } from 'react-toastify';
 import { useUploadContext } from '../../context/UploadContext';
 import ViewUpload from './viewupload'
+import { useToaster } from '../../components/common/toaster'
+
 const UploadPage = ({ characters, movies }) => {
 	const router = useRouter();
 	const [titleFromCookie, setTitleFromCookie] = useState('');
@@ -34,6 +36,8 @@ const UploadPage = ({ characters, movies }) => {
 	const [uploadedData, setUploadedData] = useState(null);
 	const [selectedImages, setSelectedImages] = useState([]);
 	const { showSpinner, hideSpinner } = useSpinner()
+	const { addToast } = useToaster()
+	const [isUploadSuccessful, setIsUploadSuccessful] = useState(false);
 
 	useEffect(() => {
 		const title = Cookie.get('title');
@@ -92,14 +96,25 @@ const UploadPage = ({ characters, movies }) => {
 					updatedCharacterIds.push(characterId);
 					Cookie.set('characterId', JSON.stringify(updatedCharacterIds));
 				}
-				toast.success(response?.data?.data?.final_response);
+				toast.success(response?.data?.data?.final_response, {
+					progress: undefined,
+					hideProgressBar: true,
+					autoClose: 1000,
+				});
 				stopUploading();
 			} else {
-				console.error('Error:', response.status, response.data);
-				alert('Error uploading file. Status code: ' + response.status);
+				toast.error(response?.data?.data?.final_response, {
+					progress: undefined,
+					hideProgressBar: true,
+					autoClose: 1000,
+				});
 			}
 		} catch (error) {
-			toast.error('Upload failed!');
+			toast.error('Upload failed!', {
+				progress: undefined,
+				hideProgressBar: true,
+				autoClose: 1000,
+			});
 			console.error('Error uploading file:', error);
 			alert('Error uploading file. Please try again.');
 		}
@@ -107,9 +122,7 @@ const UploadPage = ({ characters, movies }) => {
 			// Stop showing the spinner after the process finishes (either success or failure)
 			hideSpinner();
 			console.log('Spinner hidden');
-
 		}
-
 	}, [characterId, showSpinner, hideSpinner]);
 
 	const closeSelfieInstructions = () => {
@@ -237,6 +250,7 @@ const UploadPage = ({ characters, movies }) => {
 							router.push('/upload/viewupload');
 
 						}}
+						disabled={isUploadSuccessful}
 					>
 						Next
 					</button>
@@ -271,7 +285,6 @@ export async function getServerSideProps(context) {
 		const payload = {
 			character_ids: selectedCharacters,
 		};
-		// Send the payload to the API
 		const axios = axiosInstance(context);
 		const response = await axios.post(API_ENDPOINTS.GET_ALL_SELECTED_CHARACTERS_LIST, payload);
 
