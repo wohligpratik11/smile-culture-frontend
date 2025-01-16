@@ -61,7 +61,7 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 		id: movie.movie_id,
 		title: movie.movie_name.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase()),
 		name: movie.movie_name,
-		image: movie.url,
+		image: movie.thumbnail_url,
 		path: `/scenes/${movie.movie_id}`,
 	}));
 

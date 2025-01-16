@@ -166,7 +166,7 @@ const ScenesPage = ({ initialScenes, totalCount, page: initialPage, id, prefetch
 										<CardContent className="p-0">
 											<AspectRatio ratio={16 / 9} className="w-full">
 												<Image
-													src={feature.thumbnailUrl || '/fallback-image.jpg'}
+													src={feature.thumbnail_url || '/fallback-image.jpg'}
 													alt={`${feature.scene_name} image`}
 													layout="fill"
 													objectFit="contain"
@@ -194,7 +194,7 @@ const ScenesPage = ({ initialScenes, totalCount, page: initialPage, id, prefetch
 											<CardContent className="p-0">
 												<AspectRatio ratio={16 / 9} className="w-full">
 													<video
-														src={feature.videoUrl}
+														src={feature.video_url}
 														controls
 														controlsList="nodownload"
 														disablePictureInPicture
