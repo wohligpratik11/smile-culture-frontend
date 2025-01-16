@@ -66,8 +66,10 @@ const UploadPage = ({ characters, movies }) => {
 		}
 
 		try {
+			// Show spinner before starting upload
 			showSpinner();
 			console.log('Spinner shown');
+
 			const firstFile = files[0];
 			const previewUrl = URL.createObjectURL(firstFile);
 
@@ -90,31 +92,34 @@ const UploadPage = ({ characters, movies }) => {
 				let uploadedDataArray = existingUploadedData ? JSON.parse(existingUploadedData) : [];
 				uploadedDataArray.push(uploadedUrl);
 				Cookie.set('uploadedData', JSON.stringify(uploadedDataArray));
+
 				const existingCharacterIds = Cookie.get('characterId');
 				let updatedCharacterIds = existingCharacterIds ? JSON.parse(existingCharacterIds) : [];
 				if (!updatedCharacterIds.includes(characterId)) {
 					updatedCharacterIds.push(characterId);
 					Cookie.set('characterId', JSON.stringify(updatedCharacterIds));
 				}
-				toast.success(response?.data?.data?.final_response, {
-					progress: undefined,
-					hideProgressBar: true,
-					autoClose: 1000,
-				});
+				addToast({
+					title: response?.data?.data?.final_response,
+					type: 'success',
+				})
 				stopUploading();
 			} else {
-				toast.error(response?.data?.data?.final_response, {
-					progress: undefined,
-					hideProgressBar: true,
-					autoClose: 1000,
-				});
+				addToast({
+					title: response?.data?.data?.final_response,
+					type: 'error',
+				})
 			}
 		} catch (error) {
-			toast.error('Upload failed!', {
-				progress: undefined,
-				hideProgressBar: true,
-				autoClose: 1000,
-			});
+			addToast({
+				title: response?.data?.data?.final_response,
+				type: 'error',
+			})
+			// toast.error('Upload failed!', {
+			// 	progress: undefined,
+			// 	hideProgressBar: true,
+			// 	autoClose: 1000,
+			// });
 			console.error('Error uploading file:', error);
 			alert('Error uploading file. Please try again.');
 		}
