@@ -31,13 +31,13 @@ const UploadPage = ({ characters, movies }) => {
 	console.log(":selectedCharacters", selectedCharacters)
 	const [selectedMode, setSelectedMode] = useState(null);
 	const [showSelfieInstructions, setShowSelfieInstructions] = useState(false);
-	const [isUploading, setIsUploading] = useState(false);
 	const [filePreview, setFilePreview] = useState(null);
 	const [uploadedData, setUploadedData] = useState(null);
 	const [selectedImages, setSelectedImages] = useState([]);
-	const { showSpinner, hideSpinner } = useSpinner()
+	const { showSpinner, hideSpinner } = useSpinner();
 	const { addToast } = useToaster()
 	const [isUploadSuccessful, setIsUploadSuccessful] = useState(false);
+	const [isUploading, setIsUploading] = useState(false);
 
 	useEffect(() => {
 		const title = Cookie.get('title');
@@ -66,20 +66,14 @@ const UploadPage = ({ characters, movies }) => {
 		}
 
 		try {
-			// Show spinner before starting upload
 			showSpinner();
-			console.log('Spinner shown');
-
 			const firstFile = files[0];
 			const previewUrl = URL.createObjectURL(firstFile);
-
 			const newFormData = new FormData();
 			newFormData.append('user_image', firstFile);
-
 			const axios = axiosInstance();
 			const response = await axios.post(API_ENDPOINTS.VALIDATION_TO_IMAGE, newFormData);
-
-			if (response.status === 200) {
+			if (response.data.status_code === 200) {
 				const uploadedUrl = response?.data?.data?.url;
 				setFilePreview(uploadedUrl);
 
@@ -87,7 +81,6 @@ const UploadPage = ({ characters, movies }) => {
 					...prevSelectedImages,
 					{ characterId, uploadedUrl }
 				]);
-
 				const existingUploadedData = Cookie.get('uploadedData');
 				let uploadedDataArray = existingUploadedData ? JSON.parse(existingUploadedData) : [];
 				uploadedDataArray.push(uploadedUrl);
@@ -102,33 +95,24 @@ const UploadPage = ({ characters, movies }) => {
 				addToast({
 					title: response?.data?.data?.final_response,
 					type: 'success',
-				})
-				stopUploading();
-			} else {
+				});
+			} else if (response.data.status_code === 400) {
 				addToast({
 					title: response?.data?.data?.final_response,
 					type: 'error',
-				})
+				});
 			}
 		} catch (error) {
 			addToast({
-				title: response?.data?.data?.final_response,
+				title: 'Unexpected error occurred. Please try again.',
 				type: 'error',
-			})
-			// toast.error('Upload failed!', {
-			// 	progress: undefined,
-			// 	hideProgressBar: true,
-			// 	autoClose: 1000,
-			// });
+			});
 			console.error('Error uploading file:', error);
-			alert('Error uploading file. Please try again.');
-		}
-		finally {
-			// Stop showing the spinner after the process finishes (either success or failure)
+		} finally {
 			hideSpinner();
-			console.log('Spinner hidden');
 		}
-	}, [characterId, showSpinner, hideSpinner]);
+	}, [characterId, showSpinner, hideSpinner, addToast]);
+
 
 	const closeSelfieInstructions = () => {
 		setShowSelfieInstructions(false);
