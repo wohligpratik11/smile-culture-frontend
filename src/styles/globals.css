@@ -160,6 +160,8 @@ body {
   right: 10px;
   z-index: 9999;
 }
+/* Example CSS for the spinner */
+/* Add this to your global CSS or a CSS module */
 .lds-dual-ring {
   display: inline-block;
   width: 64px;
@@ -177,17 +179,4 @@ body {
   100% {
     transform: rotate(360deg);
   }
-}
-
-.lds-dual-ring:after {
-  content: ' ';
-  display: block;
-  width: 64px;
-  height: 64px;
-  margin: 8px;
-  border-radius: 50%;
-  border: 6px solid rgba(67, 24, 255, 1);
-  border-color: rgba(67, 24, 255, 1) transparent rgba(67, 24, 255, 1)
-    transparent;
-  animation: lds-dual-ring 1.2s linear infinite;
 }
