@@ -10,7 +10,6 @@ import Cookie from 'js-cookie';
 import Image from 'next/image';
 import CryptoJS from 'crypto-js';
 import SelectImage from "../../../public/assets/images/image.webp";
-import Video from "../../../public/assets/images/video.webp";
 import UploadImages from "../../../public/assets/images/uploadImages.webp";
 import MediaUploader from '../../components/components/ui/UppyUploader';
 import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription } from '../../components/components/ui/dialog'; // Import Dialog components
@@ -18,17 +17,19 @@ import { AspectRatio } from "../../components/components/ui/aspect-ratio"
 import { Button } from "../../components/components/ui/button"
 import { RotateCcw, Share } from 'lucide-react'
 import ShareLink from '../../components/components/ui/shareLink'
-import { useUploadContext } from '../../context/UploadContext';
 // import { useToaster } from '../../'
+import { useUploadContext } from '../../context/UploadContext';
+import { ImageConfigContext } from 'next/dist/server/future/route-modules/app-page/vendored/contexts/entrypoints';
 
-const ViewUpload = ({ characters, movies, selectedImages }) => {
-	console.log("Uploading", selectedImages)
+const ViewUpload = ({ initialMovies }) => {
 	const router = useRouter();
 	const [titleFromCookie, setTitleFromCookie] = useState('');
 	const [selectedCharacters, setSelectedCharacters] = useState([]);
 	const [selectedMode, setSelectedMode] = useState(null);
+	const [movies, setMovies] = useState(initialMovies);
+	console.log("moviesmovies", movies)
 	const [isModalOpen, setIsModalOpen] = useState(false);
-
+	const { uploadedData, characterId } = useUploadContext();
 
 	useEffect(() => {
 		const title = Cookie.get('title');
@@ -86,16 +87,52 @@ const ViewUpload = ({ characters, movies, selectedImages }) => {
 					<div className="mx-auto max-w-5xl space-y-12">
 						<div className="space-y-6 flex flex-col items-center justify-center">
 							<Card className="group relative overflow-hidden border-0 bg-transparent shadow-2xl !w-[550px] !h-[316.93px]">
-								<div className="relative aspect-video overflow-hidden rounded-xl">
-									<Image
-										src="/assets/images/boy.webp"
-										alt="After preview"
-										fill
-										className="object-cover"
-										priority
-									/>
-								</div>
+								{movies && movies.length > 0 ? (
+									movies.map((movie, index) => (
+										<div key={index} className="space-y-6 flex flex-col items-center justify-center">
+											{movie.output_video_url ? (
+												movie.output_video_url.endsWith('.mp4') || movie.output_video_url.endsWith('.webm') || movie.output_video_url.endsWith('.ogg') ? (
+													<div className="relative">
+														<video
+															controls
+															preload="none"
+															className="rounded-lg border border-white/10"
+															width={800}
+															height={450}
+														>
+															<source src={movie.output_video_url} type="video/mp4" />
+															<source src={movie.output_video_url} type="video/webm" />
+															<source src={movie.output_video_url} type="video/ogg" />
+															Your browser does not support the video tag.
+														</video>
+													</div>
+												) : (
+													<div className="relative">
+														<Image
+															src={movie.output_video_url}
+															alt="Media"
+															className="rounded-lg border border-white/10"
+															width={800}
+															height={450}
+															objectFit="contain"
+															priority={true}
+														/>
+													</div>
+												)
+											) : (
+												<div className="text-center text-gray-500">
+													<p>No media available for this movie.</p>
+												</div>
+											)}
+										</div>
+									))
+								) : (
+									<div className="text-center text-gray-400">
+										<p>No movies found.</p>
+									</div>
+								)}
 							</Card>
+
 
 							<h2 className="text-center text-3xl font-semibold text-white">Explore</h2>
 							<div className="flex flex-wrap justify-center gap-4">
@@ -139,21 +176,23 @@ const ViewUpload = ({ characters, movies, selectedImages }) => {
 					</div>
 				</div>
 			</Card>
+
 		</div>
+
 	);
 };
 
 export async function getServerSideProps(context) {
-	// Retrieve cookies from the request
 	const cookies = context.req.cookies;
-	const uploadedFileData = cookies.uploadedData || '';
-	console.log("uploadedFileData", uploadedFileData)
+	const uploadedFileData = cookies.uploadedData || '';  // Get the uploaded data from cookies
+
 	const titleFromCookie = cookies.title.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
 	const characterId = cookies.characterId || '';
 	const selectMode = cookies.mode || '';
 	const formData = new FormData();
 	formData.append('feature_used', titleFromCookie);
-	formData.append('mode', selectMode)
+	formData.append('mode', selectMode);
+
 	if (characterId) {
 		console.log("characterId", characterId);
 		formData.append('character_ids', characterId);
@@ -166,11 +205,9 @@ export async function getServerSideProps(context) {
 		const axios = axiosInstance(context);
 		const response = await axios.post(API_ENDPOINTS.CREATE_NEW_STORE_DATA, formData);
 
-		// Return the data as props
 		return {
 			props: {
 				initialMovies: response?.data?.data || [],
-				uploadedDataFile: response?.data?.uploadedDataFile || [],
 			},
 		};
 	} catch (error) {
@@ -178,11 +215,11 @@ export async function getServerSideProps(context) {
 		return {
 			props: {
 				initialMovies: [],
-				uploadedDataFile: [],
 			},
 		};
 	}
 }
+
 
 export default ViewUpload;
 
