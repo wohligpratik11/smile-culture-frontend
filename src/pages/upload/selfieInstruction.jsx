@@ -7,13 +7,13 @@ import { CheckCircle2, XCircle } from 'lucide-react';
 
 export default function SelfieInstructions({ closeModal, uploadImageData }) {
 	const [currentStep, setCurrentStep] = useState(1);
-	const [isVisible, setIsVisible] = useState(true); // State to manage visibility
+	const [isVisible, setIsVisible] = useState(true);
 
-	if (!isVisible) return null; // Return null if the modal is not visible
+	if (!isVisible) return null;
 
 	const handleTakeSelfie = () => {
-		closeModal(); // Close the modal
-		uploadImageData(); // Call the upload image function
+		closeModal();
+		uploadImageData();
 	};
 	return (
 		<div className="min-h-screen flex items-center justify-center p-4">
@@ -33,7 +33,6 @@ export default function SelfieInstructions({ closeModal, uploadImageData }) {
 						<div className="w-24 border-t-2 border-dashed border-white/40"></div>
 						<div
 							className={`w-10 h-10 rounded-full ${currentStep === 2 ? 'bg-white text-[#3B4374]' : 'bg-white/30 text-white'} flex items-center justify-center font-semibold shadow-[0_0_12px_rgba(255,255,255,0.4)] cursor-pointer`}
-							// onClick={() => setCurrentStep(2)}
 						>
 							2
 						</div>
