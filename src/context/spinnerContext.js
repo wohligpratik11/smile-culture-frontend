@@ -23,7 +23,7 @@ export const SpinnerProvider = ({ children }) => {
           aria-live="assertive"
           role="status"
         >
-          <div className="lds-dual-ring"></div>
+          <div className="loader"></div>
         </div>
       )}
     </SpinnerContext.Provider>
