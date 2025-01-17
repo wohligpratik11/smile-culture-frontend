@@ -1,10 +1,15 @@
-// components/SocialShareModal.js
 
 'use client'
 
 import { X } from 'lucide-react'
 import { useState } from 'react'
 import { Button } from "../ui/button"
+import Instagram from "../../../../public/assets/images/instagram.webp"
+import Facebook from "../../../../public/assets/images/facebook.webp"
+import Mail from "../../../../public/assets/images/mail.webp"
+import Reddit from "../../../../public/assets/images/reddit.webp"
+import XIcon from "../../../../public/assets/images/x.webp"
+import Thread from "../../../../public/assets/images/thread.webp"
 import {
 	Dialog,
 	DialogContent,
@@ -12,57 +17,56 @@ import {
 	DialogTitle,
 } from "../ui/dialog"
 
-export default function SocialShareModal({ open, onClose, shareUrl }) {
+export default function SocialShareModal({ open, onClose, movies }) {
 	const [copied, setCopied] = useState(false)
-
+	useEffect(() => {
+		console.log('Movies array:', movies);
+	}, [movies]);
+	const shareUrl = movies
+		?.map((movie) => movie.output_video_url)
+		.filter(Boolean) // Remove undefined or null values
+		.join(','); // Use comma or other delimiter if needed
 	const socialLinks = [
 		{
-			name: "Instagram",
-			icon: "/instagram.svg",
-			color: "bg-gradient-to-tr from-yellow-500 via-pink-500 to-purple-500",
-			url: `https://www.instagram.com/share?url=${shareUrl}`,
+			name: 'Instagram',
+			url: `https://www.instagram.com/share?url=${encodeURIComponent(shareUrl)}`,
+			icon: Instagram,
 		},
 		{
-			name: "WhatsApp",
-			icon: "/whatsapp.svg",
-			color: "bg-[#25D366]",
-			url: `https://wa.me/?text=${shareUrl}`,
+			name: 'Facebook',
+			url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`,
+			icon: Facebook,
 		},
 		{
-			name: "Facebook",
-			icon: "/facebook.svg",
-			color: "bg-[#1877F2]",
-			url: `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`,
+			name: 'Email',
+			url: `mailto:?body=${encodeURIComponent(shareUrl)}`,
+			icon: Mail,
 		},
 		{
-			name: "Twitter",
-			icon: "/twitter.svg",
-			color: "bg-[#1DA1F2]",
-			url: `https://twitter.com/intent/tweet?url=${shareUrl}`,
+			name: 'Reddit',
+			url: `https://reddit.com/submit?url=${encodeURIComponent(shareUrl)}`,
+			icon: Reddit,
 		},
 		{
-			name: "Email",
-			icon: "/gmail.svg",
-			color: "bg-[#EA4335]",
-			url: `mailto:?body=${shareUrl}`,
+			name: 'X',
+			url: '#',
+			icon: XIcon,
 		},
 		{
-			name: "Reddit",
-			icon: "/reddit.svg",
-			color: "bg-[#FF4500]",
-			url: `https://reddit.com/submit?url=${shareUrl}`,
+			name: 'Thread',
+			url: '#',
+			icon: Thread,
 		},
-	]
-
+	];
 	const copyToClipboard = async () => {
 		try {
-			await navigator.clipboard.writeText(shareUrl)
-			setCopied(true)
-			setTimeout(() => setCopied(false), 2000)
+			await navigator.clipboard.writeText(shareUrl);
+			setCopied(true);
+			setTimeout(() => setCopied(false), 2000);
 		} catch (err) {
-			console.error("Failed to copy text: ", err)
+			console.error('Failed to copy text: ', err);
 		}
-	}
+	};
 
 	return (
 		<Dialog open={open} onOpenChange={onClose}>
@@ -87,23 +91,17 @@ export default function SocialShareModal({ open, onClose, shareUrl }) {
 							rel="noopener noreferrer"
 							className="flex flex-col items-center gap-1"
 						>
-							<div className={`p-3 rounded-full ${social.color}`}>
-								<img
-									src={social.icon}
-									alt={social.name}
-									className="w-6 h-6"
-								/>
-							</div>
-							<span className="text-xs text-white">{social.name}</span>
+							<img src={social.icon.src} alt={social.name} className="w-14 h-14" />
+							<span className="text-sm text-white font-normal">{social.name}</span>
 						</a>
 					))}
 				</div>
-				<div className="flex items-center gap-2 bg-[#2c387e] rounded-md p-2">
+				<div className="flex items-center gap-2 bg-[#2c387e] rounded-md p-2 border">
 					<input
 						type="text"
 						readOnly
 						value={shareUrl}
-						className="flex-1 bg-transparent border-none text-sm text-white focus:outline-none"
+						className="flex-1 bg-transparent border-none font-normal text-lg text-white focus:outline-none"
 					/>
 					<Button
 						type="submit"
@@ -111,7 +109,7 @@ export default function SocialShareModal({ open, onClose, shareUrl }) {
 						onClick={copyToClipboard}
 						className="bg-[#3d5afe] hover:bg-[#536dfe] text-white"
 					>
-						{copied ? "Copied!" : "Copy"}
+						{copied ? 'Copied!' : 'Copy'}
 					</Button>
 				</div>
 			</DialogContent>

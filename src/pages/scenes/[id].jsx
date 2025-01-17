@@ -134,7 +134,7 @@ const ScenesPage = ({ initialScenes, totalCount, page: initialPage, id, prefetch
 							}}
 
 						>
-							Scene
+							Scenes
 						</button>
 						<button
 							className={`px-6 py-2 rounded-full text-white font-semibold transition-colors duration-200 ${selectedTab === 'image' ? 'bg-gradient-custom-gradient border border-buttonBorder' : 'border border-slateBlue cursor-pointer transition-all bg-blueYonder'}`}
@@ -144,7 +144,7 @@ const ScenesPage = ({ initialScenes, totalCount, page: initialPage, id, prefetch
 							}}
 
 						>
-							Image
+							Images
 						</button>
 					</div>
 
