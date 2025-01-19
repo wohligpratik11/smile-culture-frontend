@@ -1,118 +1,107 @@
+"use client";
 
-'use client'
-
-import { X } from 'lucide-react'
-import { useState } from 'react'
-import { Button } from "../ui/button"
+import { X } from "lucide-react";
+import { useState } from "react";
 import Instagram from "../../../../public/assets/images/instagram.webp"
 import Facebook from "../../../../public/assets/images/facebook.webp"
 import Mail from "../../../../public/assets/images/mail.webp"
 import Reddit from "../../../../public/assets/images/reddit.webp"
 import XIcon from "../../../../public/assets/images/x.webp"
 import Thread from "../../../../public/assets/images/thread.webp"
-import {
-	Dialog,
-	DialogContent,
-	DialogHeader,
-	DialogTitle,
-} from "../ui/dialog"
 
-export default function SocialShareModal({ open, onClose, movies }) {
-	const [copied, setCopied] = useState(false)
-	useEffect(() => {
-		console.log('Movies array:', movies);
-	}, [movies]);
-	const shareUrl = movies
-		?.map((movie) => movie.output_video_url)
-		.filter(Boolean) // Remove undefined or null values
-		.join(','); // Use comma or other delimiter if needed
-	const socialLinks = [
+export default function ShareModal({ isOpen, onClose, url }) {
+	const [copied, setCopied] = useState(false);
+
+	if (!isOpen) return null;
+
+	const shareOptions = [
 		{
-			name: 'Instagram',
-			url: `https://www.instagram.com/share?url=${encodeURIComponent(shareUrl)}`,
+			name: "Instagram",
 			icon: Instagram,
+			link: `https://www.instagram.com/sharer.php?u=${url}`,
 		},
 		{
-			name: 'Facebook',
-			url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`,
-			icon: Facebook,
-		},
-		{
-			name: 'Email',
-			url: `mailto:?body=${encodeURIComponent(shareUrl)}`,
+			name: "WhatsApp",
 			icon: Mail,
+			link: `https://wa.me/?text=${url}`,
 		},
 		{
-			name: 'Reddit',
-			url: `https://reddit.com/submit?url=${encodeURIComponent(shareUrl)}`,
-			icon: Reddit,
+			name: "Facebook",
+			icon: Facebook,
+			link: `https://www.facebook.com/sharer/sharer.php?u=${url}`,
 		},
 		{
-			name: 'X',
-			url: '#',
+			name: "Twitter",
 			icon: XIcon,
+			link: `https://twitter.com/intent/tweet?url=${url}`,
 		},
 		{
-			name: 'Thread',
-			url: '#',
+			name: "Reddit",
+			icon: Reddit,
+			link: `https://reddit.com/submit?url=${url}`,
+		},
+		{
+			name: "Thread",
 			icon: Thread,
+			link: `https://reddit.com/submit?url=${url}`,
 		},
 	];
-	const copyToClipboard = async () => {
+
+	const handleCopy = async () => {
 		try {
-			await navigator.clipboard.writeText(shareUrl);
+			await navigator.clipboard.writeText(url);
 			setCopied(true);
 			setTimeout(() => setCopied(false), 2000);
 		} catch (err) {
-			console.error('Failed to copy text: ', err);
+			console.error("Failed to copy text: ", err);
 		}
 	};
 
 	return (
-		<Dialog open={open} onOpenChange={onClose}>
-			<DialogContent className="sm:max-w-md bg-[#1a237e] text-white">
-				<DialogHeader>
-					<DialogTitle className="text-center text-white">Share</DialogTitle>
-					<Button
-						variant="ghost"
-						className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
-						onClick={() => onClose(false)}
-					>
-						<X className="h-4 w-4 text-white" />
-						<span className="sr-only">Close</span>
-					</Button>
-				</DialogHeader>
-				<div className="flex justify-center gap-4 py-4">
-					{socialLinks.map((social) => (
+		<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+			<div className="relative w-full max-w-lg rounded-xl bg-deepNavy p-6 text-white shadow-lg">
+				<button
+					onClick={onClose}
+					className="absolute right-4 top-4 text-gray-400 hover:text-white"
+					aria-label="Close share modal"
+				>
+					<X className="h-6 w-6" />
+				</button>
+
+				<h2 className="mb-8 text-2xl font-semibold">Share</h2>
+
+				<div className="mb-8 grid grid-cols-3 gap-8 sm:grid-cols-6">
+					{shareOptions.map((option) => (
 						<a
-							key={social.name}
-							href={social.url}
+							key={option.name}
+							href={option.link}
 							target="_blank"
 							rel="noopener noreferrer"
-							className="flex flex-col items-center gap-1"
+							className="flex flex-col items-center gap-2"
 						>
-							<img src={social.icon.src} alt={social.name} className="w-14 h-14" />
-							<span className="text-sm text-white font-normal">{social.name}</span>
+							<div className={`flex h-16 w-16 items-center justify-center rounded-full ${option.icon.src}`}>
+								<img src={option.icon.src || "/placeholder.svg"} alt="" className="w-14 h-14" aria-hidden="true" />
+							</div>
+							<span className="text-sm text-white font-normal">{option.name}</span>
 						</a>
 					))}
 				</div>
-				<div className="flex items-center gap-2 bg-[#2c387e] rounded-md p-2 border">
+
+				<div className="flex items-center gap-2 rounded-md bg-[#2c387e] p-2 border">
 					<input
 						type="text"
+						value={url}
 						readOnly
-						value={shareUrl}
-						className="flex-1 bg-transparent border-none font-normal text-lg text-white focus:outline-none"
+						className="flex-1 bg-transparent px-2 border-none font-normal text-lg text-white focus:outline-none"
 					/>
-					<Button
-						type="submit"
-						size="sm"
-						onClick={copyToClipboard}
-						className="bg-[#3d5afe] hover:bg-[#536dfe] text-white"
+					<button
+						onClick={handleCopy}
+						className="rounded-lg bg-[#00BCD4] px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-[#00ACC1] focus:outline-none focus:ring-2 focus:ring-[#00BCD4] focus:ring-offset-2 focus:ring-offset-[#2B3147]"
 					>
-						{copied ? 'Copied!' : 'Copy'}
-					</Button>
+						{copied ? "Copied!" : "Copy"}
+					</button>
 				</div>
-			</DialogContent>
-		</Dialog>
-	)
+			</div>
+		</div>
+	);
 }

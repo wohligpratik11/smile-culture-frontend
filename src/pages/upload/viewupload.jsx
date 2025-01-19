@@ -30,7 +30,15 @@ const ViewUpload = ({ initialMovies }) => {
 	console.log("moviesmovies", movies)
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const { uploadedData, characterId } = useUploadContext();
+	const [isOpen, setIsOpen] = useState(false);
 
+	const handleShareClick = () => {
+		setIsOpen(true);
+	};
+
+	const handleModalClose = () => {
+		setIsOpen(false);
+	};
 	useEffect(() => {
 		const title = Cookie.get('title');
 		setTitleFromCookie(title);
@@ -169,12 +177,18 @@ const ViewUpload = ({ initialMovies }) => {
 						<Button
 							size="lg"
 							className="min-w-[140px] bg-cyan-400 font-medium text-white hover:bg-cyan-500"
+							onClick={handleShareClick}
 						>
-							<Share className="mr-2 h-4 w-4" />
+							<Share />
 							Share
 						</Button>
 					</div>
+
+
+
 				</div>
+				<ShareLink isOpen={isOpen} onClose={handleModalClose} />
+
 			</Card>
 
 		</div>
