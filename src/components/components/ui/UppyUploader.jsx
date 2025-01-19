@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import { useSpinner } from '../../../context/spinnerContext'; // Import the useSpinner hook
+import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import '@uppy/core/dist/style.css';
 import '@uppy/dashboard/dist/style.css';
@@ -18,7 +19,9 @@ const Dashboard = dynamic(
 );
 
 const MediaUploader = ({ onUploadComplete }) => {
+  const { showSpinner, hideSpinner } = useSpinner(); // Use the spinner hook here
   const [uppyInstance, setUppyInstance] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
     const initUppy = async () => {
@@ -37,16 +40,20 @@ const MediaUploader = ({ onUploadComplete }) => {
         .use(Webcam, { modes: ['picture', 'video'] })
         .use(ImageEditor);
 
-      uppy.on('complete', (result) => {
+      uppy.on('complete', async (result) => {
         const files = result.successful;
 
         if (files.length > 0) {
-          // Instead of creating FormData here, just pass the file data
           const uploadedFiles = files.map(file => file.data);
 
+          setIsUploading(true); 
+
           if (onUploadComplete) {
-            onUploadComplete(uploadedFiles);
+            await onUploadComplete(uploadedFiles);
           }
+
+          hideSpinner();
+          setIsUploading(false); 
         }
       });
 
@@ -65,10 +72,10 @@ const MediaUploader = ({ onUploadComplete }) => {
         }
       }
     };
-  }, [onUploadComplete]);
+  }, [onUploadComplete, showSpinner, hideSpinner]);
 
   return (
-    <div>
+    <div className="relative">
       {uppyInstance ? (
         <Dashboard
           uppy={uppyInstance}
@@ -79,10 +86,23 @@ const MediaUploader = ({ onUploadComplete }) => {
           note="Images and videos only, up to 10MB each"
         />
       ) : (
-        <div className="w-full h-[400px] bg-deepNavy flex items-center justify-center">
-          <div className="text-white">Initializing uploader...</div>
+        <div
+          className=" fixed inset-0 z-50 flex items-center justify-center "
+          style={{ backgroundColor: 'rgba(0, 0, 0, 0.3)' }}
+        >
+          <div className="loader"></div>
         </div>
       )}
+
+      {isUploading && (
+        <div
+          className=" fixed inset-0 z-50 flex items-center justify-center "
+          style={{ backgroundColor: 'rgba(0, 0, 0, 0.3)' }}
+        >
+          <div className="loader"></div>
+        </div>
+      )}
+
     </div>
   );
 };

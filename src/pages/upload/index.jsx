@@ -66,7 +66,6 @@ const UploadPage = ({ characters, movies }) => {
 		}
 
 		try {
-			showSpinner();
 			const firstFile = files[0];
 			const previewUrl = URL.createObjectURL(firstFile);
 			const newFormData = new FormData();
@@ -96,6 +95,7 @@ const UploadPage = ({ characters, movies }) => {
 					title: response?.data?.data?.final_response,
 					type: 'success',
 				});
+				stopUploading()
 			} else if (response.data.status_code === 400) {
 				addToast({
 					title: response?.data?.data?.final_response,
@@ -109,9 +109,9 @@ const UploadPage = ({ characters, movies }) => {
 			});
 			console.error('Error uploading file:', error);
 		} finally {
-			hideSpinner();
+			// hideSpinner();
 		}
-	}, [characterId, showSpinner, hideSpinner, addToast]);
+	}, [characterId, addToast]);
 
 
 	const closeSelfieInstructions = () => {
@@ -233,16 +233,14 @@ const UploadPage = ({ characters, movies }) => {
 					)}
 				</div>
 				<div className="flex justify-end space-x-4 mt-6">
-					<button
-						className="px-4 py-2 bg-gradient-custom-gradient border border-buttonBorder rounded-lg w-52 h-12"
-						onClick={() => {
-							router.push('/upload/viewupload');
-
-						}}
-						disabled={isUploadSuccessful}
-					>
-						Next
-					</button>
+					<Link href={{ pathname: '/upload/viewupload' }} prefetch>
+						<button
+							className="px-4 py-2 bg-gradient-custom-gradient border border-buttonBorder rounded-lg w-52 h-12"
+							disabled={isUploadSuccessful}
+						>
+							Next
+						</button>
+					</Link>
 				</div>
 			</Card>
 		</div>

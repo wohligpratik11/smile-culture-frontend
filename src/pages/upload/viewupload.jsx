@@ -85,51 +85,38 @@ const ViewUpload = ({ initialMovies }) => {
 		<div className="min-h-screen p-4 h-[835px]">
 			<Card className="bg-card-cardCustomBlue p-6">
 				<div className="space-y-4">
-					<div className="flex items-center gap-4">
-
-						<div className="text-lg font-medium leading-10 mt-[17px]">
-
-						</div>
-					</div>
-
-					<div className="mx-auto max-w-5xl space-y-12">
+					<div className="mx-auto max-w-full sm:max-w-5xl space-y-12 p-2">
 						<div className="space-y-6 flex flex-col items-center justify-center">
-							<Card className="group relative overflow-hidden border-0 bg-transparent shadow-2xl !w-[550px] !h-[316.93px]">
+							<Card className="relative w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[500px] xl:h-[560px]">
 								{movies && movies.length > 0 ? (
 									movies.map((movie, index) => (
 										<div key={index} className="space-y-6 flex flex-col items-center justify-center">
 											{movie.output_video_url ? (
-												movie.output_video_url.endsWith('.mp4') || movie.output_video_url.endsWith('.webm') || movie.output_video_url.endsWith('.ogg') ? (
-													<div className="relative">
-														<video
-															controls
-															preload="none"
-															className="rounded-lg border border-white/10"
-															width={800}
-															height={450}
-														>
-															<source src={movie.output_video_url} type="video/mp4" />
-															<source src={movie.output_video_url} type="video/webm" />
-															<source src={movie.output_video_url} type="video/ogg" />
-															Your browser does not support the video tag.
-														</video>
-													</div>
-												) : (
-													<div className="relative">
-														<Image
-															src={movie.output_video_url}
-															alt="Media"
-															className="rounded-lg border border-white/10"
-															width={800}
-															height={450}
-															objectFit="contain"
-															priority={true}
-														/>
-													</div>
-												)
+												<div className="relative w-full h-auto">
+													<video
+														controls
+														preload="auto"
+														width="100%"
+														height="auto"
+														controlsList="nodownload"
+														disablePictureInPicture
+														className="w-full h-auto object-contain rounded-lg border border-buttonBorder"
+													>
+														<source src={movie.output_video_url} type="video/mp4" />
+														Your browser does not support the video tag.
+													</video>
+												</div>
 											) : (
-												<div className="text-center text-gray-500">
-													<p>No media available for this movie.</p>
+												<div className="relative w-full h-auto">
+													<Image
+														src={movie.output_video_url}
+														alt="Media"
+														className="rounded-lg border border-buttonBorder object-contain"
+														layout="responsive"
+														width={800}
+														height={450}
+														priority
+													/>
 												</div>
 											)}
 										</div>
@@ -140,7 +127,6 @@ const ViewUpload = ({ initialMovies }) => {
 									</div>
 								)}
 							</Card>
-
 
 							<h2 className="text-center text-3xl font-semibold text-white">Explore</h2>
 							<div className="flex flex-wrap justify-center gap-4">
@@ -160,15 +146,13 @@ const ViewUpload = ({ initialMovies }) => {
 						</div>
 
 						<ShareLink />
-						{/* Action Buttons */}
-
 					</div>
-					<div className="flex justify-end gap-4 pt-4">
+					<div className="flex justify-end gap-4  flex-wrap">
 						<Link href="/">
 							<Button
 								variant="outline"
 								size="lg"
-								className="min-w-[140px] border-white/10 bg-white/5 text-white backdrop-blur-sm hover:bg-white/10 hover:text-white"
+								className="min-w-[140px] w-full sm:w-auto border-white/10 bg-white/5 text-white backdrop-blur-sm hover:bg-white/10 hover:text-white"
 							>
 								<RotateCcw className="mr-2 h-4 w-4" />
 								Restart
@@ -176,13 +160,14 @@ const ViewUpload = ({ initialMovies }) => {
 						</Link>
 						<Button
 							size="lg"
-							className="min-w-[140px] bg-cyan-400 font-medium text-white hover:bg-cyan-500"
+							className="min-w-[140px] w-full sm:w-auto bg-cyan-400 font-medium text-white hover:bg-cyan-500"
 							onClick={handleShareClick}
 						>
 							<Share />
 							Share
 						</Button>
 					</div>
+
 
 
 

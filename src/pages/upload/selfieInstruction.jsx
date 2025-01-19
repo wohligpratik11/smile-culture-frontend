@@ -47,7 +47,7 @@ export default function SelfieInstructions({ closeModal, uploadImageData }) {
 								<p className="text-gray-300 mb-4">
 									Bright, even lighting makes all the difference!
 								</p>
-								<ul className="text-gray-300 space-y-2 list-disc list-inside mb-6">
+								<ul className="text-[#B8B9CF] space-y-2 list-disc list-inside mb-6">
 									<li>Face towards a natural light source like a window.</li>
 									<li>Avoid shadows or bright light from behind.</li>
 								</ul>

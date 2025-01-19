@@ -9,7 +9,7 @@ const Layout = ({ children }) => {
 
 		<div className="min-h-screen flex flex-col">
 			<ToastProvider>
-				<div className="mr-5 mt-5">
+				<div className="mr-5 mt-2">
 					<Header />
 				</div>
 				<div>
