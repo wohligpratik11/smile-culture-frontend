@@ -157,38 +157,18 @@ const UploadPage = ({ characters, movies }) => {
 						</div>
 					</div>
 					<h2 className="text-white mb-4 font-medium text-lg">Upload Selfie</h2>
-					<div className="grid grid-cols-4 gap-4">
+					<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
 						{movies.map((movie, index) => (
-							<div>
-								<div key={index} className="flex gap-2">
+							<div key={index}>
+								<div className="flex gap-2 flex-col sm:flex-row">
 									<Card
-										className={`cursor-pointer transition-all h-[122px] w-full sm:w-[172px] rounded-xl ${filePreview ? 'p-1' : 'p-4 sm:p-4'
-											}`}
+										className={`cursor-pointer transition-all h-[122px] w-full sm:w-[172px] rounded-xl ${filePreview ? 'p-1' : 'p-4 sm:p-4'}`}
 										onClick={() => {
 											setShowSelfieInstructions(true);
 											setArrayCharacterId(movie.character_id);
 										}}
-
 									>
 										<div className="flex flex-col items-center gap-2">
-											{/* {filePreview && (
-												<div >
-													<Image
-														src={filePreview}
-														alt="Selected File"
-														width={70}
-														height={70}
-														className="rounded-lg"
-													/>
-												</div>
-											)} */}
-											{/* {filePreview && (
-												<Image
-													src={UploadImages}
-													alt="Image Icon"
-													className="w-10 sm:w-12 h-10 sm:h-12"
-												/>
-											)} */}
 											<Image
 												src={UploadImages}
 												alt="Image Icon"
@@ -200,7 +180,8 @@ const UploadPage = ({ characters, movies }) => {
 											</div>
 										</div>
 									</Card>
-									<div className="flex flex-col items-center gap-2 ">
+
+									<div className="flex flex-col items-center gap-2 mt-2 sm:mt-0 sm:ml-2">
 										<Image
 											src={movie.url || UploadImages}
 											alt={movie.title || 'Movie Image'}
@@ -208,7 +189,7 @@ const UploadPage = ({ characters, movies }) => {
 											height={122}
 											className="object-contain rounded-2xl"
 										/>
-										<span className="ml-3 text-white font-medium text-sm">
+										<span className="ml-3 text-white font-medium text-sm text-center sm:text-left">
 											{movie.character_real_name || "Character Name Not Available"}
 										</span>
 									</div>
@@ -216,6 +197,7 @@ const UploadPage = ({ characters, movies }) => {
 							</div>
 						))}
 					</div>
+
 					{showSelfieInstructions && (
 						<div className="fixed inset-0 bg-opacity-50 flex items-center justify-center">
 							<SelfieInstruction closeModal={closeSelfieInstructions} uploadImageData={uploadImageData} />

@@ -91,7 +91,21 @@ const ViewUpload = ({ initialMovies }) => {
 								{movies && movies.length > 0 ? (
 									movies.map((movie, index) => (
 										<div key={index} className="space-y-6 flex flex-col items-center justify-center">
-											{movie.output_video_url ? (
+											{movie?.output_video_url ? (
+
+												<div className="relative w-full h-auto">
+													<Image
+														src={movie.output_video_url}
+														alt="Media"
+														className="rounded-lg border border-buttonBorder object-contain"
+														layout="responsive"
+														width={800}
+														height={450}
+														priority
+													/>
+												</div>
+
+											) : (
 												<div className="relative w-full h-auto">
 													<video
 														controls
@@ -105,18 +119,6 @@ const ViewUpload = ({ initialMovies }) => {
 														<source src={movie.output_video_url} type="video/mp4" />
 														Your browser does not support the video tag.
 													</video>
-												</div>
-											) : (
-												<div className="relative w-full h-auto">
-													<Image
-														src={movie.output_video_url}
-														alt="Media"
-														className="rounded-lg border border-buttonBorder object-contain"
-														layout="responsive"
-														width={800}
-														height={450}
-														priority
-													/>
 												</div>
 											)}
 										</div>
@@ -172,7 +174,7 @@ const ViewUpload = ({ initialMovies }) => {
 
 
 				</div>
-				<ShareLink isOpen={isOpen} onClose={handleModalClose} />
+				<ShareLink isOpen={isOpen} onClose={handleModalClose} movies={movies}/>
 
 			</Card>
 

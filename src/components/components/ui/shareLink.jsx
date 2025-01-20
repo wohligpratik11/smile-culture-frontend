@@ -9,47 +9,54 @@ import Reddit from "../../../../public/assets/images/reddit.webp"
 import XIcon from "../../../../public/assets/images/x.webp"
 import Thread from "../../../../public/assets/images/thread.webp"
 
-export default function ShareModal({ isOpen, onClose, url }) {
+export default function ShareModal({ isOpen, onClose, movies }) {
+	console.log("movies1112222", movies)
 	const [copied, setCopied] = useState(false);
 
 	if (!isOpen) return null;
+
+	const videoUrl = movies[0]?.output_video_url;
+	console.log("videoUrlvideoUrl", videoUrl)
+	console.log("Movies:", movies);
+	console.log("output_video_url:", movies?.output_video_url);
 
 	const shareOptions = [
 		{
 			name: "Instagram",
 			icon: Instagram,
-			link: `https://www.instagram.com/sharer.php?u=${url}`,
+			link: `https://www.instagram.com/`,
 		},
 		{
 			name: "WhatsApp",
 			icon: Mail,
-			link: `https://wa.me/?text=${url}`,
+			link: `whatsapp://send?text=${encodeURIComponent(videoUrl)}`,
 		},
 		{
 			name: "Facebook",
 			icon: Facebook,
-			link: `https://www.facebook.com/sharer/sharer.php?u=${url}`,
+			link: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(videoUrl)}`,
 		},
 		{
 			name: "Twitter",
 			icon: XIcon,
-			link: `https://twitter.com/intent/tweet?url=${url}`,
+			link: `https://twitter.com/intent/tweet?url=${encodeURIComponent(videoUrl)}`,
 		},
 		{
 			name: "Reddit",
 			icon: Reddit,
-			link: `https://reddit.com/submit?url=${url}`,
+			link: `https://www.reddit.com/submit?url=${encodeURIComponent(videoUrl)}`,
 		},
 		{
 			name: "Thread",
 			icon: Thread,
-			link: `https://reddit.com/submit?url=${url}`,
+			link: `https://www.threads.net/intent/tweet?url=${encodeURIComponent(videoUrl)}`,
 		},
 	];
 
+
 	const handleCopy = async () => {
 		try {
-			await navigator.clipboard.writeText(url);
+			await navigator.clipboard.writeText(videoUrl);
 			setCopied(true);
 			setTimeout(() => setCopied(false), 2000);
 		} catch (err) {
@@ -90,13 +97,13 @@ export default function ShareModal({ isOpen, onClose, url }) {
 				<div className="flex items-center gap-2 rounded-md bg-[#2c387e] p-2 border">
 					<input
 						type="text"
-						value={url}
+						value={videoUrl}
 						readOnly
 						className="flex-1 bg-transparent px-2 border-none font-normal text-lg text-white focus:outline-none"
 					/>
 					<button
 						onClick={handleCopy}
-						className="rounded-lg bg-[#00BCD4] px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-[#00ACC1] focus:outline-none focus:ring-2 focus:ring-[#00BCD4] focus:ring-offset-2 focus:ring-offset-[#2B3147]"
+						className="rounded-lg bg-gradient-custom-gradient px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-[#00ACC1] focus:outline-none focus:ring-2 focus:ring-[#00BCD4] focus:ring-offset-2 focus:ring-offset-[#2B3147]"
 					>
 						{copied ? "Copied!" : "Copy"}
 					</button>
