@@ -2,7 +2,7 @@ name: eros-now-ui
 on:
   push:
     branches:
-      - prod
+      - master
 
 jobs:
   un-page-prod:
