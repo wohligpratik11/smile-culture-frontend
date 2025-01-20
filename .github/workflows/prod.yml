@@ -5,7 +5,7 @@ on:
       - master
 
 jobs:
-  un-page-prod:
+  eros-now-ui:
     runs-on: ubuntu-latest
 
     permissions: 
