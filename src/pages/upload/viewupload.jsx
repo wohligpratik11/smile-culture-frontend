@@ -21,7 +21,7 @@ import ShareLink from '../../components/components/ui/shareLink'
 import { useUploadContext } from '../../context/UploadContext';
 import { ImageConfigContext } from 'next/dist/server/future/route-modules/app-page/vendored/contexts/entrypoints';
 
-const ViewUpload = ({ initialMovies }) => {
+const ViewUpload = ({ initialMovies, mode }) => {
 	const router = useRouter();
 	const [titleFromCookie, setTitleFromCookie] = useState('');
 	const [selectedCharacters, setSelectedCharacters] = useState([]);
@@ -31,7 +31,7 @@ const ViewUpload = ({ initialMovies }) => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const { uploadedData, characterId } = useUploadContext();
 	const [isOpen, setIsOpen] = useState(false);
-
+	console.log("Received mode prop:", mode); // Log the mode prop
 	const handleShareClick = () => {
 		setIsOpen(true);
 	};
@@ -87,12 +87,11 @@ const ViewUpload = ({ initialMovies }) => {
 				<div className="space-y-4">
 					<div className="mx-auto max-w-full sm:max-w-5xl space-y-12 p-2">
 						<div className="space-y-6 flex flex-col items-center justify-center">
-							<Card className="relative w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[500px] xl:h-[560px]">
+							<Card className="relative w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[00px] xl:h-[560px]">
 								{movies && movies.length > 0 ? (
 									movies.map((movie, index) => (
 										<div key={index} className="space-y-6 flex flex-col items-center justify-center">
-											{movie?.output_video_url ? (
-
+											{mode === 'image' ? (
 												<div className="relative w-full h-auto">
 													<Image
 														src={movie.output_video_url}
@@ -104,7 +103,6 @@ const ViewUpload = ({ initialMovies }) => {
 														priority
 													/>
 												</div>
-
 											) : (
 												<div className="relative w-full h-auto">
 													<video
@@ -117,7 +115,6 @@ const ViewUpload = ({ initialMovies }) => {
 														className="w-full h-auto object-contain rounded-lg border border-buttonBorder"
 													>
 														<source src={movie.output_video_url} type="video/mp4" />
-														Your browser does not support the video tag.
 													</video>
 												</div>
 											)}
@@ -174,7 +171,7 @@ const ViewUpload = ({ initialMovies }) => {
 
 
 				</div>
-				<ShareLink isOpen={isOpen} onClose={handleModalClose} movies={movies}/>
+				<ShareLink isOpen={isOpen} onClose={handleModalClose} movies={movies} />
 
 			</Card>
 
@@ -209,6 +206,7 @@ export async function getServerSideProps(context) {
 		return {
 			props: {
 				initialMovies: response?.data?.data || [],
+				mode: selectMode,
 			},
 		};
 	} catch (error) {
@@ -216,6 +214,7 @@ export async function getServerSideProps(context) {
 		return {
 			props: {
 				initialMovies: [],
+				mode: selectMode,
 			},
 		};
 	}

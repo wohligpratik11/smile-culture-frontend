@@ -168,7 +168,7 @@ const UploadPage = ({ characters, movies }) => {
 											setArrayCharacterId(movie.character_id);
 										}}
 									>
-										<div className="flex flex-col items-center gap-2">
+										<div className="flex flex-col items-center gap-2 mt-2.5">
 											<Image
 												src={UploadImages}
 												alt="Image Icon"
