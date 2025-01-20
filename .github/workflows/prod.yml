@@ -46,7 +46,7 @@ jobs:
       run: |-
         docker push ${{ secrets.GCP_GAR_HOST_PROD }}/${{ secrets.GCP_PROJECT_ID_PROD }}/${{ secrets.GCP_REPO_PROD }}/${{ secrets.GCP_IMAGE_NAME_PROD }}:$GITHUB_REF_NAME-$GITHUB_SHA
 
-        git clone https://${{ secrets.GIT_OPS_GITHUB_USER }}:${{ secrets.GIT_OPS_GITHUB_TOKEN }}@github.com/eros-universe-gitops.git
+        git clone https://${{ secrets.GIT_OPS_GITHUB_USER }}:${{ secrets.GIT_OPS_GITHUB_TOKEN }}@github.com/wohlig/eros-universe-gitops.git
         cd eros-universe-gitops
         git checkout prod
 
