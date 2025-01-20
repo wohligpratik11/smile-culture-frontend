@@ -13,6 +13,9 @@ RUN npm install
 # Copy the rest of the application code
 COPY . .
 
+# rename prod env to env
+RUN mv .env.prod .env
+
 # Build the Next.js app
 RUN npm run build
 
