@@ -184,7 +184,9 @@ export async function getServerSideProps(context) {
 	const cookies = context.req.cookies;
 	const uploadedFileData = cookies.uploadedData || '';  // Get the uploaded data from cookies
 
-	const titleFromCookie = cookies.title.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
+	const titleFromCookie = cookies?.title
+		? cookies?.title?.replace(/-/g, ' ')?.replace(/\b\w/g, char => char.toUpperCase())
+		: null; // Or provide a default value like an empty string
 	const characterId = cookies.characterId || '';
 	const selectMode = cookies.mode || '';
 	const formData = new FormData();
