@@ -1,0 +1,61 @@
+name: eros-now-ui
+on:
+  push:
+    branches:
+      - prod
+
+jobs:
+  un-page-prod:
+    runs-on: ubuntu-latest
+
+    permissions: 
+      id-token : write
+      contents: read
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Set env
+      run: echo "GITHUB_BRANCH=$(echo $GITHUB_REF_NAME-$GITHUB_SHA)" >> $GITHUB_ENV
+
+    # Authenticate to Google Cloud using workload identity federation
+    - id: 'auth'
+      name: 'Obtain access token by using workload identity federation'
+      uses: 'google-github-actions/auth@v2'
+      
+      with:
+        create_credentials_file: true
+        token_format: access_token
+        workload_identity_provider: projects/${{ secrets.GCP_PROJECT_NUMBER_PROD }}/locations/global/workloadIdentityPools/github-action/providers/github-action
+        service_account: github-sa@${{ secrets.GCP_PROJECT_ID_PROD }}.iam.gserviceaccount.com
+
+    - name: Connect to Artifact Registry
+      run: |-
+        echo ${{ steps.auth.outputs.access_token }} | docker login -u oauth2accesstoken --password-stdin ${{ secrets.GCP_GAR_HOST_PROD }}
+
+    - name: Build Docker Image
+      run: |-
+        docker build -t ${{ secrets.GCP_GAR_HOST_PROD }}/${{ secrets.GCP_PROJECT_ID_PROD }}/${{ secrets.GCP_REPO_PROD }}/${{ secrets.GCP_IMAGE_NAME_PROD }}:$GITHUB_REF_NAME-$GITHUB_SHA .
+
+    - uses: actions/checkout@v2
+    - name: Set env
+      run: echo "GITHUB_BRANCH=$(echo $GITHUB_REF_NAME-$GITHUB_SHA)" >> $GITHUB_ENV
+
+    - name: Push Docker Image to Artifact Registry
+      run: |-
+        docker push ${{ secrets.GCP_GAR_HOST_PROD }}/${{ secrets.GCP_PROJECT_ID_PROD }}/${{ secrets.GCP_REPO_PROD }}/${{ secrets.GCP_IMAGE_NAME_PROD }}:$GITHUB_REF_NAME-$GITHUB_SHA
+
+        git clone https://${{ secrets.GIT_OPS_GITHUB_USER }}:${{ secrets.GIT_OPS_GITHUB_TOKEN }}@github.com/eros-universe-gitops.git
+        cd eros-universe-gitops
+        git checkout prod
+
+        git config user.name "$GITHUB_ACTOR"
+        git config user.email "$GITHUB_ACTOR@hungama.com"
+
+        yq e '.image.name = "${{ secrets.GCP_GAR_HOST_PROD }}/${{ secrets.GCP_PROJECT_ID_PROD }}/${{ secrets.GCP_REPO_PROD }}/${{ secrets.GCP_IMAGE_NAME_PROD }}"' -i eros-now-genai-frontend/values.yaml
+        yq e '.image.tag = "${{ env.GITHUB_BRANCH }}"' -i eros-now-genai-frontend/values.yaml
+  
+        git add .
+        git commit -m "updating newer image"  
+        git push --set-upstream origin prod
