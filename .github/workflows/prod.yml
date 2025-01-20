@@ -51,7 +51,7 @@ jobs:
         git checkout prod
 
         git config user.name "$GITHUB_ACTOR"
-        git config user.email "$GITHUB_ACTOR@hungama.com"
+        git config user.email "$GITHUB_ACTOR@wohlig.com"
 
         yq e '.image.name = "${{ secrets.GCP_GAR_HOST_PROD }}/${{ secrets.GCP_PROJECT_ID_PROD }}/${{ secrets.GCP_REPO_PROD }}/${{ secrets.GCP_IMAGE_NAME_PROD }}"' -i eros-now-genai-frontend/values.yaml
         yq e '.image.tag = "${{ env.GITHUB_BRANCH }}"' -i eros-now-genai-frontend/values.yaml
