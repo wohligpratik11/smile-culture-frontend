@@ -45,21 +45,6 @@ const Header = () => {
         <Avatar className="ml-auto cursor-pointer text-3xl">
           <AvatarFallback>{userEmail ? getFirstLetter(userEmail) : ''}</AvatarFallback>
         </Avatar>
-        {/* HoverCard with Avatar */}
-        {/* <HoverCard>
-          <HoverCardTrigger>
-            <Avatar className="ml-auto cursor-pointer">
-              <AvatarFallback>{userEmail ? getFirstLetter(userEmail) : 'A'}</AvatarFallback>
-            </Avatar>
-          </HoverCardTrigger>
-
-          <HoverCardContent className="bg-card-cardCustomBlue">
-            <div>
-              <p className='pb-3 cursor-pointer' onClick={handleLoginClick}>Login</p>
-              <p>Dark Mode</p>
-            </div>
-          </HoverCardContent>
-        </HoverCard> */}
       </div>
     </div>
   );

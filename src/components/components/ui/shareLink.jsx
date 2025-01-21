@@ -4,7 +4,7 @@ import { X } from "lucide-react";
 import { useState } from "react";
 import Instagram from "../../../../public/assets/images/instagram.webp"
 import Facebook from "../../../../public/assets/images/facebook.webp"
-import Mail from "../../../../public/assets/images/mail.webp"
+import Whatsapp from "../../../../public/assets/images/whatsapp.webp"
 import Reddit from "../../../../public/assets/images/reddit.webp"
 import XIcon from "../../../../public/assets/images/x.webp"
 import Thread from "../../../../public/assets/images/thread.webp"
@@ -24,11 +24,11 @@ export default function ShareModal({ isOpen, onClose, movies }) {
 		{
 			name: "Instagram",
 			icon: Instagram,
-			link: `https://www.instagram.com/`,
+			link: `https://www.instagram.com/direct/new/?text=${encodeURIComponent(videoUrl)}`,
 		},
 		{
-			name: "WhatsApp",
-			icon: Mail,
+			name: "Whatsapp",
+			icon: Whatsapp,
 			link: `whatsapp://send?text=${encodeURIComponent(videoUrl)}`,
 		},
 		{
@@ -67,15 +67,16 @@ export default function ShareModal({ isOpen, onClose, movies }) {
 	return (
 		<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
 			<div className="relative w-full max-w-lg rounded-xl bg-deepNavy p-6 text-white shadow-lg">
-				<button
-					onClick={onClose}
-					className="absolute right-4 top-4 text-gray-400 hover:text-white"
-					aria-label="Close share modal"
-				>
-					<X className="h-6 w-6" />
-				</button>
-
-				<h2 className="mb-8 text-2xl font-semibold">Share</h2>
+				<div className="flex items-center justify-between mb-4">
+					<span className="text-xl font-medium leading-8 text-customWhite">Share Now</span>
+					<button
+						onClick={onClose}
+						className="text-gray-400 hover:text-white leading-8"
+						aria-label="Close share modal"
+					>
+						<X className="h-6 w-6 text-xl font-medium text-customWhite" />
+					</button>
+				</div>
 
 				<div className="mb-8 grid grid-cols-3 gap-8 sm:grid-cols-6">
 					{shareOptions.map((option) => (

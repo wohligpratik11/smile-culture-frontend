@@ -69,6 +69,12 @@ const Home = () => {
         />
         <meta property="og:url" content="https://erosnow.com/" />
         <meta name="twitter:card" content="Summary" />
+
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="mobile-web-app-capable" content="yes" />
+
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
       </Head>
       <div className="h-[835px] min-h-screen p-6">
         <Card className="bg-card-cardCustomBlue p-6">

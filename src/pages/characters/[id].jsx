@@ -157,8 +157,11 @@ const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, 
 												<Image
 													src={feature.thumbnail_url || '/fallback-image.jpg'}
 													alt={`${feature.character_real_name} image`}
-													layout="fill"
 													objectFit="contain"
+													layout="responsive"
+													quality={100}
+													width={500}
+													height={300}
 													priority={true}
 												/>
 											</AspectRatio>

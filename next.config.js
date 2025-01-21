@@ -24,7 +24,16 @@ const nextConfig = {
       {
         source: '/:path*',
         headers: [
-          { key: 'X-Robots-Tag', value: 'index, follow' }, // Default for SEO
+          { key: 'X-Robots-Tag', value: 'index, follow' },
+          { key: 'Access-Control-Allow-Origin', value: '*' },
+          {
+            key: 'Access-Control-Allow-Methods',
+            value: 'GET, POST, PUT, DELETE',
+          },
+          {
+            key: 'Access-Control-Allow-Headers',
+            value: 'content-type, authorization',
+          },
         ],
       },
     ];
