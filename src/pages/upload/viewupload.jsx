@@ -204,7 +204,9 @@ export async function getServerSideProps(context) {
 
 	try {
 		const axios = axiosInstance(context);
-		const response = await axios.post(API_ENDPOINTS.CREATE_NEW_STORE_DATA, formData);
+		const response = await axios.post(API_ENDPOINTS.CREATE_NEW_STORE_DATA, formData, {
+			timeout: 3600000,
+		});
 
 		return {
 			props: {
