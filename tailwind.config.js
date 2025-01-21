@@ -61,6 +61,8 @@ module.exports = {
         lightOrangeRed: '#fddbb5',
         darkOrangeRed: '#c13e1b',
         deepNavy: '#434E80',
+        blue: '#01bff2',
+        gray: '#666666',
         customWhite: '#F5F5F5',
         buttonBorder: '#56e5f6',
         vividSkyBlue: '#10A3E7',
