@@ -172,7 +172,7 @@ const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, 
 				</div>
 
 				<div className="flex justify-between items-center mt-6">
-					<div className={`flex justify-center items-center space-x-2 text-center flex-1 ${selectedCharacters ? 'ml-36' : ''}`}>
+					<div className={`flex justify-center items-center space-x-2 text-center flex-1 ${selectedCharacters ? 'md:ml-36' : ''}`}>
 						<button
 							className={`px-4 py-2 rounded-md bg-gradient-custom-gradient border border-buttonBorder text-white transition-all duration-200 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 ${currentPage <= 1 ? 'opacity-50 cursor-not-allowed' : ''
 								}`}
