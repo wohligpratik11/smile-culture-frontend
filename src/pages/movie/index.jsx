@@ -169,9 +169,9 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 								<button
 									key={page}
 									onClick={() => handlePageChange(page)}
-									className={`px-4 py-2 rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-300 ${isActive
-										? 'bg-gradient-custom-gradient border border-buttonBorder text-white'
-										: 'bg-white text-blue-600 hover:bg-blue-100 hover:border hover:border-blue-500'
+									className={`px-4 py-2 rounded-md transition-all duration-200 focus:outline-none  focus:ring-2 focus:ring-blue-300 ${isActive
+										? 'bg-white text-lg font-bold text-blue hover:bg-blue-100 hover:border hover:border-blue-500 '
+										: 'bg-gradient-custom-gradient border border-buttonBorder text-white'
 										}`}
 								>
 									{page}
