@@ -196,6 +196,7 @@ const ScenesPage = ({ initialScenes, totalCount, page: initialPage, id, prefetch
 													<video
 														src={feature.video_url}
 														controls
+														playsInline
 														controlsList="nodownload"
 														disablePictureInPicture
 														className="w-full h-full object-contain"
