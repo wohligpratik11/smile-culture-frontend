@@ -113,14 +113,7 @@ const UploadPage = ({ characters, movies }) => {
 		}
 	}, [characterId, addToast]);
 
-	const handleNextClick = () => {
-		router.push({
-			pathname: '/upload/viewupload',
-			query: {
-				movies: JSON.stringify(movies),
-			},
-		});
-	};
+
 	const closeSelfieInstructions = () => {
 		setShowSelfieInstructions(false);
 	};
@@ -223,9 +216,7 @@ const UploadPage = ({ characters, movies }) => {
 				</div>
 				<div className="flex justify-end space-x-4 mt-6">
 					<Link href="/upload/viewupload" prefetch>
-
 						<button
-							onClick={handleNextClick}
 							className="px-4 py-2 bg-gradient-custom-gradient border border-buttonBorder rounded-lg w-52 h-12"
 							disabled={isUploadSuccessful}
 						>
