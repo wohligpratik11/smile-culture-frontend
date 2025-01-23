@@ -83,11 +83,11 @@ const ViewUpload = ({ initialMovies, mode }) => {
 
 	return (
 		<div className="min-h-screen p-4 h-[835px]">
-			<Card className="bg-card-cardCustomBlue p-6">
+			<Card className="bg-card-cardCustomBlue p-6 ">
 				<div className="space-y-4">
 					<div className="mx-auto max-w-full sm:max-w-5xl space-y-12 p-2">
 						<div className="space-y-6 flex flex-col items-center justify-center">
-							<Card className="relative w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[00px] xl:h-[560px]">
+							<Card className="relative w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[00px] xl:h-[560px] border border-slateBlue shadow">
 								{movies && movies.length > 0 ? (
 									movies.map((movie, index) => (
 										<div key={index} className="space-y-6 flex flex-col items-center justify-center">
