@@ -122,9 +122,10 @@ const ViewUpload = ({ initialMovies, mode }) => {
 										</div>
 									))
 								) : (
-									<div className="text-center text-gray-400">
-										<p>No movies found.</p>
+									<div className="flex items-center justify-center h-full w-full">
+										<p className="text-center text-gray-400 text-2xl">No movies found.</p>
 									</div>
+
 								)}
 							</Card>
 
@@ -186,8 +187,8 @@ export async function getServerSideProps(context) {
 	const uploadedFileData = cookies.uploadedData || '';  // Get the uploaded data from cookies
 
 	const titleFromCookie = cookies?.title
-		? cookies?.title?.replace(/-/g, ' ')?.replace(/\b\w/g, char => char.toUpperCase())
-		: null; // Or provide a default value like an empty string
+		?.replace(/-/g, ' ')
+		?.replace(/\b\w/g, char => char.toUpperCase());
 	const characterId = cookies.characterId || '';
 	const selectMode = cookies.mode || '';
 	const formData = new FormData();

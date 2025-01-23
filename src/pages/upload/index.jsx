@@ -113,7 +113,14 @@ const UploadPage = ({ characters, movies }) => {
 		}
 	}, [characterId, addToast]);
 
-
+	const handleNextClick = () => {
+		router.push({
+			pathname: '/upload/viewupload',
+			query: {
+				movies: JSON.stringify(movies),
+			},
+		});
+	};
 	const closeSelfieInstructions = () => {
 		setShowSelfieInstructions(false);
 	};
@@ -140,7 +147,7 @@ const UploadPage = ({ characters, movies }) => {
 			<Card className="bg-card-cardCustomBlue p-6">
 				<div className="space-y-4">
 					<div className="flex items-center gap-4">
-						<Link href="#" passHref>
+						<Link href={router.asPath} passHref>
 							<button
 								className="px-4 py-2 rounded-lg bg-gradient-custom-gradient border border-buttonBorder"
 								onClick={(e) => {
@@ -215,8 +222,10 @@ const UploadPage = ({ characters, movies }) => {
 					)}
 				</div>
 				<div className="flex justify-end space-x-4 mt-6">
-					<Link href={{ pathname: '/upload/viewupload' }} prefetch>
+					<Link href="/upload/viewupload" prefetch>
+
 						<button
+							onClick={handleNextClick}
 							className="px-4 py-2 bg-gradient-custom-gradient border border-buttonBorder rounded-lg w-52 h-12"
 							disabled={isUploadSuccessful}
 						>
@@ -274,11 +283,6 @@ export async function getServerSideProps(context) {
 		};
 	}
 }
-
-
-
-
-
 
 export default UploadPage;
 
