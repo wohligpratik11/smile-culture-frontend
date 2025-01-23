@@ -162,7 +162,7 @@ const UploadPage = ({ characters, movies }) => {
 							<div key={index}>
 								<div className="flex gap-2 flex-col sm:flex-row">
 									<Card
-										className={`cursor-pointer transition-all h-[122px] w-full sm:w-[172px] rounded-xl ${filePreview ? 'p-1' : 'p-4 sm:p-4'}`}
+										className={`cursor-pointer transition-all h-[122px] w-full sm:w-[172px] rounded-xl border border-slateBlue shadow ${filePreview ? 'p-1' : 'p-4 sm:p-4'}`}
 										onClick={() => {
 											setShowSelfieInstructions(true);
 											setArrayCharacterId(movie.character_id);

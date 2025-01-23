@@ -113,7 +113,7 @@ const ViewUpload = ({ initialMovies, mode }) => {
 														controlsList="nodownload"
 														disablePictureInPicture
 														playsInline
-														className="w-full h-auto object-contain rounded-lg border border-buttonBorder"
+														className="w-full h-full object-contain rounded-lg border border-buttonBorder"
 													>
 														<source src={movie.output_video_url} type="video/mp4" />
 													</video>
