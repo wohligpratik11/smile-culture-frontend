@@ -78,16 +78,13 @@ const ViewUpload = ({ initialMovies, mode }) => {
 			console.log(pair[0] + ': ' + pair[1]);
 		}
 	};
-
-
-
 	return (
 		<div className="min-h-screen p-4 h-[835px]">
 			<Card className="bg-card-cardCustomBlue p-6 ">
 				<div className="space-y-4">
 					<div className="mx-auto max-w-full sm:max-w-5xl space-y-12 p-2">
 						<div className="space-y-6 flex flex-col items-center justify-center">
-							<Card className="relative w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[00px] xl:h-[560px] border border-slateBlue shadow">
+							<Card className="relative w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[00px] xl:h-[560px]">
 								{movies && movies.length > 0 ? (
 									movies.map((movie, index) => (
 										<div key={index} className="space-y-6 flex flex-col items-center justify-center">
@@ -122,7 +119,7 @@ const ViewUpload = ({ initialMovies, mode }) => {
 										</div>
 									))
 								) : (
-									<div className="flex items-center justify-center h-full w-full">
+									<div className="flex items-center justify-center h-full w-full border border-slateBlue shadow rounded-xl">
 										<p className="text-center text-gray-400 text-2xl">No movies found.</p>
 									</div>
 
