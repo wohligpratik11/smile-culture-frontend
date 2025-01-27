@@ -81,7 +81,9 @@ export default function SelfieInstructions({ closeModal, uploadImageData }) {
 										height={200}
 										className="rounded-lg w-full"
 									/>
-									<CheckCircle2 className="absolute top-2 right-2 w-6 h-6 text-green-500" />
+									<div className="absolute top-2 right-2 w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+										<CheckCircle2 className="w-5 h-5 text-white" />
+									</div>
 								</div>
 								<div className="relative">
 									<Image
@@ -91,8 +93,11 @@ export default function SelfieInstructions({ closeModal, uploadImageData }) {
 										height={200}
 										className="rounded-lg w-full brightness-50"
 									/>
-									<XCircle className="absolute top-2 right-2 w-6 h-6 text-red-500" />
+									<div className="absolute top-2 right-2 w-8 h-8 bg-red-500 rounded-full flex items-center justify-center">
+										<XCircle className="w-5 h-5 text-white" />
+									</div>
 								</div>
+
 							</div>
 						</div>
 					) : (
