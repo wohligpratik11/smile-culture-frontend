@@ -9,18 +9,13 @@ import axiosInstance from '../../lib/api/axiosInstance';
 import Cookie from 'js-cookie';
 import Image from 'next/image';
 import CryptoJS from 'crypto-js';
-import SelectImage from "../../../public/assets/images/image.webp";
-import UploadImages from "../../../public/assets/images/uploadImages.webp";
 import MediaUploader from '../../components/components/ui/UppyUploader';
 import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription } from '../../components/components/ui/dialog'; // Import Dialog components
 import { AspectRatio } from "../../components/components/ui/aspect-ratio"
 import { Button } from "../../components/components/ui/button"
 import { RotateCcw, Share } from 'lucide-react'
 import ShareLink from '../../components/components/ui/shareLink'
-// import { useToaster } from '../../'
 import { useUploadContext } from '../../context/UploadContext';
-import { ImageConfigContext } from 'next/dist/server/future/route-modules/app-page/vendored/contexts/entrypoints';
-
 const ViewUpload = ({ initialMovies, mode }) => {
 	const router = useRouter();
 	const [titleFromCookie, setTitleFromCookie] = useState('');
@@ -89,33 +84,42 @@ const ViewUpload = ({ initialMovies, mode }) => {
 									movies.map((movie, index) => (
 										<div key={index} className="space-y-6 flex flex-col items-center justify-center">
 											{mode === 'image' ? (
-												<div className="relative w-full h-auto">
-													<Image
-														src={movie.output_video_url}
-														alt="Media"
-														className="rounded-lg border border-buttonBorder object-contain"
-														layout="responsive"
-														width={800}
-														height={450}
-														priority
-													/>
-												</div>
+												movie.output_video_url ? (
+													<div className="relative w-full h-auto">
+														<Image
+															src={movie.output_video_url}
+															alt="Media"
+															className="rounded-lg border border-buttonBorder object-contain"
+															layout="responsive"
+															width={800}
+															height={450}
+															priority
+														/>
+													</div>
+												) : (
+													<div className="text-center text-gray-400">Image not available</div>
+												)
 											) : (
-												<div className="relative w-full h-auto">
-													<video
-														controls
-														preload="auto"
-														width="100%"
-														height="auto"
-														controlsList="nodownload"
-														disablePictureInPicture
-														playsInline
-														className="w-full h-full object-contain rounded-lg border border-buttonBorder"
-													>
-														<source src={movie.output_video_url} type="video/mp4" />
-													</video>
-												</div>
+												movie.output_video_url ? (
+													<div className="relative w-full h-auto">
+														<video
+															controls
+															preload="auto"
+															width="100%"
+															height="auto"
+															controlsList="nodownload"
+															disablePictureInPicture
+															playsInline
+															className="w-full h-full object-contain rounded-lg border border-buttonBorder"
+														>
+															<source src={movie.output_video_url} type="video/mp4" />
+														</video>
+													</div>
+												) : (
+													<div className="text-center text-gray-400">Video not available</div>
+												)
 											)}
+
 										</div>
 									))
 								) : (
@@ -184,8 +188,6 @@ export async function getServerSideProps(context) {
 	const uploadedFileData = cookies.uploadedData || '';  // Get the uploaded data from cookies
 
 	const titleFromCookie = cookies?.title
-		?.replace(/-/g, ' ')
-		?.replace(/\b\w/g, char => char.toUpperCase());
 	const characterId = cookies.characterId || '';
 	const selectMode = cookies.mode || '';
 	const formData = new FormData();
