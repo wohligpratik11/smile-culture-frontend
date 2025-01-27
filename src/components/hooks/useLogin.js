@@ -8,12 +8,10 @@ export const useLogin = () => {
     const handleLogin = async () => {
       try {
         const response = await apiService.post(API_ENDPOINTS.LOGIN, {
-          user_email: 'pratik.sawant@wohlig.in',
-          password: '123',
+          user_email: 'pratik.sawant@gmail.in',
+          password: '1234',
         });
-        Cookies.set('userData', JSON.stringify(response.data?.data), {
-          expires: 7,
-        });
+        Cookies.set('userData', JSON.stringify(response.data?.data));
       } catch (error) {
         console.error('Login API Error:', error);
       }

@@ -13,7 +13,7 @@ const Home = () => {
 
   const features = [
     {
-      title: 'face-Swap',
+      title: 'face-swap',
       image: '/assets/images/faceswap.webp',
       description: 'Advanced face swapping technology',
       path: '/movie',
