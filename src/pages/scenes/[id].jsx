@@ -197,7 +197,8 @@ const ScenesPage = ({ initialScenes, totalCount, page: initialPage, id, prefetch
 														src={feature.video_url}
 														controls
 														playsInline
-														controlsList="nodownload"
+														title="Description"
+														controlsList="nodownload noplaybackrate"
 														disablePictureInPicture
 														className="w-full h-full object-contain"
 														aria-label={`Video for ${feature.scene_name}`}

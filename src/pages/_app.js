@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 // import Header from '../components/layout/Header';
 import Head from 'next/head';
-import '../../src/styles/globals.css';
+import '../styles/globals.css';
 import CustomThemeProvider from '../context/ThemeProvider';
 import Layout from '@/components/layout/Layout';
 import Cookies from 'js-cookie';
