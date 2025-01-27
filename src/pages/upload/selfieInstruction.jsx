@@ -9,35 +9,55 @@ export default function SelfieInstructions({ closeModal, uploadImageData }) {
 	const [currentStep, setCurrentStep] = useState(1);
 	const [isVisible, setIsVisible] = useState(true);
 
-	if (!isVisible) return null;
+	const handleBackdropClick = (e) => {
+		if (e.target.id === 'backdrop') {
+			closeModal();
+		}
+	};
 
 	const handleTakeSelfie = () => {
 		closeModal();
 		uploadImageData();
 	};
+
+	if (!isVisible) return null;
+
 	return (
-		<div className="min-h-screen flex items-center justify-center p-4">
-			<div className="w-full max-w-2xl bg-[#3B4374] rounded-3xl p-6 relative">
+		<div
+			id="backdrop"
+			className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center"
+			onClick={handleBackdropClick}
+		>
+			<div
+				className="w-full max-w-2xl bg-[#3B4374] rounded-3xl p-6 relative"
+				onClick={(e) => e.stopPropagation()}
+			>
 				<div className="space-y-8">
-					<h1 className="text-white text-3xl font-semibold text-center">
+					<h1 className="text-white text-2xl font-medium text-center">
 						Selfie Instructions
 					</h1>
 
-					<div className="flex justify-center items-center gap-4 py-4">
+					<div className="flex justify-center items-center gap-4">
 						<div
-							className={`w-10 h-10 rounded-full ${currentStep === 1 ? 'bg-white text-[#3B4374]' : 'bg-white/30 text-white'} flex items-center justify-center font-semibold shadow-[0_0_12px_rgba(255,255,255,0.4)] cursor-pointer`}
-							onClick={() => setCurrentStep(1)}
+							className={`w-10 h-10 rounded-full ${currentStep === 1
+								? 'bg-white text-[#3B4374]'
+								: 'bg-white/30 text-white'
+								} flex items-center justify-center font-semibold shadow-[0_0_12px_rgba(255,255,255,0.4)] cursor-pointer`}
 						>
 							1
 						</div>
 						<div className="w-24 border-t-2 border-dashed border-white/40"></div>
 						<div
-							className={`w-10 h-10 rounded-full ${currentStep === 2 ? 'bg-white text-[#3B4374]' : 'bg-white/30 text-white'} flex items-center justify-center font-semibold shadow-[0_0_12px_rgba(255,255,255,0.4)] cursor-pointer`}
+							className={`w-10 h-10 rounded-full ${currentStep === 2
+								? 'bg-white text-[#3B4374]'
+								: 'bg-white/30 text-white'
+								} flex items-center justify-center font-semibold shadow-[0_0_12px_rgba(255,255,255,0.4)] cursor-pointer`}
 						>
 							2
 						</div>
 					</div>
 
+					{/* Content for Step 1 */}
 					{currentStep === 1 ? (
 						<div className="space-y-4">
 							<div className="mb-8">
@@ -69,7 +89,7 @@ export default function SelfieInstructions({ closeModal, uploadImageData }) {
 										alt="Poor lighting example"
 										width={200}
 										height={200}
-										className="rounded-lg w-full brightness-75"
+										className="rounded-lg w-full brightness-50"
 									/>
 									<XCircle className="absolute top-2 right-2 w-6 h-6 text-red-500" />
 								</div>
