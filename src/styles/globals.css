@@ -6,7 +6,7 @@
 :root {
   --background-color: #000000; /* Dark background */
   --text-color: #ffffff; /* Light text */
-  --background-image: url('../../public/assets/images/erosnowbg.webp');
+  --background-image: url('../../public/assets/images/erosnowbg.webp') !important;
 }
 
 /* Light theme */
@@ -19,9 +19,11 @@
 /* Apply the theme variables */
 
 body {
-  background-color: var(--background-color);
+  background-color: var(--background-color) !important;
   color: var(--text-color);
-  background-image: var(--background-image); /* Apply background image */
+  background-image: var(
+    --background-image
+  ) !important; /* Apply background image */
   background-size: cover;
   background-position: center;
   font-family: 'Poppins', sans-serif;
@@ -74,8 +76,7 @@ body {
 /* Buttons */
 .uppy-u-reset.uppy-c-btn.uppy-StatusBar-actionBtn.uppy-StatusBar-actionBtn--upload.uppy-c-btn-primary {
   padding: 0.5rem 1rem !important; /* px-4 py-2 */
-  background
-  : linear-gradient(
+  background: linear-gradient(
     90deg,
     #0ca1ea,
     #3ec5b6
