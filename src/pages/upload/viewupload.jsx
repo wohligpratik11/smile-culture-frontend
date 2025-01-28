@@ -124,7 +124,7 @@ const ViewUpload = () => {
 														/>
 													</div>
 												) : (
-													<div className="text-center text-gray-400">Image not available</div>
+													<p className="text-center text-gray-400 text-2xl">Oops! Something went wrong. Please try again later.</p>
 												)
 											) : (
 												movie ? (
@@ -151,7 +151,7 @@ const ViewUpload = () => {
 									))
 								) : (
 									<div className="flex items-center justify-center h-full w-full border border-slateBlue shadow rounded-xl">
-										<p className="text-center text-gray-400 text-2xl">No movies found.</p>
+										<p className="text-center text-gray-400 text-2xl">Oops! Something went wrong. Please try again later.</p>
 									</div>
 
 								)}
