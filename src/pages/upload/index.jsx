@@ -33,13 +33,16 @@ const UploadPage = ({ characters, movies }) => {
 	const [selectedMode, setSelectedMode] = useState(null);
 	const [showSelfieInstructions, setShowSelfieInstructions] = useState(false);
 	const [filePreview, setFilePreview] = useState(null);
+	console.log("filePreview", filePreview)
 	const [uploadedData, setUploadedData] = useState(null);
+	console.log("uploadedData", uploadedData)
+
 	const [selectedImages, setSelectedImages] = useState([]);
+	console.log("selectedImages", selectedImages)
 	const { showSpinner, hideSpinner } = useSpinner();
 	const { addToast } = useToaster()
 	const [isUploadSuccessful, setIsUploadSuccessful] = useState(false);
 	const [isUploading, setIsUploading] = useState(false);
-	const [imageUrl, setImageUrl] = useState(null);
 	const [isLoading, setIsLoading] = useState(false);
 	const [remainingTime, setRemainingTime] = useState(1);
 
@@ -182,6 +185,12 @@ const UploadPage = ({ characters, movies }) => {
 					title: 'Data created successfully.',
 					type: 'success',
 				});
+				const outputVideoUrl = response?.data?.data[0]?.output_video_url;
+				if (outputVideoUrl) {
+					const encryptedVideoUrl = CryptoJS.AES.encrypt(outputVideoUrl, 'your-encryption-key').toString();
+					Cookie.set('output_video_url', encryptedVideoUrl); // Save encrypted URL in cookies
+				}
+
 				router.push('/upload/viewupload');
 			} else {
 				addToast({
@@ -240,28 +249,18 @@ const UploadPage = ({ characters, movies }) => {
 										}}
 									>
 										<div className="flex flex-col items-center gap-2">
-											{imageUrl ? (
-												<div className="flex flex-col items-center gap-2">
-													<Image
-														src={imageUrl}
-														alt="Uploaded Image"
-														width={155}
-														height={155}
-													/>
+
+											<div className="flex flex-col items-center gap-2 mt-2.5">
+												<Image
+													src={UploadImages}
+													alt="Image Icon"
+													className="w-10 sm:w-12 h-10 sm:h-12"
+												/>
+												<div className="flex items-center space-x-2">
+													<ArrowUpFromLine size={20} strokeWidth={3} absoluteStrokeWidth />
+													<span className="text-white font-medium text-xs">{movie.title || 'Upload Image'}</span>
 												</div>
-											) : (
-												<div className="flex flex-col items-center gap-2 mt-2.5">
-													<Image
-														src={UploadImages}
-														alt="Image Icon"
-														className="w-10 sm:w-12 h-10 sm:h-12"
-													/>
-													<div className="flex items-center space-x-2">
-														<ArrowUpFromLine size={20} strokeWidth={3} absoluteStrokeWidth />
-														<span className="text-white font-medium text-xs">{movie.title || 'Upload Image'}</span>
-													</div>
-												</div>
-											)}
+											</div>
 
 										</div>
 									</Card>
