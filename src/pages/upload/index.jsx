@@ -293,7 +293,7 @@ const UploadPage = ({ characters, movies }) => {
 							<DialogTrigger asChild>
 							</DialogTrigger>
 							<DialogContent className="mx-auto max-w-4xl p-2 !bg-deepNavy rounded-lg mb-2">
-								<DialogTitle className="text-xl font-medium ml-1.5">Upload Selfie Image</DialogTitle>
+								<DialogTitle className="text-xl font-medium ml-1.5 !text-customWhite">Upload Selfie Image</DialogTitle>
 								<UppyUploader stopUploading={stopUploading} onUploadComplete={handleUploadComplete} />
 							</DialogContent>
 						</Dialog>

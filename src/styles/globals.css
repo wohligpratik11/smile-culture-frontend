@@ -9,14 +9,6 @@
   --background-image: url('../../public/assets/images/erosnowbg.webp') !important;
 }
 
-/* Light theme */
-.light {
-  --background-color: #ffffff;
-  --text-color: #000000;
-  --background-image: none;
-}
-
-/* Apply the theme variables */
 
 body {
   background-color: var(--background-color) !important;
