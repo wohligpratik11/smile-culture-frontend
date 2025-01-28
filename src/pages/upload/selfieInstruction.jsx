@@ -137,7 +137,10 @@ export default function SelfieInstructions({ closeModal, uploadImageData }) {
 						<Button
 							variant="link"
 							className="text-white hover:text-white/80"
-							onClick={() => closeModal()}
+							onClick={() => {
+								closeModal();
+								handleTakeSelfie();
+							}}
 						>
 							Skip
 						</Button>
@@ -170,6 +173,6 @@ export default function SelfieInstructions({ closeModal, uploadImageData }) {
 					</div>
 				</div>
 			</div>
-		</div>
+		</div >
 	);
 }
