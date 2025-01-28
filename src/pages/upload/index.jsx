@@ -157,7 +157,9 @@ const UploadPage = ({ movies }) => {
 		setCurrentCharacterId(movie.character_id);
 		setShowSelfieInstructions(true);
 	};
-
+	const isAllImagesUploaded = movies.every((movie) =>
+		selectedImages.some((image) => image.characterId === movie.character_id)
+	);
 	const handleNextClick = async (e) => {
 		e.preventDefault();
 		setIsLoading(true);
@@ -296,7 +298,7 @@ const UploadPage = ({ movies }) => {
 															aria-label="Remove Image"
 														>
 															<button
-																className="absolute right-0 mr-2 bg-black rounded-full text-white top-[6px]"
+																className="absolute right-0 mr-2 bg-black rounded-full text-white top-[0px]"
 																onClick={() => {
 																	setSelectedImages((prevSelectedImages) =>
 																		prevSelectedImages.filter(
@@ -314,7 +316,7 @@ const UploadPage = ({ movies }) => {
 															alt="Uploaded Image"
 															width={150}
 															height={80}
-															className="contain rounded-2xl border border-slateBlue shadow mt-2"
+															className="contain rounded-2xl border border-slateBlue shadow"
 														/>
 													</div>
 												) : (
@@ -393,17 +395,19 @@ const UploadPage = ({ movies }) => {
 				</div>
 
 				{/* Next Button */}
-				<div className="flex justify-end space-x-4 mt-6">
-					<Link href="/upload/viewupload" prefetch>
-						<button
-							className="px-4 py-2 bg-gradient-custom-gradient border border-buttonBorder rounded-lg w-52 h-12"
-							disabled={isUploading || isUploadSuccessful}
-							onClick={handleNextClick}
-						>
-							Next
-						</button>
-					</Link>
-				</div>
+				{isAllImagesUploaded && (
+					<div className="flex justify-end space-x-4 mt-6">
+						<Link href="/upload/viewupload" prefetch>
+							<button
+								className="px-4 py-2 bg-gradient-custom-gradient border border-buttonBorder rounded-lg w-52 h-12"
+								onClick={handleNextClick}
+							>
+								Next
+							</button>
+						</Link>
+					</div>
+				)}
+
 			</Card>
 		</div>
 	);
