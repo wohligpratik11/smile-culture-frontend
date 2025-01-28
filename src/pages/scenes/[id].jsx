@@ -149,7 +149,7 @@ const ScenesPage = ({ initialScenes, totalCount, page: initialPage, id, prefetch
 					</div>
 
 					<div className="flex items-center justify-between mt-4">
-						<div className="text-lg font-semibold">
+						<div className="text-lg font-semibold !text-customWhite">
 							{selectedTab === 'scene' ? 'Choose Scene' : 'Choose Image'}
 						</div>
 					</div>
