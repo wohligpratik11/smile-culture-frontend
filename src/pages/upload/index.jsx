@@ -14,6 +14,7 @@ import UploadImages from "../../../public/assets/images/uploadImages.webp";
 import UppyUploader from '../../components/components/ui/UppyUploader';
 import SelfieInstruction from '../upload/selfieInstruction';
 import { useSpinner } from '../../context/spinnerContext'
+import LoadingScreen from "../../components/components/ui/loader";
 
 import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription } from '../../components/components/ui/dialog';
 import { AspectRatio } from "../../components/components/ui/aspect-ratio"
@@ -38,7 +39,8 @@ const UploadPage = ({ characters, movies }) => {
 	const { addToast } = useToaster()
 	const [isUploadSuccessful, setIsUploadSuccessful] = useState(false);
 	const [isUploading, setIsUploading] = useState(false);
-
+	const [imageUrl, setImageUrl] = useState(null);
+	console.log("imageUrl", imageUrl)
 	useEffect(() => {
 		const title = Cookie.get('title');
 		setTitleFromCookie(title);
@@ -75,7 +77,7 @@ const UploadPage = ({ characters, movies }) => {
 			if (response.data.status_code === 200) {
 				const uploadedUrl = response?.data?.data?.url;
 				setFilePreview(uploadedUrl);
-
+				setImageUrl(uploadedUrl);
 				setSelectedImages(prevSelectedImages => [
 					...prevSelectedImages,
 					{ characterId, uploadedUrl }
@@ -169,15 +171,33 @@ const UploadPage = ({ characters, movies }) => {
 										}}
 									>
 										<div className="flex flex-col items-center gap-2 mt-2.5">
-											<Image
-												src={UploadImages}
-												alt="Image Icon"
-												className="w-10 sm:w-12 h-10 sm:h-12"
-											/>
-											<div className="flex items-center space-x-2">
-												<ArrowUpFromLine size={20} strokeWidth={3} absoluteStrokeWidth />
-												<span className="text-white font-medium text-xs">{movie.title || 'Upload Image'}</span>
-											</div>
+											{imageUrl ? (
+												<div className="flex flex-col items-center gap-2 mt-2.5">
+													<Image
+														src={imageUrl}
+														alt="Uploaded Image"
+														width={155}
+														height={155}
+													/>
+													<div className="flex items-center space-x-2">
+														<ArrowUpFromLine size={20} strokeWidth={3} absoluteStrokeWidth />
+														<span className="text-white font-medium text-xs">{movie.title || 'Uploaded Image'}</span>
+													</div>
+												</div>
+											) : (
+												<div className="flex flex-col items-center gap-2 mt-2.5">
+													<Image
+														src={UploadImages}
+														alt="Image Icon"
+														className="w-10 sm:w-12 h-10 sm:h-12"
+													/>
+													<div className="flex items-center space-x-2">
+														<ArrowUpFromLine size={20} strokeWidth={3} absoluteStrokeWidth />
+														<span className="text-white font-medium text-xs">{movie.title || 'Upload Image'}</span>
+													</div>
+												</div>
+											)}
+
 										</div>
 									</Card>
 
