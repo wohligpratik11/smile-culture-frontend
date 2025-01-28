@@ -266,14 +266,12 @@ const UploadPage = ({ movies }) => {
 
 					<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
 						{movies.map((movie, index) => {
-							// Find if there's a preview image for this character
 							const previewData = selectedImages.find(
 								(item) => item.characterId === movie.character_id
 							);
 							return (
 								<div key={index}>
 									<div className="flex gap-2 flex-col sm:flex-row">
-										{/* Upload Card */}
 										<Card
 											className={`cursor-pointer transition-all h-[122px] w-full sm:w-[172px] rounded-xl shadow
                         ${!previewData
@@ -284,15 +282,41 @@ const UploadPage = ({ movies }) => {
 											onClick={() => handleCharacterClick(movie)}
 										>
 											<div className="flex flex-col items-center gap-2">
-												{/* If a preview exists, display it; else show the default upload prompt */}
 												{previewData ? (
-													<Image
-														src={previewData.uploadedUrl}
-														alt="Uploaded Image"
-														width={150}
-														height={80}
-														className="contain rounded-2xl border border-slateBlue shadow mt-2"
-													/>
+													<div className="relative">
+														<button
+															className="absolute right-0 p-1 bg-gray-800 bg-opacity-50 rounded-full text-white top-[10px]"
+															onClick={() => {
+																setSelectedImages((prevSelectedImages) =>
+																	prevSelectedImages.filter(
+																		(item) => item.characterId !== movie.character_id
+																	)
+																);
+															}}
+															aria-label="Remove Image"
+														>
+															<button
+																className="absolute right-0 mr-2 bg-black rounded-full text-white top-[6px]"
+																onClick={() => {
+																	setSelectedImages((prevSelectedImages) =>
+																		prevSelectedImages.filter(
+																			(item) => item.characterId !== movie.character_id
+																		)
+																	);
+																}}
+																aria-label="Remove Image"
+															>
+																<X size={16} className="text-white" />
+															</button>
+														</button>
+														<Image
+															src={previewData.uploadedUrl}
+															alt="Uploaded Image"
+															width={150}
+															height={80}
+															className="contain rounded-2xl border border-slateBlue shadow mt-2"
+														/>
+													</div>
 												) : (
 													<div className="flex flex-col items-center gap-2 mt-2.5">
 														<Image
