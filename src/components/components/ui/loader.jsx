@@ -2,13 +2,13 @@
 
 import { Loader2 } from "lucide-react"
 
-export default function LoadingScreen() {
+export default function LoadingScreen({ remainingTime }) {
 	return (
-		<div className="min-h-screen flex flex-col items-center justify-center bg-[#1e2344] text-white p-4">
+		<div className="h-[83%] w-[83%] rounded-2xl flex flex-col items-center justify-center bg-[#1e2344] text-white p-4">
 			<div className="w-full max-w-md space-y-6 text-center">
 				<h1 className="text-2xl font-medium">Generating...</h1>
 
-				<p className="text-lg text-gray-300">Estimated wait time : 6 minutes</p>
+				<p className="text-lg text-gray-300">Estimated wait time: {remainingTime}s</p>
 
 				<div className="py-12">
 					<Loader2 className="w-12 h-12 text-[#e94e77] animate-spin mx-auto" />

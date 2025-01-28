@@ -40,7 +40,9 @@ const UploadPage = ({ characters, movies }) => {
 	const [isUploadSuccessful, setIsUploadSuccessful] = useState(false);
 	const [isUploading, setIsUploading] = useState(false);
 	const [imageUrl, setImageUrl] = useState(null);
-	console.log("imageUrl", imageUrl)
+	const [isLoading, setIsLoading] = useState(false);
+	const [remainingTime, setRemainingTime] = useState(1);
+
 	useEffect(() => {
 		const title = Cookie.get('title');
 		setTitleFromCookie(title);
@@ -77,7 +79,6 @@ const UploadPage = ({ characters, movies }) => {
 			if (response.data.status_code === 200) {
 				const uploadedUrl = response?.data?.data?.url;
 				setFilePreview(uploadedUrl);
-				setImageUrl(uploadedUrl);
 				setSelectedImages(prevSelectedImages => [
 					...prevSelectedImages,
 					{ characterId, uploadedUrl }
@@ -136,6 +137,74 @@ const UploadPage = ({ characters, movies }) => {
 	const handleModeSelect = (mode) => {
 		setSelectedMode(mode);
 	};
+	const handleNextClick = async (e) => {
+		e.preventDefault();
+		setIsLoading(true);
+		setRemainingTime(0);
+
+		const countdownInterval = setInterval(() => {
+			setRemainingTime((prevTime) => {
+				if (prevTime >= 3600) { // if time reaches 1 hour, stop the countdown
+					clearInterval(countdownInterval);
+					return prevTime;
+				}
+				return prevTime + 1;
+			});
+		}, 1000);
+
+
+		// Your existing logic
+		const uploadedFileData = Cookie.get('uploadedData') || '';
+		const titleFromCookie = Cookie.get('title');
+		const characterId = Cookie.get('characterId') || '';
+		const selectMode = Cookie.get('mode') || '';
+
+		const formData = new FormData();
+		formData.append('feature_used', titleFromCookie);
+		formData.append('mode', selectMode);
+
+		if (characterId) {
+			formData.append('character_ids', characterId);
+		}
+		if (uploadedFileData) {
+			formData.append('user_images', uploadedFileData);
+		}
+
+		try {
+			const axios = axiosInstance();
+			const response = await axios.post(API_ENDPOINTS.CREATE_NEW_STORE_DATA, formData, {
+				timeout: 3600000,
+			});
+			if (response.data.status_code === 200) {
+				// Handle success
+				setIsUploadSuccessful(true);
+				addToast({
+					title: 'Data created successfully.',
+					type: 'success',
+				});
+				router.push('/upload/viewupload');
+			} else {
+				addToast({
+					title: response?.data?.message || 'An error occurred.',
+					type: 'error',
+				});
+			}
+		} catch (error) {
+			addToast({
+				title: 'Unexpected error occurred. Please try again.',
+				type: 'error',
+			});
+			console.error('Error during API call:', error);
+		} finally {
+			setIsLoading(false); // Hide loader when process is complete
+			clearInterval(countdownInterval); // Stop countdown once the process is complete
+		}
+	};
+	const formatTime = (timeInSeconds) => {
+		const minutes = Math.floor(timeInSeconds / 60);
+		const seconds = timeInSeconds % 60;
+		return `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+	};
 
 	return (
 		<div className="min-h-screen p-6 h-[835px]">
@@ -170,19 +239,15 @@ const UploadPage = ({ characters, movies }) => {
 											setArrayCharacterId(movie.character_id);
 										}}
 									>
-										<div className="flex flex-col items-center gap-2 mt-2.5">
+										<div className="flex flex-col items-center gap-2">
 											{imageUrl ? (
-												<div className="flex flex-col items-center gap-2 mt-2.5">
+												<div className="flex flex-col items-center gap-2">
 													<Image
 														src={imageUrl}
 														alt="Uploaded Image"
 														width={155}
 														height={155}
 													/>
-													<div className="flex items-center space-x-2">
-														<ArrowUpFromLine size={20} strokeWidth={3} absoluteStrokeWidth />
-														<span className="text-white font-medium text-xs">{movie.title || 'Uploaded Image'}</span>
-													</div>
 												</div>
 											) : (
 												<div className="flex flex-col items-center gap-2 mt-2.5">
@@ -233,18 +298,29 @@ const UploadPage = ({ characters, movies }) => {
 							</DialogContent>
 						</Dialog>
 					)}
+					{isLoading && (
+						<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+							<LoadingScreen remainingTime={formatTime(remainingTime)} />
+						</div>
+					)}
+
+
+
+
 				</div>
 				<div className="flex justify-end space-x-4 mt-6">
 					<Link href="/upload/viewupload" prefetch>
 						<button
 							className="px-4 py-2 bg-gradient-custom-gradient border border-buttonBorder rounded-lg w-52 h-12"
-							disabled={isUploadSuccessful}
+							disabled={isUploading || isUploadSuccessful}
+							onClick={handleNextClick}
 						>
 							Next
 						</button>
 					</Link>
 				</div>
 			</Card>
+
 		</div>
 	);
 };

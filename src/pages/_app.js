@@ -22,6 +22,7 @@ function MyApp({ Component, pageProps }) {
 
   useEffect(() => {
     if (router.pathname === '/') {
+      Cookies.remove('output_video_url');
       Cookies.remove('characterId');
       Cookies.remove('mode');
       Cookies.remove('selectedCharacters');

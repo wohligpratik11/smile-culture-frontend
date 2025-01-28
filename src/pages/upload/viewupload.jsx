@@ -16,17 +16,22 @@ import { Button } from "../../components/components/ui/button"
 import { RotateCcw, Share } from 'lucide-react'
 import ShareLink from '../../components/components/ui/shareLink'
 import { useUploadContext } from '../../context/UploadContext';
-const ViewUpload = ({ initialMovies, mode }) => {
+
+const ViewUpload = () => {
 	const router = useRouter();
 	const [titleFromCookie, setTitleFromCookie] = useState('');
 	const [selectedCharacters, setSelectedCharacters] = useState([]);
-	const [selectedMode, setSelectedMode] = useState(null);
-	const [movies, setMovies] = useState(initialMovies);
-	console.log("moviesmovies", movies)
+	const [mode, setSelectedMode] = useState(null);
+	console.log("mode", mode);
+
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const { uploadedData, characterId } = useUploadContext();
 	const [isOpen, setIsOpen] = useState(false);
 	console.log("Received mode prop:", mode); // Log the mode prop
+	const [movies, setMovies] = useState([]);
+	console.log("movies1qqqq", movies);
+	console.log("Received mode prop:", mode); // Log the mode prop
+
 	const handleShareClick = () => {
 		setIsOpen(true);
 	};
@@ -34,6 +39,12 @@ const ViewUpload = ({ initialMovies, mode }) => {
 	const handleModalClose = () => {
 		setIsOpen(false);
 	};
+	useEffect(() => {
+		const storedMode = Cookie.get('mode'); // Retrieve 'mode' from cookies
+		if (storedMode) {
+			setSelectedMode(storedMode); // Set the mode from cookie to state
+		}
+	}, []);
 	useEffect(() => {
 		const title = Cookie.get('title');
 		setTitleFromCookie(title);
@@ -46,6 +57,22 @@ const ViewUpload = ({ initialMovies, mode }) => {
 			}
 		}
 	}, []);
+	useEffect(() => {
+		const encryptedUrl = Cookie.get('output_video_url');
+		console.log("Encrypted URL from cookie:", encryptedUrl);  // Log encrypted URL
+
+		if (encryptedUrl) {
+			const bytes = CryptoJS.AES.decrypt(encryptedUrl, 'your-encryption-key');
+			const decryptedUrl = bytes.toString(CryptoJS.enc.Utf8);
+
+			console.log("Decrypted output_video_url:", decryptedUrl);
+
+			setMovies([decryptedUrl]);
+		}
+	}, []);
+
+
+
 	const openModal = () => {
 		setIsModalOpen(true);
 	};
@@ -84,10 +111,10 @@ const ViewUpload = ({ initialMovies, mode }) => {
 									movies.map((movie, index) => (
 										<div key={index} className="space-y-6 flex flex-col items-center justify-center">
 											{mode === 'image' ? (
-												movie.output_video_url ? (
+												movie ? (
 													<div className="relative w-full h-auto">
 														<Image
-															src={movie.output_video_url}
+															src={movie}
 															alt="Media"
 															className="rounded-lg border border-buttonBorder object-contain"
 															layout="responsive"
@@ -100,7 +127,7 @@ const ViewUpload = ({ initialMovies, mode }) => {
 													<div className="text-center text-gray-400">Image not available</div>
 												)
 											) : (
-												movie.output_video_url ? (
+												movie ? (
 													<div className="relative w-full h-auto">
 														<video
 															controls
@@ -112,7 +139,7 @@ const ViewUpload = ({ initialMovies, mode }) => {
 															playsInline
 															className="w-full h-full object-contain rounded-lg border border-buttonBorder"
 														>
-															<source src={movie.output_video_url} type="video/mp4" />
+															<source src={movie} type="video/mp4" />
 														</video>
 													</div>
 												) : (
@@ -183,47 +210,6 @@ const ViewUpload = ({ initialMovies, mode }) => {
 	);
 };
 
-export async function getServerSideProps(context) {
-	const cookies = context.req.cookies;
-	const uploadedFileData = cookies.uploadedData || '';  // Get the uploaded data from cookies
-
-	const titleFromCookie = cookies?.title
-	const characterId = cookies.characterId || '';
-	const selectMode = cookies.mode || '';
-	const formData = new FormData();
-	formData.append('feature_used', titleFromCookie);
-	formData.append('mode', selectMode);
-
-	if (characterId) {
-		console.log("characterId", characterId);
-		formData.append('character_ids', characterId);
-	}
-	if (uploadedFileData) {
-		formData.append('user_images', uploadedFileData);
-	}
-
-	try {
-		const axios = axiosInstance(context);
-		const response = await axios.post(API_ENDPOINTS.CREATE_NEW_STORE_DATA, formData, {
-			timeout: 3600000,
-		});
-
-		return {
-			props: {
-				initialMovies: response?.data?.data || [],
-				mode: selectMode,
-			},
-		};
-	} catch (error) {
-		console.error('Error fetching data:', error);
-		return {
-			props: {
-				initialMovies: [],
-				mode: selectMode,
-			},
-		};
-	}
-}
 
 
 export default ViewUpload;

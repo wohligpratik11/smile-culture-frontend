@@ -10,16 +10,9 @@ import XIcon from "../../../../public/assets/images/x.webp"
 import Thread from "../../../../public/assets/images/thread.webp"
 
 export default function ShareModal({ isOpen, onClose, movies }) {
-	console.log("movies1112222", movies)
 	const [copied, setCopied] = useState(false);
-
 	if (!isOpen) return null;
-
-	const videoUrl = movies[0]?.output_video_url;
-	console.log("videoUrlvideoUrl", videoUrl)
-	console.log("Movies:", movies);
-	console.log("output_video_url:", movies?.output_video_url);
-
+	const videoUrl = movies;
 	const shareOptions = [
 		{
 			name: "Instagram",

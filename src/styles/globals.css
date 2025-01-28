@@ -74,7 +74,8 @@ body {
 /* Buttons */
 .uppy-u-reset.uppy-c-btn.uppy-StatusBar-actionBtn.uppy-StatusBar-actionBtn--upload.uppy-c-btn-primary {
   padding: 0.5rem 1rem !important; /* px-4 py-2 */
-  background: linear-gradient(
+  background
+  : linear-gradient(
     90deg,
     #0ca1ea,
     #3ec5b6
@@ -191,7 +192,7 @@ body {
   animation: mulShdSpin 1.1s infinite ease;
   transform: translateZ(0);
 }
-.uppy-DashboardContent-bar{
+.uppy-DashboardContent-bar {
   display: none !important;
 }
 @keyframes mulShdSpin {
