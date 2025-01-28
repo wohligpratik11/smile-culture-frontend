@@ -29,10 +29,17 @@ export default function SelfieInstructions({ closeModal, uploadImageData }) {
 			onClick={handleBackdropClick}
 		>
 			<div
-				className="w-full max-w-2xl bg-[#3B4374] rounded-3xl p-6 relative"
+				className="w-full max-w-2xl bg-[#3B4374] rounded-3xl p-4 relative"
 				onClick={(e) => e.stopPropagation()}
 			>
-				<div className="space-y-8">
+				{/* Close button */}
+				<div className="absolute top-4 right-4">
+					<button onClick={closeModal} className="text-white">
+						<XCircle className="w-6 h-6" />
+					</button>
+				</div>
+
+				<div className="space-y-6">
 					<h1 className="text-white text-2xl font-medium text-center">
 						Selfie Instructions
 					</h1>
@@ -101,7 +108,7 @@ export default function SelfieInstructions({ closeModal, uploadImageData }) {
 							</div>
 						</div>
 					) : (
-						<div className="space-y-8">
+						<div className="space-y-6">
 							<div className="space-y-4">
 								<h2 className="text-white text-2xl font-semibold">
 									Keep Your Face Centered
@@ -173,6 +180,6 @@ export default function SelfieInstructions({ closeModal, uploadImageData }) {
 					</div>
 				</div>
 			</div>
-		</div >
+		</div>
 	);
 }
