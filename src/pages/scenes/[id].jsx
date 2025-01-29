@@ -248,9 +248,9 @@ const ScenesPage = ({
 					)}
 				</div>
 
-				<div className="mt-6 flex items-center justify-between">
+				<div className="flex justify-between items-center mt-6 flex-col sm:flex-row">
 					<div
-						className={`flex flex-1 items-center justify-center space-x-2 ${selectedScenes ? 'md:ml-36' : ''}`}
+						className={`flex justify-center items-center space-x-2 sm:flex-1 md:ml-36 flex-wrap sm:space-x-2 ${selectedScenes ? 'md:ml-36' : ''}`}
 					>
 						<button
 							className={`bg-gradient-custom-gradient hover:bg-blue-600 focus:ring-blue-300 rounded-md border border-buttonBorder px-4 py-2 text-white transition-all duration-200 focus:outline-none focus:ring-2 ${currentPage <= 1 ? 'cursor-not-allowed opacity-50' : ''
@@ -290,7 +290,7 @@ const ScenesPage = ({
 
 					{selectedScenes && (
 						<button
-							className="bg-gradient-custom-gradient ml-4 h-12 w-52 rounded-lg border border-buttonBorder px-4 py-2"
+							className="bg-gradient-custom-gradient mt-4 h-12 w-52 rounded-lg border border-buttonBorder px-4 py-2 sm:ml-4 sm:mt-0"
 							onClick={() => {
 								if (selectedScenes) {
 									router.push(`/characters/${selectedScenes.scene_id}`);

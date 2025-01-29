@@ -1,202 +1,331 @@
-import { useRouter } from 'next/router'
-import React from 'react'; // Add this line to define React;
-import { useState, useEffect } from 'react';
-import { Card } from '../../components/components/ui/card';
+import { useRouter } from 'next/router';
+import { useState, useEffect, useCallback } from 'react';
+import { Input } from '../../components/components/ui/input';
+import { Card, CardContent } from '../../components/components/ui/card';
 import Link from 'next/link';
-import { ArrowLeft, ArrowUpFromLine } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
+import { ChevronRight, ChevronLeft } from 'lucide-react';
+import { CiSearch } from 'react-icons/ci';
 import { apiService, API_ENDPOINTS } from '../../lib/api/apiService';
 import axiosInstance from '../../lib/api/axiosInstance';
 import Cookie from 'js-cookie';
 import Image from 'next/image';
-import CryptoJS from 'crypto-js';
-import MediaUploader from '../../components/components/ui/UppyUploader';
-import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription } from '../../components/components/ui/dialog'; // Import Dialog components
-import { AspectRatio } from "../../components/components/ui/aspect-ratio"
-import { Button } from "../../components/components/ui/button"
-import { RotateCcw, Share } from 'lucide-react'
-import ShareLink from '../../components/components/ui/shareLink'
-import { useUploadContext } from '../../context/UploadContext';
+import { AspectRatio } from '../../components/components/ui/aspect-ratio';
 
-const ViewUpload = () => {
+const ScenesPage = ({
+	initialScenes,
+	totalCount,
+	page: initialPage,
+	id,
+	prefetchNextPageData,
+}) => {
 	const router = useRouter();
-	const [titleFromCookie, setTitleFromCookie] = useState('');
-	const [selectedCharacters, setSelectedCharacters] = useState([]);
-	const [mode, setSelectedMode] = useState(null);
-	console.log("mode", mode);
+	const [searchQuery, setSearchQuery] = useState('');
+	const [selectedScenes, setSelectedScenes] = useState(null);
+	const [scenes, setScenes] = useState(initialScenes);
+	const [currentPage, setCurrentPage] = useState(initialPage);
+	const [totalPages, setTotalPages] = useState(Math.ceil(totalCount / 8));
+	const [selectedTab, setSelectedTab] = useState('scene');
 
-	const [isModalOpen, setIsModalOpen] = useState(false);
-	const { uploadedData, characterId } = useUploadContext();
-	const [isOpen, setIsOpen] = useState(false);
-	console.log("Received mode prop:", mode); // Log the mode prop
-	const [movies, setMovies] = useState([]);
-	console.log("movies1qqqq", movies);
-	console.log("Received mode prop:", mode); // Log the mode prop
-
-	const handleShareClick = () => {
-		setIsOpen(true);
-	};
-
-	const handleModalClose = () => {
-		setIsOpen(false);
-	};
 	useEffect(() => {
-		const storedMode = Cookie.get('mode'); // Retrieve 'mode' from cookies
-		if (storedMode) {
-			setSelectedMode(storedMode); // Set the mode from cookie to state
-		}
 	}, []);
+
 	useEffect(() => {
-		const title = Cookie.get('title');
-		setTitleFromCookie(title);
-		const encryptedData = Cookie.get('selectedCharacters');
-		if (encryptedData) {
-			const bytes = CryptoJS.AES.decrypt(encryptedData, 'your-encryption-key');
-			const decryptedData = bytes.toString(CryptoJS.enc.Utf8);
-			if (decryptedData) {
-				setSelectedCharacters(JSON.parse(decryptedData));
+		const { page } = router.query;
+		if (page && parseInt(page) !== currentPage) {
+			handlePageChange(parseInt(page));
+		}
+	}, [router.query.page]);
+
+	const handlePageChange = useCallback(
+		async (page) => {
+			if (page < 1 || page > totalPages) return;
+
+			router.push(
+				{
+					pathname: router.pathname,
+					query: { ...router.query, page },
+				},
+				undefined,
+				{ shallow: true }
+			);
+
+			setCurrentPage(page);
+
+			try {
+				const axios = axiosInstance();
+				const response = await axios.post(API_ENDPOINTS.GET_VIEW_ALL_DATA, {
+					// page,
+				});
+
+				setScenes(response?.data?.data || []);
+				setTotalPages(Math.ceil(response?.data?.data?.totalCount / 8));
+			} catch (error) {
+				console.error('Error fetching Scene:', error);
 			}
-		}
+		},
+		[router, totalPages, id]
+	);
+
+	const handleSearchChange = useCallback((e) => {
+		setSearchQuery(e.target.value);
 	}, []);
+
+	const filteredFeatures = scenes?.filter((feature) =>
+		feature?.scene_name?.toLowerCase()?.includes(searchQuery.toLowerCase())
+	);
+
+	const handleScenesSelect = (scene) => {
+		setSelectedScenes((prev) =>
+			prev?.scene_id === scene.scene_id ? null : scene
+		);
+	};
+	const handleTabChange = (tab) => {
+		setSelectedTab(tab);
+		setSelectedScenes(null);
+	};
 	useEffect(() => {
-		const encryptedUrl = Cookie.get('output_video_url');
-		console.log("Encrypted URL from cookie:", encryptedUrl);  // Log encrypted URL
-
-		if (encryptedUrl) {
-			const bytes = CryptoJS.AES.decrypt(encryptedUrl, 'your-encryption-key');
-			const decryptedUrl = bytes.toString(CryptoJS.enc.Utf8);
-
-			console.log("Decrypted output_video_url:", decryptedUrl);
-
-			setMovies([decryptedUrl]);
+		if (selectedTab === 'scene') {
+			Cookie.set('mode', 'video');
+		} else if (selectedTab === 'image') {
+			Cookie.set('mode', 'image');
 		}
-	}, []);
+
+		setSelectedScenes(null);
+	}, [selectedTab]);
 
 
 
-	const openModal = () => {
-		setIsModalOpen(true);
-	};
-
-	const closeModal = () => {
-		setIsModalOpen(false);
-	};
-
-	const renderHeader = () => {
-		if (titleFromCookie) {
-			const formattedTitle = titleFromCookie.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
-			return <h1 className="text-2xl leading-10 text-customWhite capitalize font-medium mb-4">{formattedTitle}</h1>;
-		}
-		return <h1 className="text-2xl leading-10 text-customWhite capitalize font-medium mb-4">Loading...</h1>;
-	};
-
-	const handleModeSelect = (mode) => {
-		setSelectedMode(mode);
-	};
-	const handleUploadComplete = (formData) => {
-		console.log("Received formData in onUploadComplete: ", formData);
-
-		// Iterate through the formData to check the uploaded files
-		for (let pair of formData.entries()) {
-			console.log(pair[0] + ': ' + pair[1]);
-		}
-	};
 	return (
-		<div className="min-h-screen p-4 h-[835px]">
-			<Card className="bg-card-cardCustomBlue p-6 ">
+		<div className="h-[835px] min-h-screen p-6">
+			<Card className="bg-card-cardCustomBlue p-6">
 				<div className="space-y-4">
-					<div className="mx-auto max-w-full sm:max-w-5xl space-y-12 p-2">
-						<div className="space-y-6 flex flex-col items-center justify-center">
-							<Card >
-								{movies && movies.length > 0 ? (
-									movies.map((movie, index) => (
-										<div key={index} className="space-y-6 flex flex-col items-center justify-center">
-											{mode === 'image' ? (
-												movie ? (
-													<div className="relative w-full h-auto">
-														<Image
-															src={movie}
-															alt="Media"
-															className="rounded-lg border border-buttonBorder object-contain"
-															layout="responsive"
-															width={800}
-															height={450}
-															priority
-														/>
-													</div>
-												) : (
-													<p className="text-center text-gray-400 text-2xl">Oops! Something went wrong. Please try again later.</p>
-												)
-											) : (
-												movie ? (
-													<div className="relative w-full h-auto">
-														<video
-															controls
-															preload="auto"
-															width="100%"
-															height="auto"
-															controlsList="nodownload"
-															disablePictureInPicture
-															playsInline
-															className="w-full h-full object-contain rounded-lg border border-buttonBorder"
-														>
-															<source src={movie} type="video/mp4" />
-														</video>
-													</div>
-												) : (
-													<div className="text-center text-gray-400">Video not available</div>
-												)
-											)}
-
-										</div>
-									))
-								) : (
-									<div className="flex items-center justify-center h-full w-full border border-slateBlue shadow rounded-xl">
-										<p className="text-center text-gray-400 text-2xl">Oops! Something went wrong. Please try again later.</p>
-									</div>
-
-								)}
-							</Card>
-
-
-						</div>
-
-						<ShareLink />
-					</div>
-					<div className="flex justify-end gap-4  flex-wrap">
-						<Link href="/">
-							<Button
-								variant="outline"
-								size="lg"
-								className="min-w-[140px] w-full sm:w-auto border-white/10 bg-white/5 text-white backdrop-blur-sm hover:bg-white/10 hover:text-white"
+					<div className="flex items-center gap-4">
+						<Link href="#" passHref>
+							<button
+								className="bg-gradient-custom-gradient rounded-lg border border-buttonBorder px-4 py-2"
+								onClick={(e) => {
+									e.preventDefault();
+									router.back();
+								}}
+								aria-label="Go Back"
 							>
-								<RotateCcw className="mr-2 h-4 w-4" />
-								Restart
-							</Button>
+								<ArrowLeft />
+							</button>
 						</Link>
-						<Button
-							size="lg"
-							className="min-w-[140px] w-full sm:w-auto bg-cyan-400 font-medium text-white hover:bg-cyan-500"
-							onClick={handleShareClick}
-						>
-							<Share />
-							Share
-						</Button>
+
+						<div className="mt-4 text-lg font-medium leading-10">
+							<h1 className="mb-4 text-2xl font-medium capitalize leading-10 text-customWhite">
+								View All
+							</h1>
+						</div>
 					</div>
 
+					<div className="relative mt-4">
+						<CiSearch className="absolute left-4 top-1/2 h-full w-6 -translate-y-1/2 transform font-bold text-customWhite" />
+						<Input
+							type="text"
+							placeholder="Search"
+							value={searchQuery}
+							onChange={handleSearchChange}
+							className="w-full rounded-full border-none bg-blueYonder py-3 pl-12 pr-3 text-customWhite placeholder-customWhite"
+						/>
+					</div>
 
+					<div className="flex space-x-2">
+						<button
+							className={`rounded-full px-6 py-2 font-semibold text-white transition-colors duration-200 ${selectedTab === 'scene' ? 'bg-gradient-custom-gradient border border-buttonBorder' : 'cursor-pointer border border-slateBlue bg-blueYonder transition-all'}`}
+							onClick={() => {
+								setSelectedTab('scene');
+								Cookie.set('mode', 'video');
+							}}
+						>
+							Scenes
+						</button>
+						<button
+							className={`rounded-full px-6 py-2 font-semibold text-white transition-colors duration-200 ${selectedTab === 'image' ? 'bg-gradient-custom-gradient border border-buttonBorder' : 'cursor-pointer border border-slateBlue bg-blueYonder transition-all'}`}
+							onClick={() => {
+								setSelectedTab('image');
+								Cookie.set('mode', 'image');
+							}}
+						>
+							Images
+						</button>
+					</div>
 
+					<div className="mt-4 flex items-center justify-between">
+						<div className="relative text-lg font-semibold !text-customWhite">
+							{selectedTab === 'scene' ? 'Choose Scene' : 'Choose Image'}
+						</div>
+					</div>
 
+					{selectedTab === 'image' ? (
+						<div
+							className={`mt-6 ${filteredFeatures.length > 0 ? 'grid grid-cols-1 gap-6 md:grid-cols-4' : ''}`}
+						>
+							{filteredFeatures.map((feature) => (
+								<div key={feature.path} className="space-y-2">
+									<Card
+										className={`bg-blue-800/20 mb-2 transform cursor-pointer overflow-hidden border-0 backdrop-blur-sm transition-transform duration-200 hover:scale-105 ${selectedScenes?.scene_id === feature.scene_id ? 'border border-solid border-buttonBorder' : ''}`}
+										aria-label={`Select ${feature.scene_name}`}
+										onClick={() => handleScenesSelect(feature)}
+									>
+										<CardContent className="p-0">
+											<AspectRatio ratio={16 / 9} className="w-full">
+												<Image
+													src={feature.thumbnail_url || '/fallback-image.jpg'}
+													alt={`${feature.scene_name} image`}
+													layout="fill"
+													objectFit="contain"
+													priority={true}
+												/>
+											</AspectRatio>
+										</CardContent>
+									</Card>
+									<p className="text-center text-sm font-bold text-customWhite">
+										{feature.scene_name}
+									</p>
+								</div>
+							))}
+						</div>
+					) : (
+						<div
+							className={`mt-6 ${filteredFeatures.length > 0 ? 'grid grid-cols-1 gap-6 md:grid-cols-4' : ''}`}
+						>
+							{filteredFeatures.length === 0 ? (
+								<div className="flex h-full items-center justify-center">
+									No Scene found
+								</div>
+							) : (
+								filteredFeatures.map((feature) => (
+									<div key={feature.path} className="space-y-2">
+										<Card
+											className={`bg-blue-800/20 mb-2 transform cursor-pointer overflow-hidden border-0 backdrop-blur-sm transition-transform duration-200 hover:scale-105 ${selectedScenes?.scene_id === feature.scene_id ? 'border border-solid border-buttonBorder' : ''}`}
+											aria-label={`Select ${feature.scene_name}`}
+											onClick={() => handleScenesSelect(feature)}
+										>
+											<CardContent className="p-0">
+												<AspectRatio ratio={16 / 9} className="w-full">
+													<video
+														src={feature.video_url}
+														controls
+														playsInline
+														title="Description"
+														controlsList="nodownload noplaybackrate"
+														disablePictureInPicture
+														className="h-full w-full object-contain"
+														aria-label={`Video for ${feature.scene_name}`}
+													/>
+												</AspectRatio>
+											</CardContent>
+										</Card>
+										<p className="text-center text-sm font-bold text-customWhite">
+											{feature.scene_name}
+										</p>
+									</div>
+								))
+							)}
+						</div>
+					)}
 				</div>
-				<ShareLink isOpen={isOpen} onClose={handleModalClose} movies={movies} />
 
+				<div className="flex justify-between items-center mt-6 flex-col sm:flex-row">
+					<div
+						className={`flex flex-1 items-center justify-center space-x-2 ${selectedScenes ? 'md:ml-36' : ''}`}
+					>
+						<button
+							className={`bg-gradient-custom-gradient hover:bg-blue-600 focus:ring-blue-300 rounded-md border border-buttonBorder px-4 py-2 text-white transition-all duration-200 focus:outline-none focus:ring-2 ${currentPage <= 1 ? 'cursor-not-allowed opacity-50' : ''
+								}`}
+							onClick={() => handlePageChange(currentPage - 1)}
+							disabled={currentPage <= 1}
+						>
+							<ChevronLeft className="h-5 w-5" />
+						</button>
+
+						{[...Array(totalPages)].map((_, index) => {
+							const page = index + 1;
+							const isActive = currentPage === page;
+							return (
+								<button
+									key={page}
+									onClick={() => handlePageChange(page)}
+									className={`focus:ring-blue-300 rounded-md px-4 py-2 transition-all duration-200 focus:outline-none focus:ring-2 ${isActive
+										? 'hover:bg-blue-100 hover:border-blue-500 bg-white text-lg font-bold text-blue hover:border'
+										: 'bg-gradient-custom-gradient border border-buttonBorder text-white'
+										}`}
+								>
+									{page}
+								</button>
+							);
+						})}
+
+						<button
+							className={`bg-gradient-custom-gradient hover:bg-blue-600 focus:ring-blue-300 rounded-md border border-buttonBorder px-4 py-2 text-white transition-all duration-200 focus:outline-none focus:ring-2 ${currentPage >= totalPages ? 'cursor-not-allowed opacity-50' : ''
+								}`}
+							onClick={() => handlePageChange(currentPage + 1)}
+							disabled={currentPage >= totalPages}
+						>
+							<ChevronRight className="h-5 w-5" />
+						</button>
+					</div>
+
+					{selectedScenes && (
+						<button
+							className="bg-gradient-custom-gradient ml-4 h-12 w-52 rounded-lg border border-buttonBorder px-4 py-2"
+							onClick={() => {
+								if (selectedScenes) {
+									router.push(`/characters/${selectedScenes.scene_id}`);
+								}
+							}}
+							disabled={!selectedScenes}
+						>
+							Next
+						</button>
+					)}
+				</div>
 			</Card>
-
 		</div>
-
 	);
 };
 
+export async function getServerSideProps(context) {
+	const { query } = context;
+	const page = query.page || 1;
 
+	try {
+		const axios = axiosInstance(context);
+		const response = await axios.post(API_ENDPOINTS.GET_VIEW_ALL_DATA, {
+			page,
+		});
 
-export default ViewUpload;
+		// Prefetch next page
+		const nextPage = page + 1;
+		const nextResponse = await axios.post(API_ENDPOINTS.GET_VIEW_ALL_DATA, {
+			page: nextPage,
+		});
+
+		return {
+			props: {
+				initialScenes: response?.data?.data?.data || [],
+				totalCount: response?.data?.data?.totalCount || 0,
+				page: parseInt(page, 10),
+				id,
+				prefetchNextPageData: nextResponse?.data?.data?.data || [],
+			},
+		};
+	} catch (error) {
+		console.error('Error fetching scenes:', error);
+		return {
+			props: {
+				initialScenes: [],
+				totalCount: 0,
+				page: 1,
+				id: null,
+				prefetchNextPageData: [],
+			},
+		};
+	}
+}
+
+export default ScenesPage;
 
