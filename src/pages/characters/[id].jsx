@@ -177,8 +177,8 @@ const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, 
 					</div>
 				</div>
 
-				<div className="flex justify-between items-center mt-6">
-					<div className={`flex justify-center items-center space-x-2 text-center flex-1 ${selectedCharacters ? 'md:ml-36' : ''}`}>
+				<div className="flex justify-between items-center mt-6 flex-col sm:flex-row">
+					<div className={`flex justify-center items-center space-x-2 sm:flex-1 md:ml-36 flex-wrap sm:space-x-2 ${selectedCharacters ? 'md:ml-36' : ''}`}>
 						<button
 							className={`px-4 py-2 rounded-md bg-gradient-custom-gradient border border-buttonBorder text-white transition-all duration-200 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 ${currentPage <= 1 ? 'opacity-50 cursor-not-allowed' : ''
 								}`}
@@ -215,17 +215,16 @@ const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, 
 						</button>
 					</div>
 
-					{selectedCharacters && (
+					{selectedCharacters.length > 0 && (
 						<button
-							className="px-4 py-2 rounded-lg bg-gradient-custom-gradient border border-buttonBorder w-52 h-12 ml-4"
-							onClick={() => {
-								handleNextClick();
-							}}
-							disabled={!selectedCharacters}
+							className="px-4 py-2 rounded-lg bg-gradient-custom-gradient border border-buttonBorder w-52 h-12 mt-4 sm:ml-4 sm:mt-0"
+							onClick={() => handleNextClick()}
+							disabled={selectedCharacters.length === 0}
 						>
 							Next
 						</button>
 					)}
+
 				</div>
 			</Card>
 		</div>

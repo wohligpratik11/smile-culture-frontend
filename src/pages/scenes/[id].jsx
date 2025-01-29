@@ -214,8 +214,8 @@ const ScenesPage = ({ initialScenes, totalCount, page: initialPage, id, prefetch
 					)}
 				</div>
 
-				<div className="flex justify-between items-center mt-6">
-					<div className={`flex justify-center items-center space-x-2 flex-1 ${selectedScenes ? 'md:ml-36' : ''}`}>
+				<div className="flex justify-between items-center mt-6 flex-col sm:flex-row">
+					<div className={`flex justify-center items-center space-x-2 sm:flex-1 md:ml-36 flex-wrap sm:space-x-2 ${selectedScenes ? 'md:ml-36' : ''}`}>
 						<button
 							className={`px-4 py-2 rounded-md bg-gradient-custom-gradient border border-buttonBorder text-white transition-all duration-200 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 ${currentPage <= 1 ? 'opacity-50 cursor-not-allowed' : ''
 								}`}
@@ -254,7 +254,7 @@ const ScenesPage = ({ initialScenes, totalCount, page: initialPage, id, prefetch
 
 					{selectedScenes && (
 						<button
-							className="px-4 py-2 rounded-lg bg-gradient-custom-gradient border border-buttonBorder w-52 h-12 ml-4"
+							className="px-4 py-2 rounded-lg bg-gradient-custom-gradient border border-buttonBorder w-52 h-12 mt-4 sm:ml-4 sm:mt-0"
 							onClick={() => {
 								if (selectedScenes) {
 									router.push(`/characters/${selectedScenes.scene_id}`);

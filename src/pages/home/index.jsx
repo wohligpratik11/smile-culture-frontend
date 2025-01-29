@@ -79,15 +79,17 @@ const Home = () => {
       <div className="h-[835px] min-h-screen p-6">
         <Card className="bg-card-cardCustomBlue p-6">
           <div className="mt-4 space-y-4">
-            {/* <div className="relative">
-						<button
-							className="px-4 py-2 rounded-lg bg-gradient-custom-gradient border border-buttonBorder"
-							onClick={handleHomeBackClick}
-							aria-label="Go Back"
-						>
-							<ArrowLeft />
-						</button>
-					</div> */}
+            {/* <div className="relative flex justify-end">
+              <Link href="/viewall" passHref>
+                <button
+                  className="px-4 py-2 rounded-lg bg-gradient-custom-gradient border border-buttonBorder"
+                  aria-label="Go Back"
+                >
+                  View All
+                </button>
+              </Link>
+            </div> */}
+
             <div className="flex justify-center space-x-4">
               <div className="w-913 text-center text-4xl font-semibold text-customWhite">
                 Live Your Movie Dream—Step Into the Spotlight!
