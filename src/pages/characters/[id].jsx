@@ -48,7 +48,6 @@ const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, 
 			const axios = axiosInstance();
 			let endpoint;
 
-			// Handle API call based on mode
 			if (mode === 'video') {
 				endpoint = API_ENDPOINTS.GET_ALL_CHARACTERS_LIST;
 			} else if (mode === 'image') {
@@ -238,8 +237,7 @@ export async function getServerSideProps(context) {
 	const page = query.page || 1;
 	const { id } = context.params;
 
-	// Get the mode from cookie (from request headers)
-	const mode = req.cookies.mode || 'image'; // Default to 'image' if mode is not found
+	const mode = req.cookies.mode || 'image';
 
 	try {
 		const axios = axiosInstance(context);
@@ -253,7 +251,6 @@ export async function getServerSideProps(context) {
 
 		const response = await axios.post(endpoint, { page, scene_id: id });
 
-		// Prefetch next page
 		const nextPage = page + 1;
 		const nextResponse = await axios.post(endpoint, { page: nextPage, scene_id: id });
 
@@ -264,7 +261,7 @@ export async function getServerSideProps(context) {
 				page: parseInt(page, 10),
 				id,
 				prefetchNextPageData: nextResponse?.data?.data?.data || [],
-				mode,  // Pass mode to the component
+				mode,
 			},
 		};
 	} catch (error) {
@@ -276,7 +273,7 @@ export async function getServerSideProps(context) {
 				page: 1,
 				id: null,
 				prefetchNextPageData: [],
-				mode: 'image', // Default to 'image' if there's an error
+				mode: 'image',
 			},
 		};
 	}
