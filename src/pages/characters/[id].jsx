@@ -13,16 +13,14 @@ import Cookie from 'js-cookie';
 import Image from 'next/image';
 import { AspectRatio } from "../../components/components/ui/aspect-ratio";
 
-const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, prefetchNextPageData }) => {
+const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, prefetchNextPageData, mode }) => {
 	const router = useRouter();
 	const [titleFromCookie, setTitleFromCookie] = useState('');
 	const [searchQuery, setSearchQuery] = useState('');
 	const [characters, setCharacters] = useState(initialCharacters);
-	console.log("characters", characters)
 	const [currentPage, setCurrentPage] = useState(initialPage);
 	const [totalPages, setTotalPages] = useState(Math.ceil(totalCount / 8));
 	const [selectedCharacters, setSelectedCharacters] = useState([]);
-	console.log("selectedCharacters", selectedCharacters)
 
 	useEffect(() => {
 		const title = Cookie.get('title');
@@ -48,14 +46,23 @@ const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, 
 
 		try {
 			const axios = axiosInstance();
-			const response = await axios.post(API_ENDPOINTS.GET_ALL_CHARACTERS_LIST, { page, scene_id: id });
+			let endpoint;
+
+			// Handle API call based on mode
+			if (mode === 'video') {
+				endpoint = API_ENDPOINTS.GET_ALL_CHARACTERS_LIST;
+			} else if (mode === 'image') {
+				endpoint = API_ENDPOINTS.GET_ALL_IMAGE_CHARACTERS_LIST;
+			}
+
+			const response = await axios.post(endpoint, { page, scene_id: id });
 
 			setCharacters(response?.data?.data?.data || []);
 			setTotalPages(Math.ceil(response?.data?.data?.totalCount / 8));
 		} catch (error) {
 			console.error('Error fetching Characters:', error);
 		}
-	}, [router, totalPages, id]);
+	}, [router, totalPages, id, mode]);
 
 	const handleSearchChange = useCallback((e) => {
 		setSearchQuery(e.target.value);
@@ -64,9 +71,9 @@ const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, 
 	const filteredFeatures = characters?.filter((feature) =>
 		feature?.character_real_name?.toLowerCase()?.includes(searchQuery.toLowerCase())
 	);
+
 	const handleNextClick = () => {
 		if (selectedCharacters.length > 0) {
-			console.log("selected", selectedCharacters);
 			const encryptedData = CryptoJS.AES.encrypt(
 				JSON.stringify(selectedCharacters),
 				'your-encryption-key'
@@ -79,7 +86,6 @@ const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, 
 		}
 	};
 
-
 	const handleCharactersSelect = (character) => {
 		setSelectedCharacters((prevSelected) => {
 			const isSelected = prevSelected.includes(character.character_id);
@@ -90,7 +96,6 @@ const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, 
 			}
 		});
 	};
-
 
 	const renderHeader = () => {
 		if (titleFromCookie) {
@@ -117,7 +122,6 @@ const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, 
 								<ArrowLeft />
 							</button>
 						</Link>
-
 
 						<div className="text-lg font-medium leading-10 mt-[17px]">
 							{renderHeader()}
@@ -152,7 +156,6 @@ const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, 
 										aria-label={`Select ${feature.character_real_name}`}
 										onClick={() => handleCharactersSelect(feature)}
 									>
-
 										<CardContent className="p-0">
 											<AspectRatio ratio={16 / 9} className="w-full">
 												<Image
@@ -223,7 +226,6 @@ const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, 
 						>
 							Next
 						</button>
-
 					)}
 				</div>
 			</Card>
@@ -232,17 +234,28 @@ const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, 
 };
 
 export async function getServerSideProps(context) {
-	const { query } = context;
+	const { query, req } = context;
 	const page = query.page || 1;
 	const { id } = context.params;
 
+	// Get the mode from cookie (from request headers)
+	const mode = req.cookies.mode || 'image'; // Default to 'image' if mode is not found
+
 	try {
 		const axios = axiosInstance(context);
-		const response = await axios.post(API_ENDPOINTS.GET_ALL_CHARACTERS_LIST, { page, scene_id: id });
+		let endpoint;
+
+		if (mode === 'video') {
+			endpoint = API_ENDPOINTS.GET_ALL_CHARACTERS_LIST;
+		} else if (mode === 'image') {
+			endpoint = API_ENDPOINTS.GET_ALL_IMAGE_CHARACTERS_LIST;
+		}
+
+		const response = await axios.post(endpoint, { page, scene_id: id });
 
 		// Prefetch next page
 		const nextPage = page + 1;
-		const nextResponse = await axios.post(API_ENDPOINTS.GET_ALL_CHARACTERS_LIST, { page: nextPage, scene_id: id });
+		const nextResponse = await axios.post(endpoint, { page: nextPage, scene_id: id });
 
 		return {
 			props: {
@@ -251,6 +264,7 @@ export async function getServerSideProps(context) {
 				page: parseInt(page, 10),
 				id,
 				prefetchNextPageData: nextResponse?.data?.data?.data || [],
+				mode,  // Pass mode to the component
 			},
 		};
 	} catch (error) {
@@ -262,6 +276,7 @@ export async function getServerSideProps(context) {
 				page: 1,
 				id: null,
 				prefetchNextPageData: [],
+				mode: 'image', // Default to 'image' if there's an error
 			},
 		};
 	}
