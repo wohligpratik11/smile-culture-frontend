@@ -134,9 +134,10 @@ const ViewUpload = () => {
 															preload="auto"
 															width="100%"
 															height="auto"
-															controlsList="nodownload"
-															disablePictureInPicture
 															playsInline
+															title="Description"
+															controlsList="nodownload noplaybackrate"
+															disablePictureInPicture
 															className="w-full h-full object-contain rounded-lg border border-buttonBorder"
 														>
 															<source src={movie} type="video/mp4" />

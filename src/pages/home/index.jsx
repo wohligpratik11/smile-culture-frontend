@@ -80,9 +80,9 @@ const Home = () => {
         <meta name="apple-mobile-web-app-capable" content="yes" />
       </Head>
       <div className="h-[835px] min-h-screen p-6">
-        <Card className="bg-card-cardCustomBlue p-6">
-          <div className="mt-4 space-y-4">
-            {/* <div className="relative flex justify-end">
+        <Card className="bg-card-cardCustomBlue p-4">
+          <div className="mt-2 space-y-4">
+            <div className="relative flex justify-end">
               <Link href="/viewall" passHref>
                 <button
                   className="px-4 py-2 rounded-lg bg-gradient-custom-gradient border border-buttonBorder"
@@ -91,7 +91,7 @@ const Home = () => {
                   View All
                 </button>
               </Link>
-            </div> */}
+            </div>
 
             <div className="flex justify-center space-x-4">
               <div className="w-913 text-center text-4xl font-semibold text-customWhite">
