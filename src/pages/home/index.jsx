@@ -73,12 +73,15 @@ const Home = () => {
         <meta name="format-detection" content="telephone=no" />
         <meta name="mobile-web-app-capable" content="yes" />
 
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1"
+        />
         <meta name="apple-mobile-web-app-capable" content="yes" />
       </Head>
       <div className="h-[835px] min-h-screen p-6">
         <Card className="bg-card-cardCustomBlue p-6">
-          <div className="mt-4 space-y-4">
+          <div className="my-4 space-y-4">
             {/* <div className="relative">
 						<button
 							className="px-4 py-2 rounded-lg bg-gradient-custom-gradient border border-buttonBorder"
@@ -105,7 +108,7 @@ const Home = () => {
                 Get Started
               </button>
             </div> */}
-            <div className="flex items-center justify-center mt-4">
+            <div className="mt-4 flex items-center justify-center">
               <div className="mx-auto max-w-7xl">
                 <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-3">
                   {features.map((feature) => (
@@ -114,7 +117,7 @@ const Home = () => {
                       {feature.title === 'face-swap' ? (
                         <Link href={feature.path} passHref legacyBehavior>
                           <Card
-                            className="mb-6 transform cursor-pointer overflow-hidden border-0 bg-blue-800/20 backdrop-blur-sm transition-transform duration-200 hover:scale-105"
+                            className="bg-blue-800/20 mb-6 transform cursor-pointer overflow-hidden border-0 backdrop-blur-sm transition-transform duration-200 hover:scale-105"
                             aria-label={`Go to ${feature.title}`}
                             onClick={() => handleFeatureClick(feature)}
                           >
@@ -131,7 +134,7 @@ const Home = () => {
                         </Link>
                       ) : (
                         <div className="mb-6 cursor-not-allowed">
-                          <Card className="transform overflow-hidden border-0 bg-blue-800/20 backdrop-blur-sm transition-transform duration-200">
+                          <Card className="bg-blue-800/20 transform overflow-hidden border-0 backdrop-blur-sm transition-transform duration-200">
                             <CardContent className="p-0">
                               <div className="relative aspect-video">
                                 <img
@@ -140,9 +143,9 @@ const Home = () => {
                                   className="h-full w-full object-cover"
                                 />
                                 {/* Coming Soon Overlay */}
-                                <div className="absolute inset-0 flex items-center justify-center bg-gray-900/80 backdrop-blur-[2px]">
+                                <div className="bg-gray-900/80 absolute inset-0 flex items-center justify-center backdrop-blur-[2px]">
                                   <div className="text-center">
-                                    <span className="text-3xl font-bold text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
+                                    <span className="text-3xl font-bold text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.6)]">
                                       Coming Soon
                                     </span>
                                     <div className="mt-2 h-1 w-16 bg-gradient-to-r from-transparent via-white to-transparent opacity-75" />
@@ -156,25 +159,18 @@ const Home = () => {
 
                       {/* Button Section */}
                       {feature.title === 'face-swap' ? (
-                        <Link href={feature.path} passHref legacyBehavior>
-                          <div
-                            className="flex h-14 cursor-pointer items-center justify-center rounded-2xl border border-slateBlue text-center text-lg font-medium capitalize text-white"
-                            style={{
-                              background:
-                                'linear-gradient(180deg, rgba(49, 58, 91, 0) -1.11%, rgba(49, 58, 91, 0.44) 23.83%, #313A5B 99.56%)',
-                            }}
-                          >
+                        <Link
+                          href={feature.path}
+                          passHref
+                          legacyBehavior
+                          className="transition-opacity duration-200 hover:opacity-80"
+                        >
+                          <div className="bg-button-gradient flex h-14 cursor-pointer items-center justify-center rounded-2xl border border-slateBlue text-center text-lg font-medium capitalize text-white transition-opacity duration-200 hover:opacity-75">
                             {feature.title}
                           </div>
                         </Link>
                       ) : (
-                        <div
-                          className="flex h-14 cursor-not-allowed items-center justify-center rounded-2xl border border-slateBlue text-center text-lg font-medium capitalize text-white/50"
-                          style={{
-                            background:
-                              'linear-gradient(180deg, rgba(49, 58, 91, 0) -1.11%, rgba(49, 58, 91, 0.44) 23.83%, #313A5B 99.56%)',
-                          }}
-                        >
+                        <div className="bg-button-gradient flex h-14 cursor-not-allowed items-center justify-center rounded-2xl border border-slateBlue text-center text-lg font-medium capitalize text-white/50 transition-opacity duration-200 hover:opacity-75">
                           {feature.title}
                         </div>
                       )}
