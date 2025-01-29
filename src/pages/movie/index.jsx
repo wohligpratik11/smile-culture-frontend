@@ -156,8 +156,10 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
                         <Image
                           src={feature.image || '/fallback-image.jpg'}
                           alt={`${feature.title} image`}
-                          layout="fill"
                           objectFit="contain"
+                          width={500}
+                          height={500}
+                          quality={100}
                           priority={true}
                         />
                       </AspectRatio>
@@ -190,11 +192,10 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
                 <button
                   key={page}
                   onClick={() => handlePageChange(page)}
-                  className={`focus:ring-blue-300 rounded-md px-4 py-2 transition-all duration-200 focus:outline-none focus:ring-2 ${
-                    isActive
-                      ? 'hover:bg-blue-100 hover:border-blue-500 bg-white text-lg font-bold text-blue hover:border'
-                      : 'bg-gradient-custom-gradient border border-buttonBorder text-white'
-                  }`}
+                  className={`focus:ring-blue-300 rounded-md px-4 py-2 transition-all duration-200 focus:outline-none focus:ring-2 ${isActive
+                    ? 'hover:bg-blue-100 hover:border-blue-500 bg-white text-lg font-bold text-blue hover:border'
+                    : 'bg-gradient-custom-gradient border border-buttonBorder text-white'
+                    }`}
                 >
                   {page}
                 </button>

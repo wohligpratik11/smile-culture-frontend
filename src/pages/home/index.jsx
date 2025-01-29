@@ -5,7 +5,7 @@ import { ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Cookies from 'js-cookie';
-
+import PolygonLogo from '../../../public/assets/images/polygon.webp'
 const Home = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -93,10 +93,18 @@ const Home = () => {
               </Link>
             </div>
 
-            <div className="flex justify-center space-x-4">
-              <div className="w-913 text-center text-4xl font-semibold text-customWhite">
-                Live Your Movie Dream—Step Into the Spotlight!
+            <div className="flex justify-center ">
+              <div className="flex flex-col sm:flex-row items-center justify-center text-center text-customWhite h-14">
+                <span className="text-base sm:text-xl md:text-2xl lg:text-4xl font-semibold text-center px-4">
+                  Live Your Movie Dream—Step Into the Spotlight!
+                </span>
+                <img
+                  src={PolygonLogo.src}
+                  alt="Polygon Logo"
+                  className="w-10 h-10 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-28 lg:h-28 object-contain"
+                />
               </div>
+
             </div>
             <div className="mt-6 flex justify-center space-x-4">
               <div className="w-1004 text-center text-xl leading-7 text-customWhite">
@@ -105,11 +113,6 @@ const Home = () => {
                 dialogue and create unforgettable moments!
               </div>
             </div>
-            {/* <div className="mt-6 flex justify-center space-x-4">
-              <button className="bg-gradient-custom-gradient h-12 w-52 rounded-lg border border-buttonBorder px-4 py-2">
-                Get Started
-              </button>
-            </div> */}
             <div className="mt-4 flex items-center justify-center">
               <div className="mx-auto max-w-7xl">
                 <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-3">

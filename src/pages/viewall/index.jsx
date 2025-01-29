@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { Input } from '../../components/components/ui/input';
 import { Card, CardContent } from '../../components/components/ui/card';
 import Link from 'next/link';
@@ -12,24 +12,21 @@ import Cookie from 'js-cookie';
 import Image from 'next/image';
 import { AspectRatio } from '../../components/components/ui/aspect-ratio';
 
-const ScenesPage = ({
-	initialScenes,
-	totalCount,
-	page: initialPage,
-	id,
-	prefetchNextPageData,
-}) => {
+const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 	const router = useRouter();
+	const [titleFromCookie, setTitleFromCookie] = useState('');
 	const [searchQuery, setSearchQuery] = useState('');
-	const [selectedScenes, setSelectedScenes] = useState(null);
-	const [scenes, setScenes] = useState(initialScenes);
+	const [selectedMovie, setSelectedMovie] = useState(null);
+	const [movies, setMovies] = useState(initialMovies);
 	const [currentPage, setCurrentPage] = useState(initialPage);
 	const [totalPages, setTotalPages] = useState(Math.ceil(totalCount / 8));
-	const [selectedTab, setSelectedTab] = useState('scene');
 
 	useEffect(() => {
+		const title = Cookie.get('title');
+		setTitleFromCookie(title);
 	}, []);
 
+	// Re-fetch movies whenever the page changes
 	useEffect(() => {
 		const { page } = router.query;
 		if (page && parseInt(page) !== currentPage) {
@@ -37,77 +34,75 @@ const ScenesPage = ({
 		}
 	}, [router.query.page]);
 
-	const handlePageChange = useCallback(
-		async (page) => {
-			if (page < 1 || page > totalPages) return;
+	// Fetch new movies when page changes
+	const handlePageChange = async (page) => {
+		if (page < 1 || page > totalPages) return;
 
-			router.push(
-				{
-					pathname: router.pathname,
-					query: { ...router.query, page },
-				},
-				undefined,
-				{ shallow: true }
-			);
+		router.push(
+			{
+				pathname: router.pathname,
+				query: { ...router.query, page },
+			},
+			undefined,
+			{ shallow: true }
+		);
 
-			setCurrentPage(page);
+		setCurrentPage(page);
 
-			try {
-				const axios = axiosInstance();
-				const response = await axios.post(API_ENDPOINTS.GET_VIEW_ALL_DATA, {
-					// page,
-				});
+		try {
+			const axios = axiosInstance();
+			const response = await axios.post(API_ENDPOINTS.GET_VIEW_ALL_DATA, {
+				page,
+			});
 
-				setScenes(response?.data?.data || []);
-				setTotalPages(Math.ceil(response?.data?.data?.totalCount / 8));
-			} catch (error) {
-				console.error('Error fetching Scene:', error);
-			}
-		},
-		[router, totalPages, id]
-	);
+			// Map API response to features
+			setMovies(response?.data?.data?.data || []);
+			setTotalPages(Math.ceil(response?.data?.data?.totalCount / 8)); // Recalculate total pages
+		} catch (error) {
+			console.error('Error fetching movies:', error);
+		}
+	};
 
-	const handleSearchChange = useCallback((e) => {
+	// Handle search input
+	const handleSearchChange = (e) => {
 		setSearchQuery(e.target.value);
-	}, []);
+	};
 
-	const filteredFeatures = scenes?.filter((feature) =>
-		feature?.scene_name?.toLowerCase()?.includes(searchQuery.toLowerCase())
+	// Filter movies based on search query
+	const filteredMovies = movies.filter((movie) =>
+		movie?.feature_used?.toLowerCase()?.includes(searchQuery.toLowerCase())
 	);
 
-	const handleScenesSelect = (scene) => {
-		setSelectedScenes((prev) =>
-			prev?.scene_id === scene.scene_id ? null : scene
+	const handleMovieSelect = (movie) => {
+		setSelectedMovie((prev) => (prev?.stored_data_id === movie.stored_data_id ? null : movie));
+	};
+
+	const renderHeader = () => {
+		if (titleFromCookie) {
+			const formattedTitle = titleFromCookie
+				.replace(/-/g, ' ')
+				.replace(/\b\w/g, (char) => char.toUpperCase());
+			return (
+				<h1 className="mb-4 text-2xl font-medium capitalize leading-10 text-customWhite">
+					{formattedTitle}
+				</h1>
+			);
+		}
+		return (
+			<h1 className="mb-4 text-2xl font-medium capitalize leading-10 text-customWhite">
+				Loading...
+			</h1>
 		);
 	};
-	const handleTabChange = (tab) => {
-		setSelectedTab(tab);
-		setSelectedScenes(null);
-	};
-	useEffect(() => {
-		if (selectedTab === 'scene') {
-			Cookie.set('mode', 'video');
-		} else if (selectedTab === 'image') {
-			Cookie.set('mode', 'image');
-		}
-
-		setSelectedScenes(null);
-	}, [selectedTab]);
-
-
 
 	return (
 		<div className="h-[835px] min-h-screen p-6">
 			<Card className="bg-card-cardCustomBlue p-6">
 				<div className="space-y-4">
 					<div className="flex items-center gap-4">
-						<Link href="#" passHref>
+						<Link href="/">
 							<button
 								className="bg-gradient-custom-gradient rounded-lg border border-buttonBorder px-4 py-2"
-								onClick={(e) => {
-									e.preventDefault();
-									router.back();
-								}}
 								aria-label="Go Back"
 							>
 								<ArrowLeft />
@@ -132,106 +127,64 @@ const ScenesPage = ({
 						/>
 					</div>
 
-					<div className="flex space-x-2">
-						<button
-							className={`rounded-full px-6 py-2 font-semibold text-white transition-colors duration-200 ${selectedTab === 'scene' ? 'bg-gradient-custom-gradient border border-buttonBorder' : 'cursor-pointer border border-slateBlue bg-blueYonder transition-all'}`}
-							onClick={() => {
-								setSelectedTab('scene');
-								Cookie.set('mode', 'video');
-							}}
-						>
-							Scenes
-						</button>
-						<button
-							className={`rounded-full px-6 py-2 font-semibold text-white transition-colors duration-200 ${selectedTab === 'image' ? 'bg-gradient-custom-gradient border border-buttonBorder' : 'cursor-pointer border border-slateBlue bg-blueYonder transition-all'}`}
-							onClick={() => {
-								setSelectedTab('image');
-								Cookie.set('mode', 'image');
-							}}
-						>
-							Images
-						</button>
-					</div>
-
-					<div className="mt-4 flex items-center justify-between">
-						<div className="relative text-lg font-semibold !text-customWhite">
-							{selectedTab === 'scene' ? 'Choose Scene' : 'Choose Image'}
-						</div>
-					</div>
-
-					{selectedTab === 'image' ? (
-						<div
-							className={`mt-6 ${filteredFeatures.length > 0 ? 'grid grid-cols-1 gap-6 md:grid-cols-4' : ''}`}
-						>
-							{filteredFeatures.map((feature) => (
-								<div key={feature.path} className="space-y-2">
+					<div
+						className={`mt-6 ${filteredMovies.length > 0 ? 'grid grid-cols-1 gap-6 md:grid-cols-4' : ''}`}
+					>
+						{filteredMovies.length === 0 ? (
+							<div className="flex h-full items-center justify-center">
+								No Movie found
+							</div>
+						) : (
+							filteredMovies.map((movie) => (
+								<div key={movie.stored_data_id} className="space-y-2 text-center">
 									<Card
-										className={`bg-blue-800/20 mb-2 transform cursor-pointer overflow-hidden border-0 backdrop-blur-sm transition-transform duration-200 hover:scale-105 ${selectedScenes?.scene_id === feature.scene_id ? 'border border-solid border-buttonBorder' : ''}`}
-										aria-label={`Select ${feature.scene_name}`}
-										onClick={() => handleScenesSelect(feature)}
+										className={`bg-blue-800/20 relative mb-2 transform cursor-pointer overflow-hidden border-0 backdrop-blur-sm transition-transform duration-200 hover:scale-105`}
+										aria-label={`Select ${movie.feature_used}`}
 									>
 										<CardContent className="p-0">
 											<AspectRatio ratio={16 / 9} className="w-full">
-												<Image
-													src={feature.thumbnail_url || '/fallback-image.jpg'}
-													alt={`${feature.scene_name} image`}
-													layout="fill"
-													objectFit="contain"
-													priority={true}
-												/>
-											</AspectRatio>
-										</CardContent>
-									</Card>
-									<p className="text-center text-sm font-bold text-customWhite">
-										{feature.scene_name}
-									</p>
-								</div>
-							))}
-						</div>
-					) : (
-						<div
-							className={`mt-6 ${filteredFeatures.length > 0 ? 'grid grid-cols-1 gap-6 md:grid-cols-4' : ''}`}
-						>
-							{filteredFeatures.length === 0 ? (
-								<div className="flex h-full items-center justify-center">
-									No Scene found
-								</div>
-							) : (
-								filteredFeatures.map((feature) => (
-									<div key={feature.path} className="space-y-2">
-										<Card
-											className={`bg-blue-800/20 mb-2 transform cursor-pointer overflow-hidden border-0 backdrop-blur-sm transition-transform duration-200 hover:scale-105 ${selectedScenes?.scene_id === feature.scene_id ? 'border border-solid border-buttonBorder' : ''}`}
-											aria-label={`Select ${feature.scene_name}`}
-											onClick={() => handleScenesSelect(feature)}
-										>
-											<CardContent className="p-0">
-												<AspectRatio ratio={16 / 9} className="w-full">
+												{movie.mode === 'video' ? (
 													<video
-														src={feature.video_url}
 														controls
+														preload="auto"
+														width="100%"
+														height="auto"
 														playsInline
 														title="Description"
 														controlsList="nodownload noplaybackrate"
 														disablePictureInPicture
-														className="h-full w-full object-contain"
-														aria-label={`Video for ${feature.scene_name}`}
+														className="w-full h-full object-contain rounded-lg "
+													>
+														<source src={movie.output_video_url} type="video/mp4" />
+													</video>
+												) : (
+													<Image
+														src={movie.output_video_url || '/fallback-image.jpg'}
+														alt={`${movie.feature_used} image`}
+														layout="fill"
+														objectFit="contain"
+														priority={true}
 													/>
-												</AspectRatio>
-											</CardContent>
-										</Card>
-										<p className="text-center text-sm font-bold text-customWhite">
-											{feature.scene_name}
-										</p>
-									</div>
-								))
-							)}
-						</div>
-					)}
-				</div>
+												)}
+											</AspectRatio>
+										</CardContent>
 
+									</Card>
+									<div className="text-sm font-bold text-customWhite">
+										{movie.character?.map((character, index) => (
+											<span key={index} className="block">
+												{character.character_movie_name}
+											</span>
+										))}
+									</div>
+								</div>
+							))
+						)}
+					</div>
+				</div>
 				<div className="flex justify-between items-center mt-6 flex-col sm:flex-row">
 					<div
-						className={`flex flex-1 items-center justify-center space-x-2 ${selectedScenes ? 'md:ml-36' : ''}`}
+						className={`flex justify-center items-center space-x-2 sm:flex-1 md:ml-36 flex-wrap sm:space-x-2 `}
 					>
 						<button
 							className={`bg-gradient-custom-gradient hover:bg-blue-600 focus:ring-blue-300 rounded-md border border-buttonBorder px-4 py-2 text-white transition-all duration-200 focus:outline-none focus:ring-2 ${currentPage <= 1 ? 'cursor-not-allowed opacity-50' : ''
@@ -269,63 +222,38 @@ const ScenesPage = ({
 						</button>
 					</div>
 
-					{selectedScenes && (
-						<button
-							className="bg-gradient-custom-gradient ml-4 h-12 w-52 rounded-lg border border-buttonBorder px-4 py-2"
-							onClick={() => {
-								if (selectedScenes) {
-									router.push(`/characters/${selectedScenes.scene_id}`);
-								}
-							}}
-							disabled={!selectedScenes}
-						>
-							Next
-						</button>
-					)}
 				</div>
 			</Card>
 		</div>
 	);
 };
 
+// Server-side fetching
 export async function getServerSideProps(context) {
 	const { query } = context;
 	const page = query.page || 1;
 
 	try {
 		const axios = axiosInstance(context);
-		const response = await axios.post(API_ENDPOINTS.GET_VIEW_ALL_DATA, {
-			page,
-		});
-
-		// Prefetch next page
-		const nextPage = page + 1;
-		const nextResponse = await axios.post(API_ENDPOINTS.GET_VIEW_ALL_DATA, {
-			page: nextPage,
-		});
+		const response = await axios.post(API_ENDPOINTS.GET_VIEW_ALL_DATA, { page });
 
 		return {
 			props: {
-				initialScenes: response?.data?.data?.data || [],
+				initialMovies: response?.data?.data?.data || [],
 				totalCount: response?.data?.data?.totalCount || 0,
 				page: parseInt(page, 10),
-				id,
-				prefetchNextPageData: nextResponse?.data?.data?.data || [],
 			},
 		};
 	} catch (error) {
-		console.error('Error fetching scenes:', error);
+		console.error('Error fetching movies:', error);
 		return {
 			props: {
-				initialScenes: [],
+				initialMovies: [],
 				totalCount: 0,
 				page: 1,
-				id: null,
-				prefetchNextPageData: [],
 			},
 		};
 	}
 }
 
-export default ScenesPage;
-
+export default MoviePage;
