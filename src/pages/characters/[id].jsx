@@ -12,6 +12,7 @@ import CryptoJS from 'crypto-js';
 import Cookie from 'js-cookie';
 import Image from 'next/image';
 import { AspectRatio } from "../../components/components/ui/aspect-ratio";
+import Pagination from '../../components/components/ui/pagination';
 
 const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, prefetchNextPageData, mode }) => {
 	const router = useRouter();
@@ -176,45 +177,14 @@ const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, 
 						)}
 					</div>
 				</div>
-
 				<div className="flex justify-between items-center mt-6 flex-col sm:flex-row">
 					<div className={`flex justify-center items-center space-x-2 sm:flex-1 md:ml-36 flex-wrap sm:space-x-2 ${selectedCharacters ? 'md:ml-36' : ''}`}>
-						<button
-							className={`px-4 py-2 rounded-md bg-gradient-custom-gradient border border-buttonBorder text-white transition-all duration-200 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 ${currentPage <= 1 ? 'opacity-50 cursor-not-allowed' : ''
-								}`}
-							onClick={() => handlePageChange(currentPage - 1)}
-							disabled={currentPage <= 1}
-						>
-							<ChevronLeft className="w-5 h-5" />
-						</button>
-
-						{[...Array(totalPages)].map((_, index) => {
-							const page = index + 1;
-							const isActive = currentPage === page;
-							return (
-								<button
-									key={page}
-									onClick={() => handlePageChange(page)}
-									className={`px-4 py-2 rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-300 ${isActive
-										? 'bg-white text-lg font-bold text-blue hover:bg-blue-100 hover:border hover:border-blue-500 '
-										: 'bg-gradient-custom-gradient border border-buttonBorder text-white'
-										}`}
-								>
-									{page}
-								</button>
-							);
-						})}
-
-						<button
-							className={`px-4 py-2 rounded-md bg-gradient-custom-gradient border border-buttonBorder text-white transition-all duration-200 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 ${currentPage >= totalPages ? 'opacity-50 cursor-not-allowed' : ''
-								}`}
-							onClick={() => handlePageChange(currentPage + 1)}
-							disabled={currentPage >= totalPages}
-						>
-							<ChevronRight className="w-5 h-5" />
-						</button>
+						<Pagination
+							currentPage={currentPage}
+							totalPages={totalPages}
+							onPageChange={handlePageChange}
+						/>
 					</div>
-
 					{selectedCharacters.length > 0 && (
 						<button
 							className="px-4 py-2 rounded-lg bg-gradient-custom-gradient border border-buttonBorder w-52 h-12 mt-4 sm:ml-4 sm:mt-0"
@@ -224,7 +194,6 @@ const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, 
 							Next
 						</button>
 					)}
-
 				</div>
 			</Card>
 		</div>

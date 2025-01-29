@@ -45,13 +45,14 @@ const Header = () => {
           className="ml-5 mr-4 max-w-[40%]"
         />
       </Link>
-      <div className="bg-gradient-custom-gradient shadow-shadow-500 relative mt-[3px] flex h-[60px] !w-[85px] flex-grow items-center justify-around gap-2 rounded-full border border-buttonBorder px-2 py-2 text-white shadow-xl dark:!bg-navy-800 dark:shadow-none md:flex-grow-0 md:gap-1 xl:w-[150px] xl:gap-2">
+      <div className="bg-gradient-custom-gradient shadow-shadow-500 relative  flex h-[60px] w-[60px] flex-grow items-center justify-center gap-2 rounded-full border border-buttonBorder text-white shadow-xl dark:!bg-navy-800 dark:shadow-none md:flex-grow-0 md:gap-1 xl:w-[60px] xl:gap-2">
         <Avatar className="ml-auto cursor-pointer text-3xl">
           <AvatarFallback>
             {userEmail ? getFirstLetter(userEmail) : ''}
           </AvatarFallback>
         </Avatar>
       </div>
+
     </div>
   );
 };

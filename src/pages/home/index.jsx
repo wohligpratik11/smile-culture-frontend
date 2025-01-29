@@ -79,7 +79,7 @@ const Home = () => {
         />
         <meta name="apple-mobile-web-app-capable" content="yes" />
       </Head>
-      <div className="h-[835px] min-h-screen p-6">
+      <div className="h-[835px] min-h-screen p-4">
         <Card className="bg-card-cardCustomBlue p-4">
           <div className="mt-2 space-y-4">
             <div className="relative flex justify-end">

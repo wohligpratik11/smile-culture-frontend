@@ -243,7 +243,7 @@ const UploadPage = ({ movies }) => {
   };
 
   return (
-    <div className="h-[835px] min-h-screen p-6">
+    <div className="h-[835px] min-h-screen p-4">
       <Card className="bg-card-cardCustomBlue p-6">
         <div className="space-y-4">
           <div className="flex items-center gap-4">
@@ -275,9 +275,8 @@ const UploadPage = ({ movies }) => {
                 <div key={index}>
                   <div className="flex flex-col gap-2 sm:flex-row">
                     <Card
-                      className={`h-[122px] w-full cursor-pointer rounded-xl shadow transition-all sm:w-[172px] ${
-                        !previewData ? 'border border-slateBlue p-1 shadow' : ''
-                      } `}
+                      className={`h-[122px] w-full cursor-pointer rounded-xl shadow transition-all sm:w-[172px] ${!previewData ? 'border border-slateBlue p-1 shadow' : ''
+                        } `}
                       onClick={() => handleCharacterClick(movie)}
                     >
                       <div className="flex flex-col items-center gap-2">

@@ -11,6 +11,7 @@ import axiosInstance from '../../lib/api/axiosInstance';
 import Cookie from 'js-cookie';
 import Image from 'next/image';
 import { AspectRatio } from '../../components/components/ui/aspect-ratio';
+import Pagination from '../../components/components/ui/pagination';
 
 const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 	const router = useRouter();
@@ -96,7 +97,7 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 	};
 
 	return (
-		<div className="h-[835px] min-h-screen p-6">
+		<div className="h-[835px] min-h-screen p-4">
 			<Card className="bg-card-cardCustomBlue p-6">
 				<div className="space-y-4">
 					<div className="flex items-center gap-4">
@@ -182,47 +183,14 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 						)}
 					</div>
 				</div>
-				<div className="flex justify-between items-center mt-6 flex-col sm:flex-row">
-					<div
-						className={`flex justify-center items-center space-x-2 sm:flex-1 md:ml-36 flex-wrap sm:space-x-2 `}
-					>
-						<button
-							className={`bg-gradient-custom-gradient hover:bg-blue-600 focus:ring-blue-300 rounded-md border border-buttonBorder px-4 py-2 text-white transition-all duration-200 focus:outline-none focus:ring-2 ${currentPage <= 1 ? 'cursor-not-allowed opacity-50' : ''
-								}`}
-							onClick={() => handlePageChange(currentPage - 1)}
-							disabled={currentPage <= 1}
-						>
-							<ChevronLeft className="h-5 w-5" />
-						</button>
-
-						{[...Array(totalPages)].map((_, index) => {
-							const page = index + 1;
-							const isActive = currentPage === page;
-							return (
-								<button
-									key={page}
-									onClick={() => handlePageChange(page)}
-									className={`focus:ring-blue-300 rounded-md px-4 py-2 transition-all duration-200 focus:outline-none focus:ring-2 ${isActive
-										? 'hover:bg-blue-100 hover:border-blue-500 bg-white text-lg font-bold text-blue hover:border'
-										: 'bg-gradient-custom-gradient border border-buttonBorder text-white'
-										}`}
-								>
-									{page}
-								</button>
-							);
-						})}
-
-						<button
-							className={`bg-gradient-custom-gradient hover:bg-blue-600 focus:ring-blue-300 rounded-md border border-buttonBorder px-4 py-2 text-white transition-all duration-200 focus:outline-none focus:ring-2 ${currentPage >= totalPages ? 'cursor-not-allowed opacity-50' : ''
-								}`}
-							onClick={() => handlePageChange(currentPage + 1)}
-							disabled={currentPage >= totalPages}
-						>
-							<ChevronRight className="h-5 w-5" />
-						</button>
-					</div>
-
+				<div className="flex justify-center items-center mt-6 flex-col sm:flex-row">
+					<Pagination
+						currentPage={currentPage}
+						totalPages={totalPages}
+						onPageChange={handlePageChange}
+					/>
 				</div>
+
 			</Card>
 		</div>
 	);
