@@ -110,26 +110,66 @@ const Home = () => {
                 <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-3">
                   {features.map((feature) => (
                     <div key={feature.title} className="space-y-2">
-                      <Link href={feature.path} passHref legacyBehavior>
-                        <Card
-                          className="mb-6 transform cursor-pointer overflow-hidden border-0 bg-blue-800/20 backdrop-blur-sm transition-transform duration-200 hover:scale-105"
-                          aria-label={`Go to ${feature.title}`}
-                          onClick={() => handleFeatureClick(feature)}
-                        >
-                          <CardContent className="p-0">
-                            <div className="relative aspect-video">
-                              <img
-                                src={feature.image}
-                                alt={`${feature.title} image`}
-                                className="h-full w-full object-cover"
-                              />
-                            </div>
-                          </CardContent>
-                        </Card>
-                      </Link>
-                      <Link href={feature.path} passHref legacyBehavior>
+                      {/* Card Section */}
+                      {feature.title === 'face-swap' ? (
+                        <Link href={feature.path} passHref legacyBehavior>
+                          <Card
+                            className="mb-6 transform cursor-pointer overflow-hidden border-0 bg-blue-800/20 backdrop-blur-sm transition-transform duration-200 hover:scale-105"
+                            aria-label={`Go to ${feature.title}`}
+                            onClick={() => handleFeatureClick(feature)}
+                          >
+                            <CardContent className="p-0">
+                              <div className="relative aspect-video">
+                                <img
+                                  src={feature.image}
+                                  alt={`${feature.title} image`}
+                                  className="h-full w-full object-cover"
+                                />
+                              </div>
+                            </CardContent>
+                          </Card>
+                        </Link>
+                      ) : (
+                        <div className="mb-6 cursor-not-allowed">
+                          <Card className="transform overflow-hidden border-0 bg-blue-800/20 backdrop-blur-sm transition-transform duration-200">
+                            <CardContent className="p-0">
+                              <div className="relative aspect-video">
+                                <img
+                                  src={feature.image}
+                                  alt={`${feature.title} image`}
+                                  className="h-full w-full object-cover"
+                                />
+                                {/* Coming Soon Overlay */}
+                                <div className="absolute inset-0 flex items-center justify-center bg-gray-900/80 backdrop-blur-[2px]">
+                                  <div className="text-center">
+                                    <span className="text-3xl font-bold text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
+                                      Coming Soon
+                                    </span>
+                                    <div className="mt-2 h-1 w-16 bg-gradient-to-r from-transparent via-white to-transparent opacity-75" />
+                                  </div>
+                                </div>
+                              </div>
+                            </CardContent>
+                          </Card>
+                        </div>
+                      )}
+
+                      {/* Button Section */}
+                      {feature.title === 'face-swap' ? (
+                        <Link href={feature.path} passHref legacyBehavior>
+                          <div
+                            className="flex h-14 cursor-pointer items-center justify-center rounded-2xl border border-slateBlue text-center text-lg font-medium capitalize text-white"
+                            style={{
+                              background:
+                                'linear-gradient(180deg, rgba(49, 58, 91, 0) -1.11%, rgba(49, 58, 91, 0.44) 23.83%, #313A5B 99.56%)',
+                            }}
+                          >
+                            {feature.title}
+                          </div>
+                        </Link>
+                      ) : (
                         <div
-                          className="flex h-14 cursor-pointer items-center justify-center rounded-2xl border border-slateBlue text-center text-lg font-medium capitalize text-white"
+                          className="flex h-14 cursor-not-allowed items-center justify-center rounded-2xl border border-slateBlue text-center text-lg font-medium capitalize text-white/50"
                           style={{
                             background:
                               'linear-gradient(180deg, rgba(49, 58, 91, 0) -1.11%, rgba(49, 58, 91, 0.44) 23.83%, #313A5B 99.56%)',
@@ -137,7 +177,7 @@ const Home = () => {
                         >
                           {feature.title}
                         </div>
-                      </Link>
+                      )}
                     </div>
                   ))}
                 </div>

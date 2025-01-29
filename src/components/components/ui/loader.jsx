@@ -13,14 +13,14 @@ export default function LoadingScreen({ remainingTime }) {
 				</div>
 				<div className="space-y-2">
 					<p className="text-lg">This may take a moment. Feel free to work on other tasks while we complete the process.</p>
-					<a
+					{/* <a
 						href="https://erosnow.com/login"
 						target="_blank"
 						rel="noopener noreferrer" // for security reasons
 						className="text-lg text-[#64b5f6] hover:text-[#90f9d6] transition-colors inline-flex items-center gap-1"
 					>
 						Explore the Community {">"}
-					</a>
+					</a> */}
 				</div>
 
 			</div>
