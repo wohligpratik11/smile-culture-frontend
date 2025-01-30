@@ -230,9 +230,10 @@ const ScenesPage = ({
 
 											aria-label={`Select ${feature.scene_name}`}
 											onClick={() => handleScenesSelect(feature)}
+											onTouchStart={() => handleScenesSelect(feature)}
 										>
 											<CardContent className="p-0">
-												<AspectRatio ratio={16 / 9} className="w-full">
+												<AspectRatio ratio={16 / 9} className="w-full" style={{ pointerEvents: 'none' }}>
 													<video
 														src={feature.compressed_video_url}
 														controls
