@@ -138,7 +138,7 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
           </div>
 
           <div
-            className={`mt-6 ${filteredFeatures.length > 0 ? 'grid grid-cols-1 gap-6 md:grid-cols-4' : ''}`}
+            className={`mt-6 ${filteredFeatures.length > 0 ? 'grid grid-cols-2 gap-6 sm:grid-cols-4' : ''}`}
           >
             {filteredFeatures.length === 0 ? (
               <div className="flex h-full items-center justify-center">

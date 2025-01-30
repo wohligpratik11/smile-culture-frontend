@@ -181,7 +181,7 @@ const ScenesPage = ({
 
 					{selectedTab === 'image' ? (
 						<div
-							className={`mt-6 ${filteredFeatures.length > 0 ? 'grid grid-cols-1 gap-6 md:grid-cols-4' : ''}`}
+							className={`mt-6 ${filteredFeatures.length > 0 ? 'grid grid-cols-2 gap-6 md:grid-cols-4' : ''}`}
 						>
 							{filteredFeatures.map((feature) => (
 								<div key={feature.path} className="space-y-2">
@@ -195,7 +195,9 @@ const ScenesPage = ({
 												<Image
 													src={feature.thumbnail_url || '/fallback-image.jpg'}
 													alt={`${feature.scene_name} image`}
-													layout="fill"
+													width={500}
+													height={500}
+													quality={100}
 													objectFit="contain"
 													priority={true}
 												/>
@@ -210,7 +212,7 @@ const ScenesPage = ({
 						</div>
 					) : (
 						<div
-							className={`mt-6 ${filteredFeatures.length > 0 ? 'grid grid-cols-1 gap-6 md:grid-cols-4' : ''}`}
+							className={`mt-6 ${filteredFeatures.length > 0 ? 'grid grid-cols-2 gap-6 md:grid-cols-4' : ''}`}
 						>
 							{filteredFeatures.length === 0 ? (
 								<div className="flex h-full items-center justify-center">
