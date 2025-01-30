@@ -82,10 +82,14 @@ const ScenesPage = ({
 	);
 
 	const handleScenesSelect = (scene) => {
-		setSelectedScenes((prev) =>
-			prev?.scene_id === scene.scene_id ? null : scene
-		);
+		console.log('Scene clicked:', scene); // Log the selected scene
+		setSelectedScenes((prev) => {
+			const updatedScene = prev?.scene_id === scene.scene_id ? null : scene;
+			console.log('Updated selected scene:', updatedScene); // Log the updated scene
+			return updatedScene;
+		});
 	};
+
 	const handleTabChange = (tab) => {
 		setSelectedTab(tab);
 		setSelectedScenes(null);
@@ -223,6 +227,7 @@ const ScenesPage = ({
 									<div key={feature.path} className="space-y-2">
 										<Card
 											className={`bg-blue-800/20 mb-2 transform cursor-pointer overflow-hidden border-0 backdrop-blur-sm transition-transform duration-200 hover:scale-105 ${selectedScenes?.scene_id === feature.scene_id ? 'border border-solid border-buttonBorder' : ''}`}
+
 											aria-label={`Select ${feature.scene_name}`}
 											onClick={() => handleScenesSelect(feature)}
 										>
