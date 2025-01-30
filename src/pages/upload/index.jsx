@@ -335,7 +335,6 @@ const UploadPage = ({ movies }) => {
                       </div>
                     </Card>
 
-                    {/* Character Card/Thumbnail */}
                     <div className="mt-2 flex flex-col items-center gap-2 sm:ml-2 sm:mt-0">
                       <Image
                         src={movie.url || UploadImages}

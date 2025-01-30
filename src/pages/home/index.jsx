@@ -82,13 +82,13 @@ const Home = () => {
       <div className="h-[835px] min-h-screen p-4">
         <Card className="bg-card-cardCustomBlue p-4">
           <div className="mt-2 space-y-4">
-            <div className="relative flex justify-end">
+            <div className="relative flex justify-end mb-9 sm:mb-0">
               <Link href="/viewall" passHref>
                 <button
-                  className="px-4 py-2 rounded-lg bg-gradient-custom-gradient border border-buttonBorder"
-                  aria-label="Go Back"
+                  className="px-4 py-2 rounded-lg bg-gradient-custom-gradient border border-buttonBorder cursor-pointer"
+                  aria-label="My Creations"
                 >
-                  View All
+                  My Creations
                 </button>
               </Link>
             </div>

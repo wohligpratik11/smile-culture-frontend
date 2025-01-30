@@ -112,7 +112,7 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 
 						<div className="mt-4 text-lg font-medium leading-10">
 							<h1 className="mb-4 text-2xl font-medium capitalize leading-10 text-customWhite">
-								View All
+								My Creations
 							</h1>
 						</div>
 					</div>
@@ -172,11 +172,9 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 
 									</Card>
 									<div className="text-sm font-bold text-customWhite">
-										{movie.character?.map((character, index) => (
-											<span key={index} className="block">
-												{character.character_movie_name}
-											</span>
-										))}
+										<span className="block">
+											{movie?.character_movie_name}
+										</span>
 									</div>
 								</div>
 							))

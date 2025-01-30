@@ -159,7 +159,7 @@ const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, 
 										<CardContent className="p-0">
 											<AspectRatio ratio={16 / 9} className="w-full">
 												<Image
-													src={feature.thumbnail_url || '/fallback-image.jpg'}
+													src={feature.compressed_thumbnail_url || '/fallback-image.jpg'}
 													alt={`${feature.character_real_name} image`}
 													objectFit="contain"
 													layout="responsive"

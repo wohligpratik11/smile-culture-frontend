@@ -13,6 +13,8 @@ module.exports = {
         dm: ['DM Sans', 'sans-serif'],
       },
       screens: {
+        xs: '576px',
+        'xs-max': { max: '320px' },
         sm: '576px',
         'sm-max': { max: '576px' },
         md: '768px',

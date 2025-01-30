@@ -193,7 +193,7 @@ const ScenesPage = ({
 										<CardContent className="p-0">
 											<AspectRatio ratio={16 / 9} className="w-full">
 												<Image
-													src={feature.thumbnail_url || '/fallback-image.jpg'}
+													src={feature.compressed_thumbnail_url || '/fallback-image.jpg'}
 													alt={`${feature.scene_name} image`}
 													width={500}
 													height={500}
@@ -212,7 +212,7 @@ const ScenesPage = ({
 						</div>
 					) : (
 						<div
-							className={`mt-6 ${filteredFeatures.length > 0 ? 'grid grid-cols-2 gap-6 md:grid-cols-4' : ''}`}
+							className={`mt-6 ${filteredFeatures.length > 0 ? 'grid grid-cols-1 gap-6 md:grid-cols-4' : ''}`}
 						>
 							{filteredFeatures.length === 0 ? (
 								<div className="flex h-full items-center justify-center">
@@ -229,7 +229,7 @@ const ScenesPage = ({
 											<CardContent className="p-0">
 												<AspectRatio ratio={16 / 9} className="w-full">
 													<video
-														src={feature.video_url}
+														src={feature.compressed_video_url}
 														controls
 														playsInline
 														title="Description"
