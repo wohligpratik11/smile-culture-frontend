@@ -22,6 +22,7 @@ const MediaUploader = ({ onUploadComplete }) => {
   const { showSpinner, hideSpinner } = useSpinner(); // Use the spinner hook here
   const [uppyInstance, setUppyInstance] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [isRecording, setIsRecording] = useState(false); // Add state for recording status
 
   useEffect(() => {
     const initUppy = async () => {
@@ -30,6 +31,7 @@ const MediaUploader = ({ onUploadComplete }) => {
       const ImageEditor = (await import('@uppy/image-editor')).default;
       const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
       const facingMode = isMobile ? 'user' : 'environment';
+
 
       const uppy = new Uppy({
         autoProceed: false,
@@ -44,7 +46,23 @@ const MediaUploader = ({ onUploadComplete }) => {
           facingMode
         })
         .use(ImageEditor);
+      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({ video: true })
+          .then(() => {
+            console.log('Camera access granted');
+          })
+          .catch((error) => {
+            console.error('Camera access denied:', error);
+            alert('Camera access is required.');
+          });
+      }
+      uppy.on('startRecording', () => {
+        setIsRecording(true); // When recording starts, set isRecording to true
+      });
 
+      uppy.on('stopRecording', () => {
+        setIsRecording(false); // When recording stops, set isRecording to false
+      });
       uppy.on('complete', async (result) => {
         const files = result.successful;
 
@@ -52,7 +70,7 @@ const MediaUploader = ({ onUploadComplete }) => {
           const uploadedFiles = files.map(file => file.data);
 
           setIsUploading(true);
-
+          setIsRecording(false);
           if (onUploadComplete) {
             await onUploadComplete(uploadedFiles);
           }
@@ -78,11 +96,7 @@ const MediaUploader = ({ onUploadComplete }) => {
       }
     };
   }, [onUploadComplete, showSpinner, hideSpinner]);
-  if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-    console.log('Camera is supported!');
-  } else {
-    console.log('Camera is not supported on this device.');
-  }
+
 
   return (
     <div className="relative">
