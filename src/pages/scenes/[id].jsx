@@ -238,6 +238,7 @@ const ScenesPage = ({
 														src={feature.compressed_video_url}
 														controls
 														playsInline
+														muted
 														title="Description"
 														controlsList="nodownload noplaybackrate"
 														disablePictureInPicture
