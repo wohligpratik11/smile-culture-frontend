@@ -42,7 +42,7 @@ const Header = () => {
         <img
           src={ErosNow.src}
           alt="ErosNow"
-          className="ml-5 mr-4 max-w-[80%] sm:max-w-[40%] cursor-pointer"
+          className="ml-5 mr-4 max-w-[60%] sm:max-w-[40%] cursor-pointer"
         />
       </Link>
       <div className="bg-gradient-custom-gradient shadow-shadow-500 relative  flex h-[60px] w-[60px] flex-grow items-center justify-center gap-2 rounded-full border border-buttonBorder text-white shadow-xl dark:!bg-navy-800 dark:shadow-none md:flex-grow-0 md:gap-1 xl:w-[60px] xl:gap-2">
