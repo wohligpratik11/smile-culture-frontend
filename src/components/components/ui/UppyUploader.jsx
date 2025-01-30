@@ -37,7 +37,10 @@ const MediaUploader = ({ onUploadComplete }) => {
           allowedFileTypes: ['image/*', 'video/*'],
         },
       })
-        .use(Webcam, { modes: ['picture', 'video'] })
+        .use(Webcam, {
+          modes: ['picture', 'video'],
+          facingMode: 'environment'
+        })
         .use(ImageEditor);
 
       uppy.on('complete', async (result) => {
@@ -46,14 +49,14 @@ const MediaUploader = ({ onUploadComplete }) => {
         if (files.length > 0) {
           const uploadedFiles = files.map(file => file.data);
 
-          setIsUploading(true); 
+          setIsUploading(true);
 
           if (onUploadComplete) {
             await onUploadComplete(uploadedFiles);
           }
 
           hideSpinner();
-          setIsUploading(false); 
+          setIsUploading(false);
         }
       });
 
