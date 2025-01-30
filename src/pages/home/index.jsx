@@ -148,7 +148,7 @@ const Home = () => {
                                   className="h-full w-full object-cover"
                                 />
                                 {/* Coming Soon Overlay */}
-                                <div className="bg-gray-900/80 absolute inset-0 flex items-center justify-center backdrop-blur-[2px]">
+                                <div className="bg-gray-900/80 absolute inset-0 flex items-center justify-center !backdrop-blur-[2px]">
                                   <div className="text-center">
                                     <span className="text-3xl font-bold text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.6)]">
                                       Coming Soon

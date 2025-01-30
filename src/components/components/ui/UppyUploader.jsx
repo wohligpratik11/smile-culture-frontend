@@ -28,6 +28,8 @@ const MediaUploader = ({ onUploadComplete }) => {
       const Uppy = (await import('@uppy/core')).default;
       const Webcam = (await import('@uppy/webcam')).default;
       const ImageEditor = (await import('@uppy/image-editor')).default;
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      const facingMode = isMobile ? 'user' : 'environment';
 
       const uppy = new Uppy({
         autoProceed: false,
@@ -39,7 +41,7 @@ const MediaUploader = ({ onUploadComplete }) => {
       })
         .use(Webcam, {
           modes: ['picture', 'video'],
-          facingMode: 'environment'
+          facingMode
         })
         .use(ImageEditor);
 
@@ -76,6 +78,11 @@ const MediaUploader = ({ onUploadComplete }) => {
       }
     };
   }, [onUploadComplete, showSpinner, hideSpinner]);
+  if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+    console.log('Camera is supported!');
+  } else {
+    console.log('Camera is not supported on this device.');
+  }
 
   return (
     <div className="relative">
