@@ -82,6 +82,7 @@ const ScenesPage = ({
 	);
 
 	const handleScenesSelect = (scene) => {
+		event.stopPropagation();
 		console.log('Scene clicked:', scene); // Log the selected scene
 		setSelectedScenes((prev) => {
 			const updatedScene = prev?.scene_id === scene.scene_id ? null : scene;
@@ -230,7 +231,6 @@ const ScenesPage = ({
 
 											aria-label={`Select ${feature.scene_name}`}
 											onClick={() => handleScenesSelect(feature)}
-											onTouchStart={() => handleScenesSelect(feature)}
 										>
 											<CardContent className="p-0">
 												<AspectRatio ratio={16 / 9} className="w-full" style={{ pointerEvents: 'none' }}>
@@ -243,6 +243,7 @@ const ScenesPage = ({
 														disablePictureInPicture
 														className="h-full w-full object-contain"
 														aria-label={`Video for ${feature.scene_name}`}
+														style={{ pointerEvents: 'none' }}
 													/>
 												</AspectRatio>
 											</CardContent>

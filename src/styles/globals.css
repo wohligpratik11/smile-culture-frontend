@@ -9,7 +9,6 @@
   --background-image: url('../../public/assets/images/erosnowbg.webp') !important;
 }
 
-
 body {
   background-color: var(--background-color) !important;
   color: var(--text-color);
@@ -164,6 +163,11 @@ body {
   border-top: 8px solid #3498db;
   border-radius: 50%;
   animation: lds-dual-ring 1.2s linear infinite;
+}
+
+.card {
+  position: relative;
+  z-index: 10;
 }
 
 @keyframes lds-dual-ring {
