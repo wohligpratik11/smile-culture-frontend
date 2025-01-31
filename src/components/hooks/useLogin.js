@@ -8,8 +8,8 @@ export const useLogin = () => {
     const handleLogin = async () => {
       try {
         const response = await apiService.post(API_ENDPOINTS.LOGIN, {
-          user_email: 'pratik.sawant@gmail.in',
-          password: '1234',
+          user_email: 'jainam.nisar@wohlig.in',
+          password: '123',
         });
         Cookies.set('userData', JSON.stringify(response.data?.data));
       } catch (error) {

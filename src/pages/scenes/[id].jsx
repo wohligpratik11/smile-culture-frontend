@@ -125,7 +125,7 @@ const ScenesPage = ({
 
 	return (
 		<div className="h-[835px] min-h-screen p-4">
-			<Card className="bg-card-cardCustomBlue p-6">
+			<Card className="bg-card-cardCustomBlue p-4">
 				<div className="space-y-4">
 					<div className="flex items-center gap-4">
 						<Link href="#" passHref>
@@ -186,7 +186,7 @@ const ScenesPage = ({
 
 					{selectedTab === 'image' ? (
 						<div
-							className={`mt-6 ${filteredFeatures.length > 0 ? 'grid grid-cols-2 gap-6 md:grid-cols-4' : ''}`}
+							className={`mt-6 ${filteredFeatures.length > 0 ? 'grid grid-cols-1 gap-6 md:grid-cols-4' : ''}`}
 						>
 							{filteredFeatures.map((feature) => (
 								<div key={feature.path} className="space-y-2">
@@ -239,6 +239,7 @@ const ScenesPage = ({
 														controls
 														playsInline
 														muted
+														preload="auto"
 														title="Description"
 														controlsList="nodownload noplaybackrate"
 														disablePictureInPicture

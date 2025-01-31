@@ -244,7 +244,7 @@ const UploadPage = ({ movies }) => {
 
   return (
     <div className="h-[835px] min-h-screen p-4">
-      <Card className="bg-card-cardCustomBlue p-6">
+      <Card className="bg-card-cardCustomBlue p-4">
         <div className="space-y-4">
           <div className="flex items-center gap-4">
             <Link href={router.asPath} passHref>

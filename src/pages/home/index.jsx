@@ -95,7 +95,7 @@ const Home = () => {
 
             <div className="flex justify-center ">
               <div className="flex flex-col sm:flex-row items-center justify-center text-center text-customWhite h-14">
-                <span className="text-base sm:text-xl md:text-2xl lg:text-4xl font-semibold text-center px-4">
+                <span className="text-base sm:text-xl md:text-2xl lg:text-4xl font-semibold text-center ">
                   Live Your Movie Dream—Step Into the Spotlight!
                 </span>
                 <img
@@ -104,7 +104,6 @@ const Home = () => {
                   className="w-10 h-10 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-28 lg:h-28 object-contain"
                 />
               </div>
-
             </div>
             <div className="mt-6 flex justify-center space-x-4">
               <div className="w-1004 text-center text-xl leading-7 text-customWhite">

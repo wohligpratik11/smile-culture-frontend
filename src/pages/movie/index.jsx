@@ -106,7 +106,7 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 
   return (
     <div className="h-[835px] min-h-screen p-4">
-      <Card className="bg-card-cardCustomBlue p-6">
+      <Card className="bg-card-cardCustomBlue p-4">
         <div className="space-y-4">
           <div className="flex items-center gap-4">
             <Link href="/">
@@ -138,7 +138,7 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
           </div>
 
           <div
-            className={`mt-6 ${filteredFeatures.length > 0 ? 'grid grid-cols-2 gap-6 sm:grid-cols-4' : ''}`}
+            className={`mt-6 ${filteredFeatures.length > 0 ? 'grid grid-cols-1 gap-6 sm:grid-cols-4' : ''}`}
           >
             {filteredFeatures.length === 0 ? (
               <div className="flex h-full items-center justify-center">

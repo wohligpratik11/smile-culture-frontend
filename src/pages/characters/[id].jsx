@@ -107,7 +107,7 @@ const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, 
 
 	return (
 		<div className="min-h-screen p-6 h-[835px]">
-			<Card className="bg-card-cardCustomBlue p-6 ">
+			<Card className="bg-card-cardCustomBlue p-4">
 				<div className="space-y-4">
 					<div className="flex items-center gap-4">
 						<Link href={router.asPath} passHref>
@@ -142,7 +142,7 @@ const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, 
 						Choose Character
 					</div>
 
-					<div className={`mt-6 ${filteredFeatures.length > 0 ? 'grid grid-cols-2 md:grid-cols-4 gap-6' : ''}`}>
+					<div className={`mt-6 ${filteredFeatures.length > 0 ? 'grid grid-cols-1 md:grid-cols-4 gap-6' : ''}`}>
 						{filteredFeatures.length === 0 ? (
 							<div className="flex justify-center items-center h-full">
 								No Character found

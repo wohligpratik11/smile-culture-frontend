@@ -21,7 +21,7 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 	const [movies, setMovies] = useState(initialMovies);
 	const [currentPage, setCurrentPage] = useState(initialPage);
 	const [totalPages, setTotalPages] = useState(Math.ceil(totalCount / 8));
-
+	const [selectedTab, setSelectedTab] = useState('video');
 	useEffect(() => {
 		const title = Cookie.get('title');
 		setTitleFromCookie(title);
@@ -35,18 +35,27 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 		}
 	}, [router.query.page]);
 
-	// Fetch new movies when page changes
+	useEffect(() => {
+		const fetchMovies = async () => {
+			try {
+				const axios = axiosInstance();
+				const response = await axios.post(API_ENDPOINTS.GET_VIEW_ALL_DATA, {
+					page: currentPage,
+					mode: selectedTab,
+				});
+				setMovies(response?.data?.data?.data || []);
+				setTotalPages(Math.ceil(response?.data?.data?.totalCount / 8));
+			} catch (error) {
+				console.error('Error fetching movies:', error);
+			}
+		};
+		if (selectedTab) {
+			fetchMovies();
+		}
+	}, [selectedTab, currentPage]); // Trigger the effect when selectedTab or currentPage changes
+
 	const handlePageChange = async (page) => {
 		if (page < 1 || page > totalPages) return;
-
-		router.push(
-			{
-				pathname: router.pathname,
-				query: { ...router.query, page },
-			},
-			undefined,
-			{ shallow: true }
-		);
 
 		setCurrentPage(page);
 
@@ -54,6 +63,7 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 			const axios = axiosInstance();
 			const response = await axios.post(API_ENDPOINTS.GET_VIEW_ALL_DATA, {
 				page,
+				mode: selectedTab, // Send selectedTab state here
 			});
 
 			// Map API response to features
@@ -63,6 +73,7 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 			console.error('Error fetching movies:', error);
 		}
 	};
+
 
 	// Handle search input
 	const handleSearchChange = (e) => {
@@ -78,23 +89,6 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 		setSelectedMovie((prev) => (prev?.stored_data_id === movie.stored_data_id ? null : movie));
 	};
 
-	const renderHeader = () => {
-		if (titleFromCookie) {
-			const formattedTitle = titleFromCookie
-				.replace(/-/g, ' ')
-				.replace(/\b\w/g, (char) => char.toUpperCase());
-			return (
-				<h1 className="mb-4 text-2xl font-medium capitalize leading-10 text-customWhite">
-					{formattedTitle}
-				</h1>
-			);
-		}
-		return (
-			<h1 className="mb-4 text-2xl font-medium capitalize leading-10 text-customWhite">
-				Loading...
-			</h1>
-		);
-	};
 
 	return (
 		<div className="h-[835px] min-h-screen p-4">
@@ -127,6 +121,26 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 							className="w-full rounded-full border-none bg-blueYonder py-3 pl-12 pr-3 text-customWhite placeholder-customWhite"
 						/>
 					</div>
+					<div className="flex space-x-2">
+						<button
+							className={`rounded-full px-6 py-2 font-semibold text-white transition-colors duration-200 ${selectedTab === 'video' ? 'bg-gradient-custom-gradient border border-buttonBorder' : 'cursor-pointer border border-slateBlue bg-blueYonder transition-all'}`}
+							onClick={() => {
+								setSelectedTab('video');
+							}}
+						>
+							Scenes
+						</button>
+						<button
+							className={`rounded-full px-6 py-2 font-semibold text-white transition-colors duration-200 ${selectedTab === 'image' ? 'bg-gradient-custom-gradient border border-buttonBorder' : 'cursor-pointer border border-slateBlue bg-blueYonder transition-all'}`}
+							onClick={() => {
+								setSelectedTab('image');
+							}}
+						>
+							Images
+						</button>
+					</div>
+
+
 
 					<div
 						className={`mt-6 ${filteredMovies.length > 0 ? 'grid grid-cols-1 gap-6 md:grid-cols-4' : ''}`}
@@ -181,7 +195,7 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 						)}
 					</div>
 				</div>
-				<div className="flex justify-center items-center mt-6 flex-col sm:flex-row">
+				<div className="flex justify-center items-center mt-6 flex-col sm:flex-row ">
 					<Pagination
 						currentPage={currentPage}
 						totalPages={totalPages}
@@ -194,14 +208,14 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 	);
 };
 
-// Server-side fetching
+// Server-side fetching (unchanged)
 export async function getServerSideProps(context) {
 	const { query } = context;
 	const page = query.page || 1;
 
 	try {
 		const axios = axiosInstance(context);
-		const response = await axios.post(API_ENDPOINTS.GET_VIEW_ALL_DATA, { page });
+		const response = await axios.post(API_ENDPOINTS.GET_VIEW_ALL_DATA, { page, mode: 'video' }); // Default to 'video'
 
 		return {
 			props: {
