@@ -233,19 +233,17 @@ const ScenesPage = ({
 											onClick={() => handleScenesSelect(feature)}
 										>
 											<CardContent className="p-0">
-												<AspectRatio ratio={16 / 9} className="w-full" style={{ pointerEvents: 'none' }}>
+												<AspectRatio ratio={16 / 9} className="w-full" >
 													<video
 														src={feature.compressed_video_url}
 														controls
 														playsInline
-														muted
-														preload="auto"
+														autoPlay="auto"
 														title="Description"
 														controlsList="nodownload noplaybackrate"
 														disablePictureInPicture
 														className="h-full w-full object-contain"
 														aria-label={`Video for ${feature.scene_name}`}
-														style={{ pointerEvents: 'none' }}
 													/>
 												</AspectRatio>
 											</CardContent>
@@ -283,8 +281,8 @@ const ScenesPage = ({
 						</button>
 					)}
 				</div>
-			</Card>
-		</div>
+			</Card >
+		</div >
 	);
 };
 
