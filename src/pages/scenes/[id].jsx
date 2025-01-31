@@ -238,7 +238,6 @@ const ScenesPage = ({
 														src={feature.compressed_video_url}
 														controls
 														playsInline
-														autoPlay="auto"
 														title="Description"
 														controlsList="nodownload noplaybackrate"
 														disablePictureInPicture

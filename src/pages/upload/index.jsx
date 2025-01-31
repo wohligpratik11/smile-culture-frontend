@@ -194,7 +194,7 @@ const UploadPage = ({ movies }) => {
       if (response.data.status_code === 200) {
         setIsUploadSuccessful(true);
         addToast({
-          title: 'Data created successfully.',
+          title: response.data.data?.msg || 'Upload successful',
           type: 'success',
         });
         const outputVideoUrl = response.data?.data[0]?.output_video_url;
@@ -314,7 +314,9 @@ const UploadPage = ({ movies }) => {
                               alt="Uploaded Image"
                               width={150}
                               height={80}
+                              loading="lazy"
                               className="contain rounded-2xl border border-slateBlue shadow"
+                              style={{ objectFit: "contain" }}
                             />
                           </div>
                         ) : (
