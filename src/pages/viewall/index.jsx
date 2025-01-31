@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { Input } from '../../components/components/ui/input';
 import { Card, CardContent } from '../../components/components/ui/card';
 import Link from 'next/link';
+import { FiShare2 } from 'react-icons/fi';
 import { ArrowLeft } from 'lucide-react';
 import { ChevronRight, ChevronLeft } from 'lucide-react';
 import { CiSearch } from 'react-icons/ci';
@@ -12,6 +13,7 @@ import Cookie from 'js-cookie';
 import Image from 'next/image';
 import { AspectRatio } from '../../components/components/ui/aspect-ratio';
 import Pagination from '../../components/components/ui/pagination';
+import ShareLink from '../../components/components/ui/shareLink';
 
 const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 	const router = useRouter();
@@ -22,18 +24,28 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 	const [currentPage, setCurrentPage] = useState(initialPage);
 	const [totalPages, setTotalPages] = useState(Math.ceil(totalCount / 8));
 	const [selectedTab, setSelectedTab] = useState('video');
+	const [isOpen, setIsOpen] = useState(false);
+	const [videoUrl, setVideoUrl] = useState(null);
 	useEffect(() => {
 		const title = Cookie.get('title');
 		setTitleFromCookie(title);
 	}, []);
 
-	// Re-fetch movies whenever the page changes
 	useEffect(() => {
 		const { page } = router.query;
 		if (page && parseInt(page) !== currentPage) {
 			handlePageChange(parseInt(page));
 		}
 	}, [router.query.page]);
+
+	const handleShareClick = (movie) => {
+		setIsOpen(true);
+		setVideoUrl(movie.output_video_url);
+	};
+
+	const handleModalClose = () => {
+		setIsOpen(false);
+	};
 
 	useEffect(() => {
 		const fetchMovies = async () => {
@@ -52,7 +64,7 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 		if (selectedTab) {
 			fetchMovies();
 		}
-	}, [selectedTab, currentPage]); // Trigger the effect when selectedTab or currentPage changes
+	}, [selectedTab, currentPage]);
 
 	const handlePageChange = async (page) => {
 		if (page < 1 || page > totalPages) return;
@@ -63,24 +75,20 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 			const axios = axiosInstance();
 			const response = await axios.post(API_ENDPOINTS.GET_VIEW_ALL_DATA, {
 				page,
-				mode: selectedTab, // Send selectedTab state here
+				mode: selectedTab,
 			});
 
-			// Map API response to features
 			setMovies(response?.data?.data?.data || []);
-			setTotalPages(Math.ceil(response?.data?.data?.totalCount / 8)); // Recalculate total pages
+			setTotalPages(Math.ceil(response?.data?.data?.totalCount / 8));
 		} catch (error) {
 			console.error('Error fetching movies:', error);
 		}
 	};
 
-
-	// Handle search input
 	const handleSearchChange = (e) => {
 		setSearchQuery(e.target.value);
 	};
 
-	// Filter movies based on search query
 	const filteredMovies = movies.filter((movie) =>
 		movie?.feature_used?.toLowerCase()?.includes(searchQuery.toLowerCase())
 	);
@@ -88,7 +96,6 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 	const handleMovieSelect = (movie) => {
 		setSelectedMovie((prev) => (prev?.stored_data_id === movie.stored_data_id ? null : movie));
 	};
-
 
 	return (
 		<div className="h-[835px] min-h-screen p-4">
@@ -140,8 +147,6 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 						</button>
 					</div>
 
-
-
 					<div
 						className={`mt-6 ${filteredMovies.length > 0 ? 'grid grid-cols-1 gap-6 md:grid-cols-4' : ''}`}
 					>
@@ -155,6 +160,7 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 									<Card
 										className={`bg-blue-800/20 relative mb-2 transform cursor-pointer overflow-hidden border-0 backdrop-blur-sm transition-transform duration-200 hover:scale-105`}
 										aria-label={`Select ${movie.feature_used}`}
+										onClick={() => handleMovieSelect(movie)}  // Optional: Handle selection of movie
 									>
 										<CardContent className="p-0">
 											<AspectRatio ratio={16 / 9} className="w-full">
@@ -181,10 +187,13 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 														priority={true}
 													/>
 												)}
+												<div className="absolute top-2 right-2 z-10 p-2 bg-black bg-opacity-50 rounded-full">
+													<FiShare2 className="text-white text-2xl cursor-pointer" onClick={() => handleShareClick(movie)} />
+												</div>
 											</AspectRatio>
 										</CardContent>
-
 									</Card>
+
 									<div className="text-sm font-bold text-customWhite">
 										<span className="block">
 											{movie?.character_movie_name}
@@ -202,20 +211,20 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 						onPageChange={handlePageChange}
 					/>
 				</div>
-
+				<ShareLink isOpen={isOpen} onClose={handleModalClose} movies={videoUrl} />
 			</Card>
 		</div>
 	);
 };
 
-// Server-side fetching (unchanged)
+// Server-side fetching remains unchanged
 export async function getServerSideProps(context) {
 	const { query } = context;
 	const page = query.page || 1;
 
 	try {
 		const axios = axiosInstance(context);
-		const response = await axios.post(API_ENDPOINTS.GET_VIEW_ALL_DATA, { page, mode: 'video' }); // Default to 'video'
+		const response = await axios.post(API_ENDPOINTS.GET_VIEW_ALL_DATA, { page, mode: 'video' });
 
 		return {
 			props: {
