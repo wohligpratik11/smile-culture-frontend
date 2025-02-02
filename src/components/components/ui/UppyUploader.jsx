@@ -24,7 +24,6 @@ const MediaUploader = ({ onUploadComplete }) => {
   const [isUploading, setIsUploading] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [cameraError, setCameraError] = useState(null);
-
   useEffect(() => {
     const initUppy = async () => {
       const Uppy = (await import('@uppy/core')).default;
@@ -34,10 +33,7 @@ const MediaUploader = ({ onUploadComplete }) => {
       // Detect iOS device
       const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
-      // Set appropriate facing mode
-      const facingMode = isIOS ? { exact: 'user' } : 'environment';
-
-      // Initialize Uppy with Webcam only if it's not an iOS device
+      // Initialize Uppy with no webcam if iOS device
       const uppy = new Uppy({
         autoProceed: false,
         restrictions: {
@@ -47,30 +43,28 @@ const MediaUploader = ({ onUploadComplete }) => {
         },
       });
 
+      // Add webcam only if it's not iOS device
       if (!isIOS) {
+        const facingMode = 'environment'; // Use environment camera for non-iOS
         uppy.use(Webcam, {
           modes: ['picture', 'video'],
-          mirror: isIOS, // Mirror for front camera on iOS
+          mirror: false,
           facingMode,
           showRecordingLength: true,
           preferredImageMimeType: 'image/jpeg',
           preferredVideoMimeType: 'video/mp4',
-          mobileNativeCamera: false // Disable native camera to use Uppy's implementation
+          mobileNativeCamera: false, // Disable native camera to use Uppy's implementation
         });
       }
 
       uppy.use(ImageEditor);
 
-      // Request camera permissions before initializing
+      // Request camera permissions before initializing (only for non-iOS devices)
       if (!isIOS && navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         try {
           await navigator.mediaDevices.getUserMedia({
-            video: {
-              facingMode,
-              width: { ideal: 1280 },
-              height: { ideal: 720 }
-            },
-            audio: true
+            video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } },
+            audio: true,
           });
           console.log('Camera access granted');
           setCameraError(null);
@@ -78,7 +72,6 @@ const MediaUploader = ({ onUploadComplete }) => {
           console.error('Camera access error:', error);
           setCameraError(error.message);
 
-          // Show proper error message to user
           if (error.name === 'NotAllowedError') {
             alert('Please enable camera access in your browser settings to use this feature.');
           } else if (error.name === 'NotFoundError') {
@@ -98,7 +91,7 @@ const MediaUploader = ({ onUploadComplete }) => {
           setIsUploading(true);
           setIsRecording(false);
           if (onUploadComplete) {
-            await onUploadComplete(files.map(file => file.data));
+            await onUploadComplete(files.map((file) => file.data));
           }
           hideSpinner();
           setIsUploading(false);
