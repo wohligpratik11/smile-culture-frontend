@@ -40,20 +40,38 @@ const ScenesPage = ({
 	const handleMouseEnter = (sceneId) => {
 		const videoElement = videoRefs.current[sceneId];
 		if (videoElement) {
-			videoElement.play();
+			// Reset the video to start
+			videoElement.currentTime = 0;
+			// Create a play promise to handle iOS requirements
+			const playPromise = videoElement.play();
+			if (playPromise !== undefined) {
+				playPromise.catch(error => {
+					console.log("Playback error:", error);
+				});
+			}
 		}
 	};
 	const handlePlayPauseClick = (sceneId) => {
 		const videoElement = videoRefs.current[sceneId];
 		if (videoElement) {
 			if (isPlaying) {
-				videoElement.pause();
+				const pausePromise = videoElement.pause();
+				if (pausePromise !== undefined) {
+					pausePromise.catch(error => {
+						console.log("Pause error:", error);
+					});
+				}
 			} else {
-				videoElement.play();
+				const playPromise = videoElement.play();
+				if (playPromise !== undefined) {
+					playPromise.catch(error => {
+						console.log("Play error:", error);
+					});
+				}
 			}
 			setIsPlaying(!isPlaying);
 		}
-	};
+	}
 
 	const handleMouseLeave = (sceneId) => {
 		const videoElement = videoRefs.current[sceneId];
@@ -268,12 +286,15 @@ const ScenesPage = ({
 														src={feature.compressed_video_url}
 														controls
 														playsInline
+														muted
+														preload="metadata"
 														controlsList="nodownload noplaybackrate"
 														disablePictureInPicture
 														className="h-full w-full object-contain"
 														aria-label={`Video for ${feature.scene_name}`}
 														onMouseEnter={() => handleMouseEnter(feature.scene_id)}
 														onMouseLeave={() => handleMouseLeave(feature.scene_id)}
+														poster={feature.compressed_thumbnail_url}
 													/>
 												</AspectRatio>
 											</CardContent>
