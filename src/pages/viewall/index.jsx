@@ -118,34 +118,40 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 						</div>
 					</div>
 
-					<div className="relative mt-4">
-						<CiSearch className="absolute left-4 top-1/2 h-full w-6 -translate-y-1/2 transform font-bold text-customWhite" />
-						<Input
-							type="text"
-							placeholder="Search"
-							value={searchQuery}
-							onChange={handleSearchChange}
-							className="w-full rounded-full border-none bg-blueYonder py-3 pl-12 pr-3 text-customWhite placeholder-customWhite"
-						/>
+					<div className="flex flex-wrap items-center gap-4 mt-4">
+						{/* Tab Buttons */}
+						<div className="flex space-x-2">
+							<button
+								className={`rounded-full px-6 py-2 font-semibold text-white transition-colors duration-200 ${selectedTab === 'video' ? 'bg-gradient-custom-gradient border border-buttonBorder' : 'cursor-pointer border border-slateBlue bg-blueYonder transition-all'}`}
+								onClick={() => {
+									setSelectedTab('video');
+								}}
+							>
+								Scenes
+							</button>
+							<button
+								className={`rounded-full px-6 py-2 font-semibold text-white transition-colors duration-200 ${selectedTab === 'image' ? 'bg-gradient-custom-gradient border border-buttonBorder' : 'cursor-pointer border border-slateBlue bg-blueYonder transition-all'}`}
+								onClick={() => {
+									setSelectedTab('image');
+								}}
+							>
+								Images
+							</button>
+						</div>
+
+						{/* Search Input */}
+						<div className="relative flex-grow mt-4 sm:mt-0">
+							<CiSearch className="absolute left-4 top-1/2 h-full w-6 -translate-y-1/2 transform font-bold text-customWhite" />
+							<Input
+								type="text"
+								placeholder="Search"
+								value={searchQuery}
+								onChange={handleSearchChange}
+								className="w-full rounded-full border-none bg-blueYonder py-3 pl-12 pr-3 text-customWhite placeholder-customWhite"
+							/>
+						</div>
 					</div>
-					<div className="flex space-x-2">
-						<button
-							className={`rounded-full px-6 py-2 font-semibold text-white transition-colors duration-200 ${selectedTab === 'video' ? 'bg-gradient-custom-gradient border border-buttonBorder' : 'cursor-pointer border border-slateBlue bg-blueYonder transition-all'}`}
-							onClick={() => {
-								setSelectedTab('video');
-							}}
-						>
-							Scenes
-						</button>
-						<button
-							className={`rounded-full px-6 py-2 font-semibold text-white transition-colors duration-200 ${selectedTab === 'image' ? 'bg-gradient-custom-gradient border border-buttonBorder' : 'cursor-pointer border border-slateBlue bg-blueYonder transition-all'}`}
-							onClick={() => {
-								setSelectedTab('image');
-							}}
-						>
-							Images
-						</button>
-					</div>
+
 
 					<div
 						className={`mt-6 ${filteredMovies.length > 0 ? 'grid grid-cols-1 gap-6 md:grid-cols-4' : ''}`}

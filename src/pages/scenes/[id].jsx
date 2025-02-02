@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Input } from '../../components/components/ui/input';
 import { Card, CardContent } from '../../components/components/ui/card';
 import Link from 'next/link';
@@ -28,6 +28,8 @@ const ScenesPage = ({
 	const [currentPage, setCurrentPage] = useState(initialPage);
 	const [totalPages, setTotalPages] = useState(Math.ceil(totalCount / 8));
 	const [selectedTab, setSelectedTab] = useState('scene');
+	const videoRefs = useRef({});
+	const [isPlaying, setIsPlaying] = useState(false);
 
 	useEffect(() => {
 		const title = Cookie.get('title');
@@ -35,6 +37,30 @@ const ScenesPage = ({
 		Cookie.set('mode', 'video');
 	}, []);
 
+	const handleMouseEnter = (sceneId) => {
+		const videoElement = videoRefs.current[sceneId];
+		if (videoElement) {
+			videoElement.play();
+		}
+	};
+	const handlePlayPauseClick = (sceneId) => {
+		const videoElement = videoRefs.current[sceneId];
+		if (videoElement) {
+			if (isPlaying) {
+				videoElement.pause();
+			} else {
+				videoElement.play();
+			}
+			setIsPlaying(!isPlaying);
+		}
+	};
+
+	const handleMouseLeave = (sceneId) => {
+		const videoElement = videoRefs.current[sceneId];
+		if (videoElement) {
+			videoElement.pause();
+		}
+	};
 	useEffect(() => {
 		const { page } = router.query;
 		if (page && parseInt(page) !== currentPage) {
@@ -146,36 +172,39 @@ const ScenesPage = ({
 						</div>
 					</div>
 
-					<div className="relative mt-4">
-						<CiSearch className="absolute left-4 top-1/2 h-full w-6 -translate-y-1/2 transform font-bold text-customWhite" />
-						<Input
-							type="text"
-							placeholder="Search"
-							value={searchQuery}
-							onChange={handleSearchChange}
-							className="w-full rounded-full border-none bg-blueYonder py-3 pl-12 pr-3 text-customWhite placeholder-customWhite"
-						/>
-					</div>
+					<div className="flex flex-wrap items-center gap-4 mt-4">
+						<div className="flex space-x-2">
+							<button
+								className={`rounded-full px-6 py-2 font-semibold text-white transition-colors duration-200  ${selectedTab === 'scene' ? 'bg-gradient-custom-gradient border border-buttonBorder' : 'cursor-pointer border border-slateBlue bg-blueYonder transition-all'}`}
+								onClick={() => {
+									setSelectedTab('scene');
+									Cookie.set('mode', 'video');
+								}}
+							>
+								Scenes
+							</button>
+							<button
+								className={`rounded-full px-6 py-2 font-semibold text-white transition-colors duration-200 ${selectedTab === 'image' ? 'bg-gradient-custom-gradient border border-buttonBorder' : 'cursor-pointer border border-slateBlue bg-blueYonder transition-all'}`}
+								onClick={() => {
+									setSelectedTab('image');
+									Cookie.set('mode', 'image');
+								}}
+							>
+								Images
+							</button>
+						</div>
 
-					<div className="flex space-x-2">
-						<button
-							className={`rounded-full px-6 py-2 font-semibold text-white transition-colors duration-200 ${selectedTab === 'scene' ? 'bg-gradient-custom-gradient border border-buttonBorder' : 'cursor-pointer border border-slateBlue bg-blueYonder transition-all'}`}
-							onClick={() => {
-								setSelectedTab('scene');
-								Cookie.set('mode', 'video');
-							}}
-						>
-							Scenes
-						</button>
-						<button
-							className={`rounded-full px-6 py-2 font-semibold text-white transition-colors duration-200 ${selectedTab === 'image' ? 'bg-gradient-custom-gradient border border-buttonBorder' : 'cursor-pointer border border-slateBlue bg-blueYonder transition-all'}`}
-							onClick={() => {
-								setSelectedTab('image');
-								Cookie.set('mode', 'image');
-							}}
-						>
-							Images
-						</button>
+						{/* Search Input */}
+						<div className="relative flex-grow mt-4 sm:mt-0">
+							<CiSearch className="absolute left-4 top-1/2 h-full w-6 -translate-y-1/2 transform font-bold text-customWhite" />
+							<Input
+								type="text"
+								placeholder="Search"
+								value={searchQuery}
+								onChange={handleSearchChange}
+								className="w-full rounded-full border-none bg-blueYonder py-3 pl-12 pr-3 text-customWhite placeholder-customWhite"
+							/>
+						</div>
 					</div>
 
 					<div className="mt-4 flex items-center justify-between">
@@ -235,14 +264,16 @@ const ScenesPage = ({
 											<CardContent className="p-0">
 												<AspectRatio ratio={16 / 9} className="w-full" >
 													<video
+														ref={(el) => { videoRefs.current[feature.scene_id] = el }}
 														src={feature.compressed_video_url}
 														controls
 														playsInline
-														title="Description"
 														controlsList="nodownload noplaybackrate"
 														disablePictureInPicture
 														className="h-full w-full object-contain"
 														aria-label={`Video for ${feature.scene_name}`}
+														onMouseEnter={() => handleMouseEnter(feature.scene_id)}
+														onMouseLeave={() => handleMouseLeave(feature.scene_id)}
 													/>
 												</AspectRatio>
 											</CardContent>
