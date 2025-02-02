@@ -26,6 +26,10 @@ const MediaUploader = ({ onUploadComplete }) => {
   const [cameraError, setCameraError] = useState(null);
   const mediaStreamRef = useRef(null);
 
+  const isMobileDevice = () => {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  };
+
   const stopMediaStream = () => {
     if (mediaStreamRef.current) {
       const tracks = mediaStreamRef.current.getTracks();
@@ -39,14 +43,13 @@ const MediaUploader = ({ onUploadComplete }) => {
   useEffect(() => {
     const initUppy = async () => {
       const Uppy = (await import('@uppy/core')).default;
-      const Webcam = (await import('@uppy/webcam')).default;
       const ImageEditor = (await import('@uppy/image-editor')).default;
 
-      // Detect iOS device
-      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-
-      // Set appropriate facing mode
-      const facingMode = isIOS ? { exact: 'user' } : 'environment';
+      // Only import Webcam if not on mobile
+      let Webcam;
+      if (!isMobileDevice()) {
+        Webcam = (await import('@uppy/webcam')).default;
+      }
 
       const uppy = new Uppy({
         autoProceed: false,
@@ -55,47 +58,40 @@ const MediaUploader = ({ onUploadComplete }) => {
           maxNumberOfFiles: 1,
           allowedFileTypes: ['image/*', 'video/*'],
         },
-      })
-        .use(Webcam, {
+      }).use(ImageEditor);
+
+      // Only add Webcam plugin if not on mobile
+      if (!isMobileDevice() && Webcam) {
+        uppy.use(Webcam, {
           modes: ['picture', 'video'],
-          mirror: isIOS,
-          facingMode,
+          mirror: false,
+          facingMode: 'environment',
           showRecordingLength: true,
           preferredImageMimeType: 'image/jpeg',
           preferredVideoMimeType: 'video/mp4',
           mobileNativeCamera: false,
           onBeforeSnapshot: () => Promise.resolve(),
           onAfterSnapshot: () => {
-            // Stop the media stream after taking a picture
             stopMediaStream();
           }
-        })
-        .use(ImageEditor);
+        });
 
-      // Request camera permissions before initializing
-      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        try {
-          const stream = await navigator.mediaDevices.getUserMedia({
-            video: {
-              facingMode,
-              width: { ideal: 1280 },
-              height: { ideal: 720 }
-            },
-            audio: true
-          });
-          mediaStreamRef.current = stream;
-          console.log('Camera access granted');
-          setCameraError(null);
-        } catch (error) {
-          console.error('Camera access error:', error);
-          setCameraError(error.message);
-
-          if (error.name === 'NotAllowedError') {
-            alert('Please enable camera access in your browser settings to use this feature.');
-          } else if (error.name === 'NotFoundError') {
-            alert('No camera device found. Please ensure your device has a working camera.');
-          } else {
-            alert('Camera error: ' + error.message);
+        // Only request camera permissions on desktop
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+          try {
+            const stream = await navigator.mediaDevices.getUserMedia({
+              video: {
+                facingMode: 'environment',
+                width: { ideal: 1280 },
+                height: { ideal: 720 }
+              },
+              audio: true
+            });
+            mediaStreamRef.current = stream;
+            setCameraError(null);
+          } catch (error) {
+            console.error('Camera access error:', error);
+            setCameraError(error.message);
           }
         }
       }
@@ -156,7 +152,7 @@ const MediaUploader = ({ onUploadComplete }) => {
           proudlyDisplayPoweredByUppy={false}
           note="Images and videos only, up to 10MB each"
         />
-      ) : cameraError ? (
+      ) : cameraError && !isMobileDevice() ? (
         <div className="w-full h-[500px] bg-deepNavy rounded-lg flex items-center justify-center flex-col gap-4">
           <div className="text-white text-center px-4">
             <p className="mb-2">Camera access is required</p>
