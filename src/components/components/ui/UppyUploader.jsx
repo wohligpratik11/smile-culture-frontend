@@ -37,6 +37,7 @@ const MediaUploader = ({ onUploadComplete }) => {
       // Set appropriate facing mode
       const facingMode = isIOS ? { exact: 'user' } : 'environment';
 
+      // Initialize Uppy with Webcam only if it's not an iOS device
       const uppy = new Uppy({
         autoProceed: false,
         restrictions: {
@@ -44,8 +45,10 @@ const MediaUploader = ({ onUploadComplete }) => {
           maxNumberOfFiles: 1,
           allowedFileTypes: ['image/*', 'video/*'],
         },
-      })
-        .use(Webcam, {
+      });
+
+      if (!isIOS) {
+        uppy.use(Webcam, {
           modes: ['picture', 'video'],
           mirror: isIOS, // Mirror for front camera on iOS
           facingMode,
@@ -53,11 +56,13 @@ const MediaUploader = ({ onUploadComplete }) => {
           preferredImageMimeType: 'image/jpeg',
           preferredVideoMimeType: 'video/mp4',
           mobileNativeCamera: false // Disable native camera to use Uppy's implementation
-        })
-        .use(ImageEditor);
+        });
+      }
+
+      uppy.use(ImageEditor);
 
       // Request camera permissions before initializing
-      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      if (!isIOS && navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         try {
           await navigator.mediaDevices.getUserMedia({
             video: {

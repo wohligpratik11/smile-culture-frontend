@@ -159,20 +159,34 @@ const ViewUpload = () => {
 							</Card>
 
 							<h2 className="text-center text-3xl font-semibold text-white">Explore</h2>
-							<div className="flex flex-wrap justify-center gap-4">
-								<Button
-									className="min-w-[180px] bg-cyan-400 text-base font-medium text-white hover:bg-cyan-500"
-									size="lg"
-								>
-									Lip-syncing
-								</Button>
-								<Button
-									className="min-w-[180px] bg-cyan-400 text-base font-medium text-white hover:bg-cyan-500"
-									size="lg"
-								>
-									Multilingual
-								</Button>
+							<div className="flex flex-wrap justify-center gap-4 relative">
+								<div className="relative group">
+									<Button
+										className="min-w-[180px] bg-cyan-400 text-base font-medium text-white hover:bg-cyan-500"
+										size="lg"
+									>
+										Lip-syncing
+									</Button>
+									<div className="absolute inset-0 bg-black opacity-50 group-hover:opacity-0 transition-opacity"></div>
+									<div className="absolute inset-0 flex items-center justify-center text-white font-bold text-lg opacity-0 group-hover:opacity-100 transition-opacity">
+
+									</div>
+								</div>
+
+								<div className="relative group">
+									<Button
+										className="min-w-[180px] bg-cyan-400 text-base font-medium text-white hover:bg-cyan-500"
+										size="lg"
+									>
+										Multilingual
+									</Button>
+									<div className="absolute inset-0 bg-black opacity-50 group-hover:opacity-0 transition-opacity"></div>
+									<div className="absolute inset-0 flex items-center justify-center text-white font-bold text-lg opacity-0 group-hover:opacity-100 transition-opacity">
+
+									</div>
+								</div>
 							</div>
+
 						</div>
 
 						<ShareLink />
