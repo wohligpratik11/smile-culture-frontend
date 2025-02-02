@@ -1,5 +1,5 @@
 import { useSpinner } from '../../../context/spinnerContext';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import '@uppy/core/dist/style.css';
 import '@uppy/dashboard/dist/style.css';
@@ -24,6 +24,18 @@ const MediaUploader = ({ onUploadComplete }) => {
   const [isUploading, setIsUploading] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [cameraError, setCameraError] = useState(null);
+  const mediaStreamRef = useRef(null);
+
+  const stopMediaStream = () => {
+    if (mediaStreamRef.current) {
+      const tracks = mediaStreamRef.current.getTracks();
+      tracks.forEach(track => {
+        track.stop();
+      });
+      mediaStreamRef.current = null;
+    }
+  };
+
   useEffect(() => {
     const initUppy = async () => {
       const Uppy = (await import('@uppy/core')).default;
@@ -33,7 +45,9 @@ const MediaUploader = ({ onUploadComplete }) => {
       // Detect iOS device
       const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
-      // Initialize Uppy with no webcam if iOS device
+      // Set appropriate facing mode
+      const facingMode = isIOS ? { exact: 'user' } : 'environment';
+
       const uppy = new Uppy({
         autoProceed: false,
         restrictions: {
@@ -41,31 +55,35 @@ const MediaUploader = ({ onUploadComplete }) => {
           maxNumberOfFiles: 1,
           allowedFileTypes: ['image/*', 'video/*'],
         },
-      });
-
-      // Add webcam only if it's not iOS device
-      if (!isIOS) {
-        const facingMode = 'environment'; // Use environment camera for non-iOS
-        uppy.use(Webcam, {
+      })
+        .use(Webcam, {
           modes: ['picture', 'video'],
-          mirror: false,
+          mirror: isIOS,
           facingMode,
           showRecordingLength: true,
           preferredImageMimeType: 'image/jpeg',
           preferredVideoMimeType: 'video/mp4',
-          mobileNativeCamera: false, // Disable native camera to use Uppy's implementation
-        });
-      }
+          mobileNativeCamera: false,
+          onBeforeSnapshot: () => Promise.resolve(),
+          onAfterSnapshot: () => {
+            // Stop the media stream after taking a picture
+            stopMediaStream();
+          }
+        })
+        .use(ImageEditor);
 
-      uppy.use(ImageEditor);
-
-      // Request camera permissions before initializing (only for non-iOS devices)
-      if (!isIOS && navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      // Request camera permissions before initializing
+      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         try {
-          await navigator.mediaDevices.getUserMedia({
-            video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } },
-            audio: true,
+          const stream = await navigator.mediaDevices.getUserMedia({
+            video: {
+              facingMode,
+              width: { ideal: 1280 },
+              height: { ideal: 720 }
+            },
+            audio: true
           });
+          mediaStreamRef.current = stream;
           console.log('Camera access granted');
           setCameraError(null);
         } catch (error) {
@@ -82,16 +100,28 @@ const MediaUploader = ({ onUploadComplete }) => {
         }
       }
 
+      uppy.on('dashboard:modal-closed', () => {
+        stopMediaStream();
+      });
+
+      uppy.on('webcam:stop', () => {
+        stopMediaStream();
+      });
+
       uppy.on('startRecording', () => setIsRecording(true));
-      uppy.on('stopRecording', () => setIsRecording(false));
+      uppy.on('stopRecording', () => {
+        setIsRecording(false);
+        stopMediaStream();
+      });
 
       uppy.on('complete', async (result) => {
         const files = result.successful;
         if (files.length > 0) {
           setIsUploading(true);
           setIsRecording(false);
+          stopMediaStream();
           if (onUploadComplete) {
-            await onUploadComplete(files.map((file) => file.data));
+            await onUploadComplete(files.map(file => file.data));
           }
           hideSpinner();
           setIsUploading(false);
@@ -104,6 +134,7 @@ const MediaUploader = ({ onUploadComplete }) => {
     initUppy();
 
     return () => {
+      stopMediaStream();
       if (uppyInstance) {
         try {
           uppyInstance.close({ reason: 'unmount' });
