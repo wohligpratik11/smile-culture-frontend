@@ -72,6 +72,43 @@ const ScenesPage = ({
 			setIsPlaying(!isPlaying);
 		}
 	}
+	const handleTouchStart = (sceneId) => {
+		const videoElement = videoRefs.current[sceneId];
+		if (videoElement) {
+			// Reset the video to start on touch
+			videoElement.currentTime = 0;
+
+			// Create a play promise to handle iOS requirements
+			const playPromise = videoElement.play();
+			if (playPromise !== undefined) {
+				playPromise.catch((error) => {
+					console.log("Playback error:", error);
+				});
+			}
+		}
+	};
+
+	const handleTouchEnd = (sceneId) => {
+		const videoElement = videoRefs.current[sceneId];
+		if (videoElement) {
+			if (isPlaying) {
+				const pausePromise = videoElement.pause();
+				if (pausePromise !== undefined) {
+					pausePromise.catch((error) => {
+						console.log("Pause error:", error);
+					});
+				}
+			} else {
+				const playPromise = videoElement.play();
+				if (playPromise !== undefined) {
+					playPromise.catch((error) => {
+						console.log("Play error:", error);
+					});
+				}
+			}
+			setIsPlaying(!isPlaying);
+		}
+	};
 
 	const handleMouseLeave = (sceneId) => {
 		const videoElement = videoRefs.current[sceneId];
@@ -294,6 +331,8 @@ const ScenesPage = ({
 														aria-label={`Video for ${feature.scene_name}`}
 														onMouseEnter={() => handleMouseEnter(feature.scene_id)}
 														onMouseLeave={() => handleMouseLeave(feature.scene_id)}
+														onTouchStart={() => handleTouchStart(feature.scene_id)}  // Handle touch start
+														onTouchEnd={() => handleTouchEnd(feature.scene_id)}      // Handle touch end
 														poster={feature.compressed_thumbnail_url}
 													/>
 												</AspectRatio>
