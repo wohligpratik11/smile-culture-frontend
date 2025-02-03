@@ -387,9 +387,7 @@ const UploadPage = ({ movies }) => {
 
           {/* If you have a loader screen when isLoading */}
           {isLoading && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-              <LoadingScreen />
-            </div>
+            <LoadingScreen className="h-full w-full" />
           )}
         </div>
 
