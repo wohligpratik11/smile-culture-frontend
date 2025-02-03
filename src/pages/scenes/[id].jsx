@@ -287,7 +287,7 @@ const ScenesPage = ({
 														controls
 														playsInline
 														muted
-														preload="metadata"
+														preload="auto"
 														controlsList="nodownload noplaybackrate"
 														disablePictureInPicture
 														className="h-full w-full object-contain"

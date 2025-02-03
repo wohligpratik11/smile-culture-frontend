@@ -217,11 +217,10 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 													<video
 														ref={(el) => { videoRefs.current[movie.stored_data_id] = el }}
 														controls
-														preload="auto"
 														width="100%"
 														height="auto"
 														playsInline
-														title="Description"
+														preload="auto"
 														controlsList="nodownload noplaybackrate"
 														disablePictureInPicture
 														className="w-full h-full object-contain rounded-lg "
