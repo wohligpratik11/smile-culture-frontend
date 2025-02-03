@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Input } from '../../components/components/ui/input';
 import { Card, CardContent } from '../../components/components/ui/card';
 import Link from 'next/link';
@@ -26,6 +26,8 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 	const [selectedTab, setSelectedTab] = useState('video');
 	const [isOpen, setIsOpen] = useState(false);
 	const [videoUrl, setVideoUrl] = useState(null);
+	const videoRefs = useRef({});
+
 	useEffect(() => {
 		const title = Cookie.get('title');
 		setTitleFromCookie(title);
@@ -65,7 +67,48 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 			fetchMovies();
 		}
 	}, [selectedTab, currentPage]);
+	const handleMouseEnter = (stored_data_id) => {
+		const videoElement = videoRefs.current[stored_data_id];
+		if (videoElement) {
+			// Reset the video to start
+			videoElement.currentTime = 0;
+			// Create a play promise to handle iOS requirements
+			const playPromise = videoElement.play();
+			if (playPromise !== undefined) {
+				playPromise.catch(error => {
+					console.log("Playback error:", error);
+				});
+			}
+		}
+	};
+	const handlePlayPauseClick = (stored_data_id) => {
+		const videoElement = videoRefs.current[stored_data_id];
+		if (videoElement) {
+			if (isPlaying) {
+				const pausePromise = videoElement.pause();
+				if (pausePromise !== undefined) {
+					pausePromise.catch(error => {
+						console.log("Pause error:", error);
+					});
+				}
+			} else {
+				const playPromise = videoElement.play();
+				if (playPromise !== undefined) {
+					playPromise.catch(error => {
+						console.log("Play error:", error);
+					});
+				}
+			}
+			setIsPlaying(!isPlaying);
+		}
+	}
 
+	const handleMouseLeave = (stored_data_id) => {
+		const videoElement = videoRefs.current[stored_data_id];
+		if (videoElement) {
+			videoElement.pause();
+		}
+	};
 	const handlePageChange = async (page) => {
 		if (page < 1 || page > totalPages) return;
 
@@ -172,6 +215,7 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 											<AspectRatio ratio={16 / 9} className="w-full">
 												{movie.mode === 'video' ? (
 													<video
+														ref={(el) => { videoRefs.current[movie.stored_data_id] = el }}
 														controls
 														preload="auto"
 														width="100%"
@@ -181,6 +225,9 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 														controlsList="nodownload noplaybackrate"
 														disablePictureInPicture
 														className="w-full h-full object-contain rounded-lg "
+														onMouseEnter={() => handleMouseEnter(movie.stored_data_id)}
+														onMouseLeave={() => handleMouseLeave(movie.stored_data_id)}
+														poster={movie.output_video_url}
 													>
 														<source src={movie.output_video_url} type="video/mp4" />
 													</video>

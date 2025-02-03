@@ -5,7 +5,6 @@ import '../styles/globals.css';
 import CustomThemeProvider from '../context/ThemeProvider';
 import Layout from '@/components/layout/Layout';
 import Cookies from 'js-cookie';
-import { useLogin } from '../../src/components/hooks/useLogin';
 import { useRouter } from 'next/router'; // Import useRouter
 import { UploadProvider } from '../context/UploadContext';
 import { AuthProvider } from '../context/AuthContext';
@@ -13,7 +12,6 @@ import { ToasterProvider } from '../components/common/toaster';
 import { SpinnerProvider } from '../context/spinnerContext';
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
-  useLogin();
   // useEffect(() => {
   //   if (router.pathname !== '/upload') {
   //     Cookies.remove('selectedCharacters');
