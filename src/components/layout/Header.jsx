@@ -7,7 +7,7 @@ import { useAuth } from '../../context/AuthContext'; // Import AuthContext
 
 const Header = () => {
   const router = useRouter();
-  const { user } = useAuth(); // Get user from AuthContext
+  const { user } = useAuth();
 
   const getFirstLetter = (user_email) => {
     return user_email ? user_email.charAt(0).toUpperCase() : '';
@@ -27,10 +27,10 @@ const Header = () => {
         />
       </Link>
 
-      <div className="relative flex h-[60px] w-[60px] items-center justify-center gap-2 rounded-full border text-white shadow-xl">
+      <div className="bg-gradient-custom-gradient shadow-shadow-500 relative  flex h-[60px] w-[60px] flex-grow items-center justify-center gap-2 rounded-full border border-buttonBorder text-white shadow-xl dark:!bg-navy-800 dark:shadow-none md:flex-grow-0 md:gap-1 xl:w-[60px] xl:gap-2">
         <Avatar className="cursor-pointer text-3xl">
           <AvatarFallback>
-            {user ? getFirstLetter(user.user_email) : 'G'}{' '}
+            {user ? getFirstLetter(user.user_email) : ''}{' '}
             {/* Default to 'G' */}
           </AvatarFallback>
         </Avatar>
