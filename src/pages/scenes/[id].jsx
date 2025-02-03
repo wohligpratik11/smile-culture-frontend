@@ -36,7 +36,30 @@ const ScenesPage = ({
 		setTitleFromCookie(title);
 		Cookie.set('mode', 'video');
 	}, []);
-
+	const handleTouchOrClick = (sceneId) => {
+		const videoElement = videoRefs.current[sceneId];
+		if (videoElement) {
+			// If video is not playing, start playing it
+			if (!isPlaying) {
+				const playPromise = videoElement.play();
+				if (playPromise !== undefined) {
+					playPromise.catch((error) => {
+						console.log("Play error:", error);
+					});
+				}
+				setIsPlaying(true);
+			} else {
+				// Pause the video if it's already playing
+				const pausePromise = videoElement.pause();
+				if (pausePromise !== undefined) {
+					pausePromise.catch((error) => {
+						console.log("Pause error:", error);
+					});
+				}
+				setIsPlaying(false);
+			}
+		}
+	};
 	const handleMouseEnter = (sceneId) => {
 		const videoElement = videoRefs.current[sceneId];
 		if (videoElement) {
@@ -294,6 +317,7 @@ const ScenesPage = ({
 														aria-label={`Video for ${feature.scene_name}`}
 														onMouseEnter={() => handleMouseEnter(feature.scene_id)}
 														onMouseLeave={() => handleMouseLeave(feature.scene_id)}
+														onClick={() => handleTouchOrClick(feature.scene_id)}
 														poster={feature.compressed_thumbnail_url}
 													/>
 												</AspectRatio>
