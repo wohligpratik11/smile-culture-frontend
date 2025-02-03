@@ -8,7 +8,7 @@ export default function LoadingScreen({ remainingTime }) {
 					<div className="w-full max-w-md space-y-6 text-center">
 						<h1 className="text-2xl font-medium">Generating, Please Hold On...</h1>
 
-						<div className="py-6">
+						<div >
 							{/* Use the image as the loader */}
 							<img src="/assets/images/eros.gif" alt="Loading..." className="w-80 h-80 mx-auto" />
 						</div>
