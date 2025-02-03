@@ -1,37 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Link from 'next/link';
-import { Avatar, AvatarFallback, AvatarImage } from '../components/ui/avatar';
+import { Avatar, AvatarFallback } from '../components/ui/avatar';
 import ErosNow from '../../../public/assets/images/erosnow.webp';
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from '../../components/components/ui/hover-card';
 import { useRouter } from 'next/router';
-import Cookies from 'js-cookie';
+import { useAuth } from '../../context/AuthContext'; // Import AuthContext
 
 const Header = () => {
   const router = useRouter();
-
-  const [userEmail, setUserEmail] = useState(null);
-  useEffect(() => {
-    const userData = Cookies.get('userData');
-    if (userData) {
-      try {
-        const parsedData = JSON.parse(userData);
-        setUserEmail(parsedData?.user_email || ''); // Ensure you extract only the necessary data
-      } catch (error) {
-        console.error('Error parsing userData from cookie:', error);
-      }
-    }
-  }, []);
+  const { user } = useAuth(); // Get user from AuthContext
 
   const getFirstLetter = (user_email) => {
-    if (user_email) {
-      return user_email.charAt(0).toUpperCase();
-    }
-    return '';
+    return user_email ? user_email.charAt(0).toUpperCase() : '';
   };
+
   const handleLoginClick = () => {
     router.push('/auth/login');
   };
@@ -42,17 +23,18 @@ const Header = () => {
         <img
           src={ErosNow.src}
           alt="ErosNow"
-          className="ml-5 mr-4 max-w-[60%] sm:max-w-[40%] cursor-pointer"
+          className="ml-5 mr-4 max-w-[60%] cursor-pointer sm:max-w-[40%]"
         />
       </Link>
-      <div className="bg-gradient-custom-gradient shadow-shadow-500 relative  flex h-[60px] w-[60px] flex-grow items-center justify-center gap-2 rounded-full border border-buttonBorder text-white shadow-xl dark:!bg-navy-800 dark:shadow-none md:flex-grow-0 md:gap-1 xl:w-[60px] xl:gap-2">
-        <Avatar className="ml-auto cursor-pointer text-3xl">
+
+      <div className="relative flex h-[60px] w-[60px] items-center justify-center gap-2 rounded-full border text-white shadow-xl">
+        <Avatar className="cursor-pointer text-3xl">
           <AvatarFallback>
-            {userEmail ? getFirstLetter(userEmail) : ''}
+            {user ? getFirstLetter(user.user_email) : 'G'}{' '}
+            {/* Default to 'G' */}
           </AvatarFallback>
         </Avatar>
       </div>
-
     </div>
   );
 };
