@@ -26,11 +26,13 @@ const MediaUploader = ({ onUploadComplete }) => {
   const [cameraError, setCameraError] = useState(null);
   const mediaStreamRef = useRef(null);
 
+  // Enhanced stopMediaStream function to handle both video and audio tracks
   const stopMediaStream = () => {
     if (mediaStreamRef.current) {
       const tracks = mediaStreamRef.current.getTracks();
       tracks.forEach(track => {
         track.stop();
+        track.enabled = false;
       });
       mediaStreamRef.current = null;
     }
@@ -42,10 +44,7 @@ const MediaUploader = ({ onUploadComplete }) => {
       const Webcam = (await import('@uppy/webcam')).default;
       const ImageEditor = (await import('@uppy/image-editor')).default;
 
-      // Detect iOS device
       const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-
-      // Set appropriate facing mode
       const facingMode = isIOS ? { exact: 'user' } : 'environment';
 
       const uppy = new Uppy({
@@ -66,13 +65,12 @@ const MediaUploader = ({ onUploadComplete }) => {
           mobileNativeCamera: false,
           onBeforeSnapshot: () => Promise.resolve(),
           onAfterSnapshot: () => {
-            // Stop the media stream after taking a picture
             stopMediaStream();
           }
         })
         .use(ImageEditor);
 
-      // Request camera permissions before initializing
+      // Request camera permissions
       if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         try {
           const stream = await navigator.mediaDevices.getUserMedia({
@@ -84,22 +82,23 @@ const MediaUploader = ({ onUploadComplete }) => {
             audio: true
           });
           mediaStreamRef.current = stream;
-          console.log('Camera access granted');
           setCameraError(null);
         } catch (error) {
-          console.error('Camera access error:', error);
+          console.error('Camera/audio access error:', error);
           setCameraError(error.message);
+          stopMediaStream();
 
           if (error.name === 'NotAllowedError') {
-            alert('Please enable camera access in your browser settings to use this feature.');
+
           } else if (error.name === 'NotFoundError') {
-            alert('No camera device found. Please ensure your device has a working camera.');
+
           } else {
             alert('Camera error: ' + error.message);
           }
         }
       }
 
+      // Event handlers for proper cleanup
       uppy.on('dashboard:modal-closed', () => {
         stopMediaStream();
       });
@@ -108,7 +107,10 @@ const MediaUploader = ({ onUploadComplete }) => {
         stopMediaStream();
       });
 
-      uppy.on('startRecording', () => setIsRecording(true));
+      uppy.on('startRecording', () => {
+        setIsRecording(true);
+      });
+
       uppy.on('stopRecording', () => {
         setIsRecording(false);
         stopMediaStream();
@@ -127,17 +129,28 @@ const MediaUploader = ({ onUploadComplete }) => {
           setIsUploading(false);
         }
       });
+      uppy.on('cancel-all', () => {
+        console.log('Upload cancelled');
+        stopMediaStream();
+      });
+
+      uppy.on('dashboard:closed', () => {
+        console.log('Dashboard closed');
+        stopMediaStream();
+      });
 
       setUppyInstance(uppy);
     };
 
     initUppy();
 
+    // Cleanup function
     return () => {
       stopMediaStream();
       if (uppyInstance) {
         try {
           uppyInstance.close({ reason: 'unmount' });
+          console.log('Uppy instance closed and cleanup completed');
         } catch (error) {
           console.warn('Error closing Uppy instance:', error);
         }
