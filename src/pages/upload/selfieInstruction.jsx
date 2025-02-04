@@ -138,7 +138,7 @@ export default function SelfieInstructions({ closeModal, uploadImageData }) {
 						</div>
 					)}
 
-					<div className="flex items-center justify-between gap-4 pt-4">
+					<div className="flex items-center justify-between gap-4 pt-2">
 						<Button
 							variant="link"
 							className="text-white hover:text-white/80"
