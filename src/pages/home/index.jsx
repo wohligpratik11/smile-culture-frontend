@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { Card, CardContent } from '../../components/components/ui/card';
 import { ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Cookies from 'js-cookie';
-import PolygonLogo from '../../../public/assets/images/polygon.webp'
+import PolygonLogo from '../../../public/assets/images/polygon.webp';
+
 const Home = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -93,9 +94,9 @@ const Home = () => {
               </Link>
             </div>
 
-            <div className="flex justify-center ">
+            <div className="flex justify-center">
               <div className="flex flex-col sm:flex-row items-center justify-center text-center text-customWhite h-14">
-                <span className="text-base sm:text-xl md:text-2xl lg:text-4xl font-semibold text-center ">
+                <span className="text-base sm:text-xl md:text-2xl lg:text-4xl font-semibold text-center">
                   Live Your Movie Dream—Step Into the Spotlight!
                 </span>
                 <img
@@ -117,7 +118,6 @@ const Home = () => {
                 <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-3">
                   {features.map((feature) => (
                     <div key={feature.title} className="space-y-2">
-                      {/* Card Section */}
                       {feature.title === 'face-swap' ? (
                         <Link href={feature.path} passHref legacyBehavior>
                           <Card
@@ -125,13 +125,16 @@ const Home = () => {
                             aria-label={`Go to ${feature.title}`}
                             onClick={() => handleFeatureClick(feature)}
                           >
-                            <CardContent className="p-0">
-                              <div className="relative aspect-video">
+                            <CardContent className="p-0 relative">
+                              <div className="relative aspect-video flex items-center justify-center">
                                 <img
                                   src={feature.image}
                                   alt={`${feature.title} image`}
-                                  className="h-full w-full object-cover"
+                                  className="object-cover h-full w-full"
                                 />
+                                <div className="absolute  flex items-center justify-center rounded-full w-10 h-10 shadow-lg border-buttonBorder cursor-pointer bg-gradient-custom-gradient">
+                                  <ArrowLeft className="rotate-180 text-blue-600 w-5 h-5" />
+                                </div>
                               </div>
                             </CardContent>
                           </Card>
@@ -146,7 +149,6 @@ const Home = () => {
                                   alt={`${feature.title} image`}
                                   className="h-full w-full object-cover"
                                 />
-                                {/* Coming Soon Overlay */}
                                 <div className="bg-gray-900/80 absolute inset-0 flex items-center justify-center !backdrop-blur-[2px]">
                                   <div className="text-center">
                                     <span className="text-3xl font-bold text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.6)]">
@@ -160,8 +162,6 @@ const Home = () => {
                           </Card>
                         </div>
                       )}
-
-                      {/* Button Section */}
                       {feature.title === 'face-swap' ? (
                         <Link
                           href={feature.path}
