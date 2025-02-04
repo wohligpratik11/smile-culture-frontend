@@ -39,7 +39,7 @@ export default function SelfieInstructions({ closeModal, uploadImageData }) {
 					</button>
 				</div>
 
-				<div className="space-y-6">
+				<div className="space-y-4">
 					<h1 className="text-white text-2xl font-medium text-center">
 						Selfie Instructions
 					</h1>
@@ -108,32 +108,30 @@ export default function SelfieInstructions({ closeModal, uploadImageData }) {
 							</div>
 						</div>
 					) : (
-						<div className="space-y-6">
-							<div className="space-y-4">
-								<h2 className="text-white text-2xl font-semibold">
+						<div className="space-y-2">
+							<div >
+								<h2 className="text-xl font-semibold text-white mb-2">
 									Keep Your Face Centered
 								</h2>
-								<p className="text-white/90 text-lg">
+								<p className="text-gray-300 mb-4">
 									Hold your phone at eye level and center your face in the frame.
 								</p>
-								<ul className="text-[#B8B9CF] space-y-2 list-disc pl-5">
+								<ul className="text-[#B8B9CF] space-y-2 list-disc list-inside mb-6">
 									<li>Look directly at the camera.</li>
 									<li>Keep the phone steady to avoid blur.</li>
 								</ul>
 							</div>
-							<div className="space-y-4">
-								<p className="text-white text-center">Align your face here</p>
-								<div className="max-w-[300px] mx-auto">
-									<div className="relative aspect-square rounded-lg overflow-hidden border-2 border-white/20">
-										<Image
-											src="/assets/images/boy.webp"
-											alt="Face alignment area"
-											fill
-											className="object-cover"
-										/>
-										<div className="absolute inset-0 top-[-1rem] flex items-center justify-center">
-											<div className="w-[80%] h-[80%] rounded-full border-4 border-dashed border-white/60 pointer-events-none" />
-										</div>
+							<p className="text-white text-center">Align your face here</p>
+							<div className="max-w-[300px] mx-auto">
+								<div className="relative aspect-square rounded-lg overflow-hidden border-2 border-white/20">
+									<Image
+										src="/assets/images/boy.webp"
+										alt="Face alignment area"
+										fill
+										className="object-cover"
+									/>
+									<div className="absolute inset-0 top-[-1rem] flex items-center justify-center">
+										<div className="w-[80%] h-[80%] rounded-full border-4 border-dashed border-white/60 pointer-events-none" />
 									</div>
 								</div>
 							</div>
