@@ -280,6 +280,7 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 														layout="fill"
 														objectFit="contain"
 														priority={true}
+														onMouseEnter={() => setActiveMenu(false)}
 													/>
 
 												)}
