@@ -11,9 +11,9 @@ const axiosInstance = (ctx = null) => {
     headers: {
       Authorization: authToken ? `Bearer ${authToken}` : '',
     },
+    timeout: 3600000,
   });
 
-  // Interceptor to set Content-Type based on the request data
   instance.interceptors.request.use((config) => {
     if (config.data instanceof FormData) {
       // Automatically set content type for FormData

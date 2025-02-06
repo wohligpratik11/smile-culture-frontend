@@ -182,13 +182,9 @@ const UploadPage = ({ movies }) => {
 
     try {
       const axios = axiosInstance();
-      // up to 1 hour
       const response = await axios.post(
         API_ENDPOINTS.CREATE_NEW_STORE_DATA,
         formData,
-        {
-          timeout: 3600000,
-        }
       );
 
       if (response.data.status_code === 200) {
@@ -264,18 +260,17 @@ const UploadPage = ({ movies }) => {
             </div>
           </div>
 
-          <h2 className="mb-4 text-lg font-medium text-white">Upload Selfie</h2>
-
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          <h2 className="mb-2 text-lg font-medium text-white">Upload Selfie</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {movies.map((movie, index) => {
               const previewData = selectedImages.find(
                 (item) => item.characterId === movie.character_id
               );
               return (
                 <div key={index}>
-                  <div className="flex flex-col gap-2 sm:flex-row">
+                  <div className="flex flex-col  sm:flex-row">
                     <Card
-                      className={`h-[122px] w-full cursor-pointer rounded-xl shadow transition-all sm:w-[172px] ${!previewData ? 'border border-slateBlue p-1 shadow' : ''
+                      className={` ${!previewData ? 'border border-slateBlue p-1 shadow' : ''
                         } `}
                       onClick={() => handleCharacterClick(movie)}
                     >
@@ -315,7 +310,7 @@ const UploadPage = ({ movies }) => {
                               width={150}
                               height={80}
                               loading="lazy"
-                              className="contain rounded-2xl border border-slateBlue shadow"
+                              className="rounded-2xl border border-slateBlue shadow"
                               style={{ objectFit: "contain" }}
                             />
                           </div>
