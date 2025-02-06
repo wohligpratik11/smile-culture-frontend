@@ -53,6 +53,7 @@ module.exports = {
         darkBlue: ' #1B2559',
         wildBlueYonder: '#A3AED0',
         lightPrimary: '#F4F7FE',
+        darkGray: '#313032',
         blueSecondary: '#4318FF',
         brandLinear: '#868CFF',
         dropdownBg: '#e4ecfd',

@@ -1,17 +1,18 @@
 "use client";
 
 import { X } from "lucide-react";
-import { useState } from "react";
-import Instagram from "../../../../public/assets/images/instagram.webp"
-import Facebook from "../../../../public/assets/images/facebook.webp"
-import Whatsapp from "../../../../public/assets/images/whatsapp.webp"
-import Reddit from "../../../../public/assets/images/reddit.webp"
-import XIcon from "../../../../public/assets/images/x.webp"
-import Thread from "../../../../public/assets/images/thread.webp"
+import { useState, useEffect, useRef } from "react";
+import Instagram from "../../../../public/assets/images/instagram.webp";
+import Facebook from "../../../../public/assets/images/facebook.webp";
+import Whatsapp from "../../../../public/assets/images/whatsapp.webp";
+import Reddit from "../../../../public/assets/images/reddit.webp";
+import XIcon from "../../../../public/assets/images/x.webp";
+import Thread from "../../../../public/assets/images/thread.webp";
 
 export default function ShareModal({ isOpen, onClose, movies }) {
 	const [copied, setCopied] = useState(false);
-	if (!isOpen) return null;
+	const modalRef = useRef(null);
+
 	const videoUrl = movies;
 	const shareOptions = [
 		{
@@ -46,7 +47,6 @@ export default function ShareModal({ isOpen, onClose, movies }) {
 		},
 	];
 
-
 	const handleCopy = async () => {
 		try {
 			await navigator.clipboard.writeText(videoUrl);
@@ -57,9 +57,26 @@ export default function ShareModal({ isOpen, onClose, movies }) {
 		}
 	};
 
+	// Close modal if click outside
+	useEffect(() => {
+		const handleOutsideClick = (event) => {
+			if (modalRef.current && !modalRef.current.contains(event.target)) {
+				onClose();
+			}
+		};
+
+		document.addEventListener("mousedown", handleOutsideClick);
+		return () => document.removeEventListener("mousedown", handleOutsideClick);
+	}, [onClose]);
+
 	return (
-		<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-			<div className="relative w-full max-w-lg rounded-xl bg-deepNavy p-6 text-white shadow-lg">
+		<div
+			className={`fixed inset-0 z-50 flex items-center justify-center bg-black/50 ${!isOpen ? 'hidden' : ''}`}
+		>
+			<div
+				ref={modalRef}
+				className="relative w-full max-w-lg rounded-xl bg-deepNavy p-6 text-white shadow-lg"
+			>
 				<div className="flex items-center justify-between mb-4">
 					<span className="text-xl font-medium leading-8 text-customWhite">Share Now</span>
 					<button
@@ -81,7 +98,12 @@ export default function ShareModal({ isOpen, onClose, movies }) {
 							className="flex flex-col items-center gap-2"
 						>
 							<div className={`flex h-16 w-16 items-center justify-center rounded-full ${option.icon.src}`}>
-								<img src={option.icon.src || "/placeholder.svg"} alt="" className="w-14 h-14" aria-hidden="true" />
+								<img
+									src={option.icon.src || "/placeholder.svg"}
+									alt=""
+									className="w-14 h-14"
+									aria-hidden="true"
+								/>
 							</div>
 							<span className="text-sm text-white font-normal">{option.name}</span>
 						</a>

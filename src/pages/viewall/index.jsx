@@ -1,13 +1,11 @@
 import { useRouter } from 'next/router';
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Input } from '../../components/components/ui/input';
 import { Card, CardContent } from '../../components/components/ui/card';
 import Link from 'next/link';
-import { FiShare2 } from 'react-icons/fi';
 import { ArrowLeft } from 'lucide-react';
 import { IoMdEye } from "react-icons/io";
-import { FaShareFromSquare } from "react-icons/fa6";
-import { ChevronRight, ChevronLeft } from 'lucide-react';
+import { FaExpand } from "react-icons/fa";
 import { CiSearch } from 'react-icons/ci';
 import { apiService, API_ENDPOINTS } from '../../lib/api/apiService';
 import axiosInstance from '../../lib/api/axiosInstance';
@@ -16,10 +14,9 @@ import Image from 'next/image';
 import { AspectRatio } from '../../components/components/ui/aspect-ratio';
 import Pagination from '../../components/components/ui/pagination';
 import ShareLink from '../../components/components/ui/shareLink';
-import { PiDotsThreeOutlineVerticalFill } from "react-icons/pi";
 import FullscreenModal from '../../components/components/ui/fullscreen';
-import { FaExpand } from "react-icons/fa";
-
+import { RiShareForwardLine } from "react-icons/ri";
+import { FiShare2 } from "react-icons/fi";
 
 const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 	const router = useRouter();
@@ -32,12 +29,10 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 	const [selectedTab, setSelectedTab] = useState('video');
 	const [isOpen, setIsOpen] = useState(false);
 	const [videoUrl, setVideoUrl] = useState(null);
-	const [isPlaying, setIsPlaying] = useState(false);
-	const videoRefs = useRef({});
-	const [currentMovie, setCurrentMovie] = useState(null);
-	const [activeMenu, setActiveMenu] = useState(null);
 	const [fullscreenModal, setFullscreenModal] = useState(false);
 	const [selectedMedia, setSelectedMedia] = useState(null);
+	const videoRefs = useRef({});
+	const [isPlaying, setIsPlaying] = useState(false);
 
 	useEffect(() => {
 		const title = Cookie.get('title');
@@ -78,6 +73,7 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 			fetchMovies();
 		}
 	}, [selectedTab, currentPage]);
+
 	const handleMouseEnter = (stored_data_id) => {
 		const videoElement = videoRefs.current[stored_data_id];
 		if (videoElement) {
@@ -89,8 +85,8 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 				});
 			}
 		}
-		setActiveMenu(false);
 	};
+
 	const handleTouchOrClick = (stored_data_id) => {
 		const videoElement = videoRefs.current[stored_data_id];
 		if (videoElement) {
@@ -115,6 +111,7 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 			}
 		}
 	};
+
 	const handlePlayPauseClick = (stored_data_id) => {
 		const videoElement = videoRefs.current[stored_data_id];
 		if (videoElement) {
@@ -136,20 +133,10 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 			setIsPlaying(!isPlaying);
 		}
 	}
-	const handleOptionsClick = (movie) => {
-		setActiveMenu(activeMenu === movie.stored_data_id ? null : movie.stored_data_id);
-	};
 
-	const handleMouseLeave = (stored_data_id) => {
-		const videoElement = videoRefs.current[stored_data_id];
-		if (videoElement) {
-			videoElement.pause();
-		}
-	};
-	const handleViewClick = (movie) => {
+	const handleFullscreenClick = (movie) => {
 		setSelectedMedia(movie);
 		setFullscreenModal(true);
-		setActiveMenu(null); // Close the menu after clicking
 	};
 
 	const handlePageChange = async (page) => {
@@ -238,10 +225,8 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 						</div>
 					</div>
 
-
-					<div
-						className={`mt-6 ${filteredMovies.length > 0 ? 'grid grid-cols-1 gap-6 md:grid-cols-4' : ''}`}
-					>
+					{/* Movie Cards */}
+					<div className={`mt-6 ${filteredMovies.length > 0 ? 'grid grid-cols-1 gap-6 md:grid-cols-4' : ''}`}>
 						{filteredMovies.length === 0 ? (
 							<div className="flex h-full items-center justify-center">
 								No Movie found
@@ -268,54 +253,33 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 														disablePictureInPicture
 														className="h-full w-full object-contain"
 														aria-label={`Video for ${movie.scene_name}`}
-														onMouseEnter={() => handleMouseEnter(movie.stored_data_id)}
-														onMouseLeave={() => handleMouseLeave(movie.stored_data_id)}
-														onClick={() => handleTouchOrClick(movie.stored_data_id)}
-													>
-													</video>
+													/>
 												) : (
 													<Image
 														src={movie.output_video_url || '/fallback-image.jpg'}
 														alt={`${movie.feature_used} image`}
-														layout="fill"
+														width={500}
+														height={500}
 														objectFit="contain"
 														priority={true}
-														onMouseEnter={() => setActiveMenu(false)}
 													/>
-
 												)}
-												<div className="absolute top-2 right-2 z-10 p-2 bg-black bg-opacity-50 rounded-full border border-customWhite">
-													<PiDotsThreeOutlineVerticalFill
-														className="text-white text-2xl cursor-pointer"
-														onClick={() => handleOptionsClick(movie)}
-													/>
-													{activeMenu === movie.stored_data_id && (
-														<div className="absolute top-10 right-2 z-20 p-2 bg-white bg-opacity-100 rounded-lg shadow-lg">
-															<div className="flex flex-col items-center ">
-																<button
-																	className="py-1 px-2 text-base flex items-center gap-2 hover:bg-gray-700 whitespace-nowrap text-black w-full"
-																	onClick={() => handleViewClick(movie)}
-																>
-																	<IoMdEye className="h-5 w-5 text-black" />
-																	View
-																</button>
-
-																<hr className="my-1 w-full border-t-2 border-dashed !border-disableGray" />
-
-																<button
-																	className="py-1 px-2 text-base flex items-center gap-2 hover:bg-gray-700 whitespace-nowrap text-black w-full"
-																	onClick={() => handleShareClick(movie)}
-																>
-																	<FaShareFromSquare className="h-4 w-4 text-black" />
-																	Share
-																</button>
-															</div>
-														</div>
-													)}
-
+												<div
+													className="absolute top-2 right-2 z-10 p-2 hover:bg-darkGray bg-opacity-50 rounded-full cursor-pointer"
+													onClick={() => handleShareClick(movie)}
+													aria-label="share"
+												>
+													<RiShareForwardLine className="text-white text-2xl" />
 												</div>
-
-
+												{movie.mode === 'image' && (
+													<div
+														className="absolute bottom-2 right-2 z-10 p-2 bg-transparent hover:bg-darkGray bg-opacity-50 rounded-full cursor-pointer"
+														onClick={() => handleFullscreenClick(movie)}
+														aria-label="Open Fullscreen"
+													>
+														<FaExpand className="text-white text-2xl" />
+													</div>
+												)}
 											</AspectRatio>
 										</CardContent>
 									</Card>
@@ -330,21 +294,26 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 						)}
 					</div>
 				</div>
-				<div className="flex justify-center items-center mt-6 flex-col sm:flex-row ">
+
+				{/* Pagination */}
+				<div className="flex justify-center items-center mt-6 flex-col sm:flex-row">
 					<Pagination
 						currentPage={currentPage}
 						totalPages={totalPages}
 						onPageChange={handlePageChange}
 					/>
 				</div>
+
+				{/* Share Link Modal */}
 				<ShareLink isOpen={isOpen} onClose={handleModalClose} movies={videoUrl} />
+
+				{/* Fullscreen Modal */}
 				<FullscreenModal
 					isOpen={fullscreenModal}
 					onClose={() => setFullscreenModal(false)}
 					media={selectedMedia}
 				/>
 			</Card>
-
 		</div>
 	);
 };
