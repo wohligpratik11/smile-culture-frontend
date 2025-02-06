@@ -132,7 +132,7 @@ const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, 
 						<CiSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 font-bold text-customWhite h-full w-6" />
 						<Input
 							type="text"
-							placeholder="Search"
+							placeholder="Search for Characters"
 							value={searchQuery}
 							onChange={handleSearchChange}
 							className="w-full pl-12 pr-3 py-3 border-none bg-blueYonder rounded-full text-customWhite placeholder-customWhite"

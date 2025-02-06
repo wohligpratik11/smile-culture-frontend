@@ -163,7 +163,7 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 	};
 
 	const filteredMovies = movies.filter((movie) =>
-		movie?.feature_used?.toLowerCase()?.includes(searchQuery.toLowerCase())
+		movie?.movie_name?.toLowerCase()?.includes(searchQuery.toLowerCase())
 	);
 
 	const handleMovieSelect = (movie) => {
@@ -283,12 +283,9 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 											</AspectRatio>
 										</CardContent>
 									</Card>
-
-									<div className="text-sm font-bold text-customWhite">
-										<span className="block">
-											{movie?.scene_name}
-										</span>
-									</div>
+									<p className="text-center text-sm font-bold text-customWhite">
+										{movie.movie_name}
+									</p>
 								</div>
 							))
 						)}

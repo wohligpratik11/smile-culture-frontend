@@ -30,11 +30,27 @@ const ScenesPage = ({
 	const [selectedTab, setSelectedTab] = useState('scene');
 	const videoRefs = useRef({});
 	const [isPlaying, setIsPlaying] = useState(false);
+	const [isMobile, setIsMobile] = useState(false);
 
 	useEffect(() => {
 		const title = Cookie.get('title');
 		setTitleFromCookie(title);
 		Cookie.set('mode', 'video');
+	}, []);
+	useEffect(() => {
+		// Check if screen width is mobile (max width 768px)
+		const handleResize = () => {
+			setIsMobile(window.innerWidth <= 768);
+		};
+
+		// Add event listener to handle window resizing
+		window.addEventListener('resize', handleResize);
+
+		// Call handler immediately to set initial state
+		handleResize();
+
+		// Cleanup the event listener on component unmount
+		return () => window.removeEventListener('resize', handleResize);
 	}, []);
 	const handleTouchOrClick = (sceneId) => {
 		const videoElement = videoRefs.current[sceneId];
@@ -240,7 +256,7 @@ const ScenesPage = ({
 							<CiSearch className="absolute left-4 top-1/2 h-full w-6 -translate-y-1/2 transform font-bold text-customWhite" />
 							<Input
 								type="text"
-								placeholder="Search"
+								placeholder="Search for Scenes"
 								value={searchQuery}
 								onChange={handleSearchChange}
 								className="w-full rounded-full border-none bg-blueYonder py-3 pl-12 pr-3 text-customWhite placeholder-customWhite"
@@ -318,7 +334,7 @@ const ScenesPage = ({
 														onMouseEnter={() => handleMouseEnter(feature.scene_id)}
 														onMouseLeave={() => handleMouseLeave(feature.scene_id)}
 														onClick={() => handleTouchOrClick(feature.scene_id)}
-														poster={feature.compressed_thumbnail_url}
+														poster={isMobile ? feature.compressed_thumbnail_url : undefined}
 													/>
 												</AspectRatio>
 											</CardContent>
