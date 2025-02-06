@@ -27,7 +27,7 @@ body {
   background: linear-gradient(to right, #0ca1ea 50%, #3ec5b6 50%);
 }
 .bg-gradient-custom-gradient {
-  background: linear-gradient(90deg, #0ca1ea, #3ec5b6);
+  background: linear-gradient(90deg, #3ec5b6, #0ca1ea);
 }
 .bg-polygon-gradient {
   background: linear-gradient(90deg, #10a3e7, #3ec4b9);
