@@ -77,7 +77,7 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 	const handleMouseEnter = (stored_data_id) => {
 		const videoElement = videoRefs.current[stored_data_id];
 		if (videoElement) {
-			videoElement.currentTime = 0;
+			videoElement.currentTime = 0; // Reset video to start
 			const playPromise = videoElement.play();
 			if (playPromise !== undefined) {
 				playPromise.catch(error => {
@@ -87,30 +87,43 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 		}
 	};
 
+	const handleMouseLeave = (stored_data_id) => {
+		const videoElement = videoRefs.current[stored_data_id];
+		if (videoElement) {
+			const pausePromise = videoElement.pause();
+			if (pausePromise !== undefined) {
+				pausePromise.catch(error => {
+					console.log("Pause error:", error);
+				});
+			}
+		}
+	};
+
+
+
 	const handleTouchOrClick = (stored_data_id) => {
 		const videoElement = videoRefs.current[stored_data_id];
 		if (videoElement) {
-			// If video is not playing, start playing it
-			if (!isPlaying) {
-				const playPromise = videoElement.play();
-				if (playPromise !== undefined) {
-					playPromise.catch((error) => {
-						console.log("Play error:", error);
-					});
-				}
-				setIsPlaying(true);
-			} else {
-				// Pause the video if it's already playing
+			// Toggle play/pause on click
+			if (isPlaying) {
 				const pausePromise = videoElement.pause();
 				if (pausePromise !== undefined) {
 					pausePromise.catch((error) => {
 						console.log("Pause error:", error);
 					});
 				}
-				setIsPlaying(false);
+			} else {
+				const playPromise = videoElement.play();
+				if (playPromise !== undefined) {
+					playPromise.catch((error) => {
+						console.log("Play error:", error);
+					});
+				}
 			}
+			setIsPlaying(!isPlaying); // Toggle state
 		}
 	};
+
 
 	const handlePlayPauseClick = (stored_data_id) => {
 		const videoElement = videoRefs.current[stored_data_id];
@@ -253,6 +266,9 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 														disablePictureInPicture
 														className="h-full w-full object-contain"
 														aria-label={`Video for ${movie.scene_name}`}
+														onMouseEnter={() => handleMouseEnter(movie.stored_data_id)}
+														onMouseLeave={() => handleMouseLeave(movie.stored_data_id)}
+														onClick={() => handleTouchOrClick(movie.stored_data_id)}
 													/>
 												) : (
 													<Image

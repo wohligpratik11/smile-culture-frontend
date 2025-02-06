@@ -68,7 +68,13 @@ const MediaUploader = ({ onUploadComplete }) => {
             stopMediaStream();
           }
         })
-        .use(ImageEditor);
+        // .use(ImageEditor, {
+        //   quality: 0.8,
+        //   cropper: true,
+        //   showControls: true,
+        //   showSaveButton: true,
+        // });
+        
 
       // Request camera permissions
       if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
