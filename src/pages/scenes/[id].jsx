@@ -256,7 +256,7 @@ const ScenesPage = ({
 							<CiSearch className="absolute left-4 top-1/2 h-full w-6 -translate-y-1/2 transform font-bold text-customWhite" />
 							<Input
 								type="text"
-								placeholder="Search for Scenes"
+								placeholder={selectedTab === 'scene' ? 'Search for Scenes' : 'Search for Images'}
 								value={searchQuery}
 								onChange={handleSearchChange}
 								className="w-full rounded-full border-none bg-blueYonder py-3 pl-12 pr-3 text-customWhite placeholder-customWhite"
