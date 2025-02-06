@@ -177,7 +177,7 @@ const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, 
 						)}
 					</div>
 				</div>
-				<div className="flex justify-between items-center mt-6 flex-col sm:flex-row">
+				<div className="flex justify-between items-center mt-4 flex-col sm:flex-row">
 					<div className={`flex justify-center items-center space-x-2 sm:flex-1 md:ml-36 flex-wrap sm:space-x-2 ${selectedCharacters ? 'md:ml-36' : ''}`}>
 						<Pagination
 							currentPage={currentPage}

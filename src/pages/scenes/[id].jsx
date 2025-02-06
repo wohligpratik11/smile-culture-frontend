@@ -348,7 +348,7 @@ const ScenesPage = ({
 						</div>
 					)}
 				</div>
-				<div className="flex justify-between items-center mt-6 flex-col sm:flex-row">
+				<div className="flex justify-between items-center mt-4 flex-col sm:flex-row">
 					<div
 						className={`flex justify-center items-center space-x-2 sm:flex-1  flex-wrap sm:space-x-2 ${selectedScenes ? 'md:ml-36' : ''}`}
 					>

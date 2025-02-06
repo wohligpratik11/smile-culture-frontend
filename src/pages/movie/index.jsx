@@ -174,7 +174,7 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
             )}
           </div>
         </div>
-        <div className="mt-6 flex flex-col items-center justify-between sm:flex-row">
+        <div className="mt-2 flex flex-col items-center justify-between sm:flex-row">
           <div
             className={`flex items-center justify-center space-x-2 sm:flex-1 ${selectedMovie ? 'md:ml-36' : ''} flex-wrap sm:space-x-2`}
           >
