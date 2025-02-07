@@ -73,12 +73,13 @@ export default function ShareModal({ isOpen, onClose, movies }) {
 		<div
 			className={`fixed inset-0 z-50 flex items-center justify-center bg-black/50 ${!isOpen ? 'hidden' : ''}`}
 		>
+
 			<div
 				ref={modalRef}
 				className="relative w-full max-w-lg rounded-xl bg-deepNavy p-6 text-white shadow-lg"
 			>
-				<div className="flex items-center justify-between mb-4">
-					<span className="text-xl font-medium leading-8 text-customWhite">Share Now</span>
+				<div className="flex items-center justify-between mb-4 bg-deepNavy">
+					<span className="text-xl font-medium leading-8 text-customWhite">Share the video with anyone you like!</span>
 					<button
 						onClick={onClose}
 						className="text-gray-400 hover:text-white leading-8"
@@ -87,6 +88,7 @@ export default function ShareModal({ isOpen, onClose, movies }) {
 						<X className="h-6 w-6 text-xl font-medium text-customWhite" />
 					</button>
 				</div>
+
 
 				<div className="mb-8 grid grid-cols-3 gap-8 sm:grid-cols-6">
 					{shareOptions.map((option) => (
