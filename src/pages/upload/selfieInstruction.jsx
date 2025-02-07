@@ -108,8 +108,8 @@ export default function SelfieInstructions({ closeModal, uploadImageData }) {
 							</div>
 						</div>
 					) : (
-						<div className="space-y-2">
-							<div >
+						<div className="space-y-4">
+							<div className="mb-8">
 								<h2 className="text-xl font-semibold text-white mb-2">
 									Keep Your Face Centered
 								</h2>
@@ -121,18 +121,16 @@ export default function SelfieInstructions({ closeModal, uploadImageData }) {
 									<li>Keep the phone steady to avoid blur.</li>
 								</ul>
 							</div>
-							<p className="text-white text-center">Align your face here</p>
-							<div className="max-w-[300px] mx-auto">
-								<div className="relative aspect-square rounded-lg overflow-hidden border-2 border-white/20">
+							<div className="flex justify-center gap-4 mb-8">
+								<div className="relative">
 									<Image
 										src="/assets/images/boy.webp"
-										alt="Face alignment area"
-										fill
-										className="object-cover"
+										alt="Good lighting example"
+										width={500}
+										height={500}
+										className="rounded-lg w-full"
 									/>
-									<div className="absolute inset-0 top-[-1rem] flex items-center justify-center">
-										<div className="w-[80%] h-[80%] rounded-full border-4 border-dashed border-white/60 pointer-events-none" />
-									</div>
+									<div className="absolute inset-0 border-4 border-dashed border-white rounded-full m-4" />
 								</div>
 							</div>
 						</div>
