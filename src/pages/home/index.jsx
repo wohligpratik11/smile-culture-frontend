@@ -86,7 +86,7 @@ const Home = () => {
             <div className="relative flex justify-end mb-9 sm:mb-0">
               <Link href="/viewall" passHref>
                 <button
-                  className="px-4 py-2 rounded-lg bg-gradient-custom-gradient border border-buttonBorder cursor-pointer"
+                  className="px-4 py-2 rounded-lg bg-gradient-custom-gradient border border-buttonBorder cursor-pointer font-medium"
                   aria-label="My Creations"
                 >
                   My Creations
@@ -97,8 +97,11 @@ const Home = () => {
             <div className="flex justify-center">
               <div className="flex flex-col sm:flex-row items-center justify-center text-center text-customWhite h-14">
                 <span className="text-base sm:text-xl md:text-2xl lg:text-4xl font-semibold text-center">
-                  Live Your Movie Dream—Step Into the Spotlight!
+                  Bring Your Movie Vision to Life—
+                  <span className="gradient_text_about-bg">Step into the Spotlight</span>
                 </span>
+
+
                 <img
                   src={PolygonLogo.src}
                   alt="Polygon Logo"
@@ -107,10 +110,8 @@ const Home = () => {
               </div>
             </div>
             <div className="mt-6 flex justify-center space-x-4">
-              <div className="w-1004 text-center text-xl leading-7 text-customWhite">
-                Transform iconic movie scenes with your image and become the
-                star you’ve always dreamed of. Add your personal touch to the
-                dialogue and create unforgettable moments!
+              <div className="w-1004 text-center text-xl leading-7 text-customWhite font-medium">
+                Transform iconic movie scenes with your image, adding your unique twist to unforgettable moments. Become the star you’ve always dreamed of!
               </div>
             </div>
             <div className="mt-4 flex items-center justify-center">
@@ -169,12 +170,12 @@ const Home = () => {
                           legacyBehavior
                           className="transition-opacity duration-200 hover:opacity-80"
                         >
-                          <div className="bg-button-gradient flex h-14 cursor-pointer items-center justify-center rounded-2xl border border-slateBlue text-center text-lg font-medium capitalize text-white transition-opacity duration-200 hover:opacity-75">
+                          <div className="bg-button-gradient flex h-14 cursor-pointer items-center justify-center rounded-2xl border border-slateBlue text-center text-lg font-bold capitalize text-white transition-opacity duration-200 hover:opacity-75">
                             {feature.title}
                           </div>
                         </Link>
                       ) : (
-                        <div className="bg-button-gradient flex h-14 cursor-not-allowed items-center justify-center rounded-2xl border border-slateBlue text-center text-lg font-medium capitalize text-white/50 transition-opacity duration-200 hover:opacity-75">
+                        <div className="bg-button-gradient flex h-14 cursor-not-allowed items-center justify-center rounded-2xl border border-slateBlue text-center text-lg font-bold capitalize text-white/50 transition-opacity duration-200 hover:opacity-75">
                           {feature.title}
                         </div>
                       )}

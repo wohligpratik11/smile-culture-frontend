@@ -17,7 +17,7 @@ body {
   ) !important; /* Apply background image */
   background-size: cover;
   background-position: center;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Instrument Sans', Sans-serif;
   transition:
     background-color 0.3s,
     color 0.3s,
@@ -82,6 +82,13 @@ body {
 
 .uppy-u-reset.uppy-c-btn.uppy-Dashboard-browse {
   color: #0075ff !important;
+}
+.gradient_text_about-bg {
+  color: #fff;
+  background-image: linear-gradient(88deg, #a0e061 0%, #2fadff 56%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 /* Dashboard */
