@@ -133,9 +133,9 @@ const Home = () => {
                                   alt={`${feature.title} image`}
                                   className="object-cover h-full w-full"
                                 />
-                                <div className="absolute  flex items-center justify-center rounded-full w-10 h-10 shadow-lg border-buttonBorder cursor-pointer bg-gradient-custom-gradient">
+                                {/* <div className="absolute  flex items-center justify-center rounded-full w-10 h-10 shadow-lg border-buttonBorder cursor-pointer bg-gradient-custom-gradient">
                                   <ArrowLeft className="rotate-180 text-blue-600 w-5 h-5" />
-                                </div>
+                                </div> */}
                               </div>
                             </CardContent>
                           </Card>
