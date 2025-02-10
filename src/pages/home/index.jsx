@@ -86,7 +86,7 @@ const Home = () => {
             <div className="relative flex justify-end mb-9 sm:mb-0">
               <Link href="/viewall" passHref>
                 <button
-                  className="px-4 py-2 rounded-lg bg-gradient-custom-gradient border border-buttonBorder cursor-pointer font-medium"
+                  className="px-4 py-2 rounded-lg bg-gradient-custom-gradient hover:border border-transparent hover:border-buttonBorder cursor-pointer font-medium"
                   aria-label="My Creations"
                 >
                   My Creations

@@ -213,7 +213,7 @@ const ScenesPage = ({
 					<div className="flex items-center gap-4">
 						<Link href="#" passHref>
 							<button
-								className="bg-gradient-custom-gradient rounded-lg border border-buttonBorder px-4 py-2"
+								className="bg-gradient-custom-gradient rounded-lg hover:border hover:border-buttonBorder px-4 py-2"
 								onClick={(e) => {
 									e.preventDefault();
 									router.back();
@@ -232,7 +232,7 @@ const ScenesPage = ({
 					<div className="flex flex-wrap items-center gap-4 mt-4">
 						<div className="flex space-x-2">
 							<button
-								className={`rounded-full px-6 py-2 font-semibold text-white transition-colors duration-200  ${selectedTab === 'scene' ? 'bg-gradient-custom-gradient border border-buttonBorder' : 'cursor-pointer border border-slateBlue bg-blueYonder transition-all'}`}
+								className={`rounded-full px-6 py-2 font-semibold text-white transition-colors duration-200  ${selectedTab === 'scene' ? 'bg-gradient-custom-gradient hover:border hover:border-buttonBorder' : 'cursor-pointer border border-slateBlue bg-blueYonder transition-all'}`}
 								onClick={() => {
 									setSelectedTab('scene');
 									Cookie.set('mode', 'video');
@@ -241,7 +241,7 @@ const ScenesPage = ({
 								Scenes
 							</button>
 							<button
-								className={`rounded-full px-6 py-2 font-semibold text-white transition-colors duration-200 ${selectedTab === 'image' ? 'bg-gradient-custom-gradient border border-buttonBorder' : 'cursor-pointer border border-slateBlue bg-blueYonder transition-all'}`}
+								className={`rounded-full px-6 py-2 font-semibold text-white transition-colors duration-200 ${selectedTab === 'image' ? 'bg-gradient-custom-gradient hover:border hover:border-buttonBorder' : 'cursor-pointer border border-slateBlue bg-blueYonder transition-all'}`}
 								onClick={() => {
 									setSelectedTab('image');
 									Cookie.set('mode', 'image');
@@ -360,7 +360,7 @@ const ScenesPage = ({
 					</div>
 					{selectedScenes && (
 						<button
-							className="bg-gradient-custom-gradient mt-4 h-12 w-52 rounded-lg border border-buttonBorder px-4 py-2 sm:ml-4 sm:mt-0"
+							className="bg-gradient-custom-gradient mt-4 h-12 w-52 rounded-lg hover:border hover:border-buttonBorder px-4 py-2 sm:ml-4 sm:mt-0"
 							onClick={() => {
 								if (selectedScenes) {
 									router.push(`/characters/${selectedScenes.scene_id}`);

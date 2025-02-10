@@ -111,7 +111,7 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
           <div className="flex items-center gap-4">
             <Link href="/">
               <button
-                className="bg-gradient-custom-gradient rounded-lg border border-buttonBorder px-4 py-2"
+                className="bg-gradient-custom-gradient rounded-lg hover:border hover:border-buttonBorder px-4 py-2"
                 aria-label="Go Back"
               >
                 <ArrowLeft />
@@ -186,7 +186,7 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
           </div>
           {selectedMovie && (
             <button
-              className="bg-gradient-custom-gradient mt-4 h-12 w-52 rounded-lg border border-buttonBorder px-4 py-2 sm:ml-4 sm:mt-0"
+              className="bg-gradient-custom-gradient mt-4 h-12 w-52 rounded-lg hover:border hover:border-buttonBorder px-4 py-2 sm:ml-4 sm:mt-0"
               onClick={() => router.push(selectedMovie.path)}
             >
               Next

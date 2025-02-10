@@ -24,13 +24,13 @@ body {
     background-image 0.3s;
 }
 .btn-gradient {
-  background: linear-gradient(to right, #0ca1ea 50%, #3ec5b6 50%);
+  background: linear-gradient(to right, #40adff 50%, #87d880 50%);
 }
 .bg-gradient-custom-gradient {
-  background: linear-gradient(90deg, #3ec5b6, #0ca1ea);
+  background: linear-gradient(90deg, #87d880, #40adff);
 }
 .bg-polygon-gradient {
-  background: linear-gradient(90deg, #10a3e7, #3ec4b9);
+  background: linear-gradient(90deg, #40adff, #87d880);
 }
 
 :root {

@@ -190,7 +190,7 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 					<div className="flex items-center gap-4">
 						<Link href="/">
 							<button
-								className="bg-gradient-custom-gradient rounded-lg border border-buttonBorder px-4 py-2"
+								className="bg-gradient-custom-gradient rounded-lg hover:border hover:border-buttonBorder px-4 py-2"
 								aria-label="Go Back"
 							>
 								<ArrowLeft />
@@ -207,7 +207,7 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 					<div className="flex flex-wrap items-center gap-4 mt-4">
 						<div className="flex space-x-2">
 							<button
-								className={`rounded-full px-6 py-2 font-semibold text-white transition-colors duration-200 ${selectedTab === 'video' ? 'bg-gradient-custom-gradient border border-buttonBorder' : 'cursor-pointer border border-slateBlue bg-blueYonder transition-all'}`}
+								className={`rounded-full px-6 py-2 font-semibold text-white transition-colors duration-200 ${selectedTab === 'video' ? 'bg-gradient-custom-gradient hover:border hover:border-buttonBorder' : 'cursor-pointer border border-slateBlue bg-blueYonder transition-all'}`}
 								onClick={() => {
 									setSelectedTab('video');
 								}}

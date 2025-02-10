@@ -112,7 +112,7 @@ const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, 
 					<div className="flex items-center gap-4">
 						<Link href={router.asPath} passHref>
 							<button
-								className="px-4 py-2 rounded-lg bg-gradient-custom-gradient border border-buttonBorder"
+								className="px-4 py-2 rounded-lg bg-gradient-custom-gradient hover:border hover:border-buttonBorder"
 								onClick={(e) => {
 									e.preventDefault();
 									router.back();
@@ -187,7 +187,7 @@ const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, 
 					</div>
 					{selectedCharacters.length > 0 && (
 						<button
-							className="px-4 py-2 rounded-lg bg-gradient-custom-gradient border border-buttonBorder w-52 h-12 mt-4 sm:ml-4 sm:mt-0"
+							className="px-4 py-2 rounded-lg bg-gradient-custom-gradient hover:border hover:border-buttonBorder w-52 h-12 mt-4 sm:ml-4 sm:mt-0"
 							onClick={() => handleNextClick()}
 							disabled={selectedCharacters.length === 0}
 						>
