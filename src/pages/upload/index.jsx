@@ -264,7 +264,7 @@ const UploadPage = ({ movies }) => {
           </div>
 
           <h2 className="mb-2 text-lg font-medium text-white">Upload Selfie</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 tablet:grid-cols-1 full-hd:grid-cols-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 tablet:grid-cols-1 full-hd:grid-cols-3">
             {movies.map((movie, index) => {
               const previewData = selectedImages.find(
                 (item) => item.characterId === movie.character_id
@@ -376,10 +376,11 @@ const UploadPage = ({ movies }) => {
 
           {/* If you have a loader screen when isLoading */}
           {isLoading && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+            <div >
               <LoadingScreen />
             </div>
           )}
+          {/* <LoadingScreen /> */}
         </div>
 
         {/* Next Button */}
