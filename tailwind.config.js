@@ -13,23 +13,33 @@ module.exports = {
         dm: ['DM Sans', 'sans-serif'],
       },
       screens: {
-        xs: '576px',
-        'xs-max': { max: '320px' },
-        sm: '576px',
-        'sm-max': { max: '576px' },
-        md: '768px',
-        'md-max': { max: '768px' },
-        lg: '992px',
-        'lg-max': { max: '992px' },
-        xl: '1200px',
-        'xl-max': { max: '1200px' },
-        '2xl': '1320px',
-        '2xl-max': { max: '1320px' },
-        '3xl': '1600px',
-        '3xl-max': { max: '1600px' },
-        '4xl': '1850px',
-        '4xl-max': { max: '1850px' },
+        xs: '576px', // For very small devices like phones
+        'xs-max': { max: '575px' }, // For devices up to 575px, typically small screens
+        sm: '576px', // Small screens (phones, but larger than xs)
+        'sm-max': { max: '767px' }, // Max width for small devices
+        md: '768px', // Medium screens (tablets and small laptops)
+        'md-max': { max: '991px' }, // Max width for medium devices (tablets and small laptops)
+        tablet: { min: '768px', max: '1024px' }, // Tablets only (portrait and landscape mode)
+        lg: '1024px', // Large screens (desktops and larger)
+        'lg-max': { max: '1199px' }, // Max width for large devices
+        xl: '1200px', // Extra-large screens (larger desktops)
+        'xl-max': { max: '1320px' }, // Max width for extra-large devices
+        '2xl': '1321px', // 2x extra-large screens
+        '2xl-max': { max: '1599px' }, // Max width for 2x extra-large devices
+        '3xl': '1600px', // 3x extra-large screens
+        '3xl-max': { max: '1849px' }, // Max width for 3x extra-large devices
+        '4xl': '1850px', // 4x extra-large screens
+        '4xl-max': { max: '2047px' }, // Max width for 4x extra-large devices
+        '5xl': { min: '2048px', max: '2559px' }, // Large laptops and smaller desktop screens
+        '6xl': { min: '2560px', max: '3839px' }, // Bigger desktops or standard TV screens
+        '7xl': { min: '3840px' }, // Ultra-wide screens and large TVs
+        hd: { min: '1366px', max: '1366px' }, // HD screens (1366x768, common for many laptops)
+        'full-hd': { min: '1920px', max: '1920px' }, // Full HD screens (1920x1080)
+        '2k': { min: '2560px', max: '2560px' }, // 2K screens (2560x1440)
+        '4k': { min: '3840px', max: '3840px' }, // 4K screens (3840x2160)
+        '8k': { min: '7680px', max: '7680px' }, // 8K screens (7680x4320)
       },
+
       borderImageLine: {
         gradient: 'linear-gradient(180deg, #13a6e3 0%, #3bc2ba 100%)',
       },

@@ -16,6 +16,9 @@ import SelfieInstruction from '../upload/selfieInstruction';
 import { useSpinner } from '../../context/spinnerContext';
 import LoadingScreen from '../../components/components/ui/loader';
 import { X } from 'lucide-react';
+import { FaArrowLeft } from "react-icons/fa6";
+import { FaArrowUp } from "react-icons/fa6";
+
 import {
   Dialog,
   DialogTrigger,
@@ -239,13 +242,13 @@ const UploadPage = ({ movies }) => {
   };
 
   return (
-    <div className="h-[835px] min-h-screen p-4">
-      <Card className="bg-card-cardCustomBlue p-4">
+    <div className="h-[835px] min-h-auto p-4">
+      <Card className="bg-card-cardCustomBlue p-4 ">
         <div className="space-y-4">
           <div className="flex items-center gap-4">
             <Link href={router.asPath} passHref>
               <button
-                className="bg-gradient-custom-gradient rounded-lg border border-buttonBorder px-4 py-2"
+                className="bg-gradient-custom-gradient rounded-lg hover:border hover:border-buttonBorder px-4 py-2"
                 onClick={(e) => {
                   e.preventDefault();
                   router.back();
@@ -261,95 +264,89 @@ const UploadPage = ({ movies }) => {
           </div>
 
           <h2 className="mb-2 text-lg font-medium text-white">Upload Selfie</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 tablet:grid-cols-1 full-hd:grid-cols-4">
             {movies.map((movie, index) => {
               const previewData = selectedImages.find(
                 (item) => item.characterId === movie.character_id
               );
               return (
-                <div key={index}>
-                  <div className="flex flex-col  sm:flex-row">
-                    <Card
-                      className={` ${!previewData ? 'border border-slateBlue p-1 shadow' : ''
-                        } `}
-                      onClick={() => handleCharacterClick(movie)}
-                    >
-                      <div className="flex flex-col items-center gap-2">
-                        {previewData ? (
-                          <div className="relative">
-                            <button
-                              className="bg-gray-800 absolute right-0 top-[10px] rounded-full bg-opacity-50 p-1 text-white"
-                              onClick={() => {
-                                setSelectedImages((prevSelectedImages) =>
-                                  prevSelectedImages.filter(
-                                    (item) =>
-                                      item.characterId !== movie.character_id
-                                  )
-                                );
-                              }}
-                              aria-label="Remove Image"
-                            >
-                              <button
-                                className="absolute right-0 top-[0px] mr-2 rounded-full bg-black text-white"
-                                onClick={() => {
-                                  setSelectedImages((prevSelectedImages) =>
-                                    prevSelectedImages.filter(
-                                      (item) =>
-                                        item.characterId !== movie.character_id
-                                    )
-                                  );
-                                }}
-                                aria-label="Remove Image"
-                              >
-                                <X size={16} className="text-white" />
-                              </button>
-                            </button>
-                            <Image
-                              src={previewData.uploadedUrl}
-                              alt="Uploaded Image"
-                              width={150}
-                              height={80}
-                              loading="lazy"
-                              className="rounded-2xl border border-slateBlue shadow"
-                              style={{ objectFit: "contain" }}
-                            />
-                          </div>
-                        ) : (
-                          <div className="mt-2.5 flex flex-col items-center gap-2">
-                            <Image
-                              src={UploadImages}
-                              alt="Image Icon"
-                              className="h-10 w-10 sm:h-12 sm:w-12"
-                            />
-                            <div className="flex items-center space-x-2">
-                              <ArrowUpFromLine size={20} strokeWidth={3} />
-                              <span className="text-xs font-medium text-white">
-                                {movie.title || 'Upload Image'}
-                              </span>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </Card>
-
-                    <div className="mt-2 flex flex-col items-center gap-2 sm:ml-2 sm:mt-0">
-                      <Image
-                        src={movie.url || UploadImages}
-                        alt={movie.title || 'Movie Image'}
-                        width={155}
-                        height={122}
-                        className="rounded-2xl object-contain"
-                      />
-                      <span className="ml-3 text-center text-sm font-medium text-white sm:text-left">
-                        {movie.character_real_name ||
-                          'Character Name Not Available'}
+                <div key={index} className="flex flex-col sm:flex-row md:flex-row tablet:mb-10">
+                  <div className="mt-2 flex flex-col items-center gap-2 sm:ml-4 sm:mt-0 rounded-2xl max-w-[300px]">
+                    <Image
+                      src={movie.url || UploadImages}
+                      alt={movie.title || 'Movie Image'}
+                      width={300}
+                      height={300}
+                      className="h-full w-full rounded-2xl object-contain transition-transform transform hover:scale-105 hover:shadow-lg"
+                    />
+                    <div className="w-full px-2">
+                      <span className="block text-center text-base font-medium text-white break-words">
+                        {movie.character_real_name || 'Character Name Not Available'}
                       </span>
                     </div>
                   </div>
+
+                  <div className="flex justify-center items-center gap-4 mx-4 p-1 py-4">
+                    <div className="flex justify-center items-center p-1 rounded-full border border-buttonBorder w-10 h-10 bg-gradient-custom-gradient">
+                      <FaArrowUp className="text-white sm:block tablet:hidden lg:hidden" size={16} />
+                      <FaArrowLeft className="text-white sm-max:hidden" size={16} />
+                    </div>
+                  </div>
+
+                  <Card
+                    className={`${!previewData ? 'border border-customWhite border-dashed p-1 shadow' : ''}`}
+                    onClick={() => handleCharacterClick(movie)}
+                  >
+                    <div className="flex flex-col items-center gap-2">
+                      {previewData ? (
+                        <div className="relative">
+                          <button
+                            className="absolute right-0 top-[10px] rounded-full bg-gray-800 bg-opacity-50 p-1 text-white"
+                            onClick={() => {
+                              setSelectedImages((prevSelectedImages) =>
+                                prevSelectedImages.filter(
+                                  (item) => item.characterId !== movie.character_id
+                                )
+                              );
+                            }}
+                            aria-label="Remove Image"
+                          >
+                            <X size={16} className="text-white" />
+                          </button>
+                          <div className="h-48 w-48">
+                            <Image
+                              src={previewData.uploadedUrl}
+                              alt="Uploaded Image"
+                              width={200}
+                              height={200}
+                              className="h-full w-full rounded-2xl border border-slateBlue object-cover shadow"
+                            />
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="flex h-40 w-48 flex-col items-center justify-center gap-2">
+                          <Image
+                            src={UploadImages}
+                            alt="Image Icon"
+                            width={64}
+                            height={64}
+                            className="h-16 w-16"
+                          />
+                          <div className="flex items-center space-x-2">
+                            <ArrowUpFromLine size={24} strokeWidth={3} />
+                            <span className="text-sm font-medium text-white">
+                              {movie.title || 'Upload Image'}
+                            </span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </Card>
                 </div>
               );
             })}
           </div>
+
 
           {/* Show the "SelfieInstruction" component */}
           {showSelfieInstructions && (
@@ -363,10 +360,7 @@ const UploadPage = ({ movies }) => {
 
           {/* Uppy Upload Dialog */}
           {isUploading && (
-            <Dialog
-              open={isUploading}
-              onOpenChange={() => setIsUploading(false)}
-            >
+            <Dialog open={isUploading} onOpenChange={() => setIsUploading(false)}>
               <DialogTrigger asChild></DialogTrigger>
               <DialogContent className="mx-auto mb-2 max-w-4xl rounded-lg !bg-deepNavy p-2">
                 <DialogTitle className="ml-1.5 text-xl font-medium !text-customWhite">
@@ -403,6 +397,7 @@ const UploadPage = ({ movies }) => {
         )}
       </Card>
     </div>
+
   );
 };
 
@@ -450,3 +445,5 @@ export async function getServerSideProps(context) {
 }
 
 export default UploadPage;
+
+
