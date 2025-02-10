@@ -324,7 +324,7 @@ const UploadPage = ({ movies }) => {
                           </div>
                         </div>
                       ) : (
-                        <div className="flex h-40 w-48 flex-col items-center justify-center gap-2">
+                        <div className="flex h-48 w-48 flex-col items-center justify-center gap-2">
                           <Image
                             src={UploadImages}
                             alt="Image Icon"
