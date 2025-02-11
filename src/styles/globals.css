@@ -304,3 +304,26 @@ body {
       -1.8em -1.8em 0 0em #ffffff;
   }
 }
+/* Slim scrollbar for webkit browsers */
+::-webkit-scrollbar {
+  width: 5px; /* Adjust width */
+  height: 5px; /* For horizontal scrollbar */
+}
+
+/* Track of the scrollbar */
+::-webkit-scrollbar-track {
+  background: #555;
+  border-radius: 10px;
+}
+
+/* Handle of the scrollbar */
+::-webkit-scrollbar-thumb {
+  background: #555;
+  border-radius: 10px;
+  transition: background 0.3s ease;
+}
+
+/* Handle hover effect */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
