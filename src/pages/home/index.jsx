@@ -115,7 +115,7 @@ const Home = () => {
               </div>
             </div>
             <div className="mt-4 flex items-center justify-center">
-              <div className="mx-auto max-w-7xl">
+              <div className="mx-auto max-w-8xl">
                 <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-3">
                   {features.map((feature) => (
                     <div key={feature.title} className="space-y-2">
