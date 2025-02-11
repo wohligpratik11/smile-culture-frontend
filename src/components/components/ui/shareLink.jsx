@@ -16,36 +16,41 @@ export default function ShareModal({ isOpen, onClose, movies }) {
 	const videoUrl = movies;
 	const shareOptions = [
 		{
-			name: "Instagram",
-			icon: Instagram,
-			link: `https://www.instagram.com/direct/new/?text=${encodeURIComponent(videoUrl)}`,
-		},
-		{
 			name: "Whatsapp",
 			icon: Whatsapp,
-			link: `whatsapp://send?text=${encodeURIComponent(videoUrl)}`,
+			link: `https://api.whatsapp.com/send?text=${videoUrl}`,
 		},
 		{
 			name: "Facebook",
 			icon: Facebook,
-			link: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(videoUrl)}`,
+			link: `https://www.facebook.com/`,
 		},
 		{
-			name: "Twitter",
+			name: "X",
 			icon: XIcon,
-			link: `https://twitter.com/intent/tweet?url=${encodeURIComponent(videoUrl)}`,
+			link: `https://x.com/intent/tweet?url=${videoUrl}`,
 		},
 		{
 			name: "Reddit",
 			icon: Reddit,
-			link: `https://www.reddit.com/submit?url=${encodeURIComponent(videoUrl)}`,
+			link: `https://www.reddit.com/submit?url=${videoUrl}`,
+		},
+		{
+			name: "Instagram",
+			icon: Instagram,
+			link: `https://www.instagram.com/`,
+			disabled: false,  // Allow clicking
+			tooltip: "Copy link to share on Instagram manually"
 		},
 		{
 			name: "Thread",
 			icon: Thread,
-			link: `https://www.threads.net/intent/tweet?url=${encodeURIComponent(videoUrl)}`,
+			link: `https://www.threads.net/`,
+			disabled: true,
+			tooltip: "Threads sharing not supported yet"
 		},
 	];
+
 
 	const handleCopy = async () => {
 		try {
