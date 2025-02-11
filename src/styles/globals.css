@@ -8,29 +8,49 @@
   --text-color: #ffffff; /* Light text */
   --background-image: url('../../public/assets/images/erosnowbg.webp') !important;
 }
+/* styles/globals.css or equivalent */
+html,
+body {
+  overflow: hidden;
+  height: 100%;
+  margin: 0;
+}
 
+@font-face {
+  font-family: 'Instrument Sans';
+  src: url('/public/fonts/InstrumentSans.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Sans-serif';
+  src: url('/public/fonts/sans-serif.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
 body {
   background-color: var(--background-color) !important;
   color: var(--text-color);
+  font-family: 'Instrument Sans', sans-serif;
   background-image: var(
     --background-image
   ) !important; /* Apply background image */
   background-size: cover;
   background-position: center;
-  font-family: 'Instrument Sans', Sans-serif;
   transition:
     background-color 0.3s,
     color 0.3s,
     background-image 0.3s;
 }
 .btn-gradient {
-  background: linear-gradient(to right, #40adff 50%, #87d880 50%);
+  background: linear-gradient(to right, #40aeff 50%, #91db73 50%);
 }
 .bg-gradient-custom-gradient {
-  background: linear-gradient(90deg, #87d880, #40adff);
+  background: linear-gradient(89.17deg, #a0e061 0.72%, #2fadff 62.22%);
 }
 .bg-polygon-gradient {
-  background: linear-gradient(90deg, #40adff, #87d880);
+  background: linear-gradient(90deg, #40adff, #91db73);
 }
 
 :root {
