@@ -10,9 +10,11 @@ export default function LoadingScreen() {
 				className="p-6 space-y-6 text-center bg-[#1e2344] rounded-lg flex flex-col justify-center items-center h-[83%] w-[83%] "
 			>
 				<h1 className="text-2xl font-medium">Generating, Please Hold On...</h1>
-
 				<div className="py-12">
-					<Loader2 className="w-12 h-12 text-[#e94e77] animate-spin mx-auto" />
+					<Loader2
+						className="w-12 h-12 animate-spin mx-auto bg-gradient-to-r from-[#87d880] to-[#40adff] text-transparent border-0 bg-clip-border"
+					/>
+
 				</div>
 
 				<div className="space-y-2">

@@ -319,7 +319,7 @@ const UploadPage = ({ movies }) => {
                               alt="Uploaded Image"
                               width={200}
                               height={200}
-                              className="h-full w-full rounded-2xl border border-slateBlue object-cover shadow"
+                              className="h-full w-full rounded-2xl border border-slateBlue object-fill shadow"
                             />
                           </div>
                         </div>
