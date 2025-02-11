@@ -9,12 +9,6 @@
   --background-image: url('../../public/assets/images/erosnowbg.webp') !important;
 }
 /* styles/globals.css or equivalent */
-html,
-body {
-  overflow: hidden;
-  height: 100%;
-  margin: 0;
-}
 
 @font-face {
   font-family: 'Instrument Sans';

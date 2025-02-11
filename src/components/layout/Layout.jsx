@@ -2,23 +2,22 @@
 
 import React from 'react';
 import Header from './Header';
-import Footer from './Footer';
-
 import ToastProvider from '../../context/ToastProvider';
 
 const Layout = ({ children }) => {
 	return (
-		<div className="min-h-screen flex flex-col overflow-hidden">
+
+		<div className="min-h-screen flex flex-col">
 			<ToastProvider>
 				<div className="mr-5 mt-4">
 					<Header />
 				</div>
-				<div className="flex-1 overflow-hidden">
-					<main>{children}</main>
+				<div>
+					<main className="flex-1">{children}</main>
 				</div>
-				{/* <Footer /> */}
 			</ToastProvider>
-		</div>
+
+		</div >
 	);
 };
 
