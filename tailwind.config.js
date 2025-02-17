@@ -78,6 +78,7 @@ module.exports = {
         lightOrangeRed: '#fddbb5',
         darkOrangeRed: '#c13e1b',
         deepNavy: '#434E80',
+        royalBlue: '#4469f3',
         blue: '#01bff2',
         gray: '#666666',
         customWhite: '#F5F5F5',
@@ -85,8 +86,9 @@ module.exports = {
         vividSkyBlue: '#10A3E7',
         lavenderBlue: '#5E6DA7',
         slateBlue: '#5B6BAB',
-        blueYonder: '#495583',
+        blueYonder: '#495583'
         blueSecondary: '#4318FF',
+
         green: {
           50: '#05cd991a',
           100: '#dcfce7',
@@ -100,6 +102,7 @@ module.exports = {
           800: '#166534',
           900: '#14532d',
         },
+
         navy: {
           50: '#d0dcfb',
           100: '#aac0fe',

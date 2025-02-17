@@ -24,7 +24,7 @@ import UploadIcon from "../../../public/assets/gif/uploadicon.gif"
 import FaceIcon from "../../../public/assets/gif/faceicon.gif"
 import PhotoIcon from "../../../public/assets/gif/photoicon.gif"
 import SaveShare from "../../../public/assets/gif/sharesave.gif"
-
+import gsap from "gsap"; // Import GSAP
 
 const Home = () => {
   const router = useRouter()
@@ -39,10 +39,10 @@ const Home = () => {
 
 
   const steps = [
-    { src: UploadIcon, text: "Upload your source photo or video" },
-    { src: PhotoIcon, text: "Select a photo from your stock database" },
-    { src: FaceIcon, text: "Select the face you'd like to swap" },
-    { src: SaveShare, text: "Share & Post" },
+    { src: UploadIcon, text: "Upload your source photo or video to begin the process" },
+    { src: PhotoIcon, text: "Select a photo from our stock database to begin" },
+    { src: FaceIcon, text: "Choose the face you'd like to swap." },
+    { src: SaveShare, text: "Share and post your customized content." },
   ];
   const features = [
     {
@@ -63,7 +63,7 @@ const Home = () => {
       description: "Support for multiple languages",
       path: "/movie",
     },
-  ]
+  ];
 
   const handleBackClick = () => {
     router.back()
@@ -96,6 +96,7 @@ const Home = () => {
   const handleMouseLeave = () => {
     setOpenIndex(null); // Close it when hover leaves
   };
+
   useEffect(() => {
     const images = [FaceGirl.src, FaceOne.src, KimFace.src, ZyanFace.src];
     let currentIndex = 0;
@@ -110,12 +111,50 @@ const Home = () => {
         setIsFaceSliderVisible(true);
       }, 1000);
 
-    }, 4000);
+    }, 4000); // Repeat every 4 seconds
+
     return () => clearInterval(interval);
   }, []);
 
 
 
+  useEffect(() => {
+    // GSAP text animations
+    gsap.from(".animate-text", {
+      opacity: 0,
+      y: 50,
+      duration: 1,
+      stagger: 0.3,
+    });
+
+    gsap.from(".animate-button", {
+      opacity: 0,
+      scale: 0.8,
+      duration: 1,
+      delay: 0.5,
+    });
+    gsap.from(".image-container", {
+      opacity: 0,
+      x: -100,
+      duration: 1.5,
+      ease: "power3.out",
+    });
+    gsap.from(".image-video-container", {
+      opacity: 0,
+      y: 50,
+      duration: 1,
+      stagger: 0.3,
+      ease: "power3.out",
+    });
+    const images = document.querySelectorAll('.animated-img');
+    gsap.from(images, {
+      opacity: 0,
+      scale: 0.10,
+      duration: 1,
+      stagger: 0.3,
+      ease: 'power2.out',
+    });
+  }, []);
 
   return (
     <>
@@ -143,8 +182,8 @@ const Home = () => {
       </Head>
       <div className="p-4">
         <Card className="bg-card-cardCustomBlue p-4">
-          <CardHeader >
-            <div className="flex justify-around sm:w-full   lg:w-fit xl:w-fit tablet:w-fit rounded-full p-1 bg-[#495583] border border-buttonBorder mb-3">
+          <CardHeader>
+            <div className="flex justify-around sm:w-full lg:w-fit xl:w-fit tablet:w-fit rounded-full p-1 bg-[#495583] border border-buttonBorder mb-3">
               <Button
                 variant="ghost"
                 className={`rounded-full ${selectedSwap === "single" ? "bg-[#3c4071]" : "text-white/70 hover:text-white hover:bg-[#3c4071]/50"} text-white hover:bg-[#3c4071]/90 text-xs w-full sm:!text-base`}
@@ -159,11 +198,10 @@ const Home = () => {
               >
                 Multi Face Swap
               </Button>
-
             </div>
 
             <div className="grid md:grid-cols-2 gap-8">
-              <div className="relative">
+              <div className="relative image-container">
                 {/* Corner borders */}
                 <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-[#4cc9f0]"></div>
                 <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-[#4cc9f0]"></div>
@@ -173,23 +211,23 @@ const Home = () => {
                 <img
                   src={currentImage}
                   alt="Face girl"
-                  className="w-full"
+                  className="w-full '"
                 />
 
                 <img
                   src={FaceSlider.src}
                   alt="Face slider"
-                  className={` absolute top-[40%] tablet:top-[28%] left-[50.5%] transform -translate-x-1/2 -translate-y-1/2 w-[24%] transition-opacity duration-1000  ${isFaceSliderVisible ? 'opacity-0' : 'opacity-100'} animate-faceSlide`}
+                  className={`absolute top-[40%] tablet:top-[28%] left-[50.5%] transform -translate-x-1/2 -translate-y-1/2 w-[24%] transition-opacity duration-1000 ${isFaceSliderVisible ? 'opacity-0' : 'opacity-100'} animate-faceSlide `}
                 />
+
               </div>
               <div className="space-y-4 ">
-                <span className="font-semibold text-3xl">
+                <span className="font-semibold text-3xl animate-text">
                   Step Into the Spotlight,&nbsp;
                   <span className="text-[#4cc9f0]">Be the Hero</span>
                 </span>
-                <p className="text-lg font-normal leading-6">
-                  Transform iconic movie scenes with your image and become the star you've always dreamed of. Add your
-                  personal touch to the dialogue and create unforgettable moments!
+                <p className="text-lg font-normal leading-6 animate-text">
+                  Elevate your creative expression by reinterpreting iconic movie moments. Infuse your personal style into the dialogue, adjust the setting, or introduce new characters to create unforgettable cinematic experiences. Whether transforming a beloved scene or crafting an entirely original scenario, you have the power to reshape film history and make it uniquely yours. Unleash your vision and become the star you've always imagined.
                 </p>
 
                 <Link href="/movie">
@@ -199,29 +237,24 @@ const Home = () => {
                       description: "Advanced face swapping technology",
                       path: "/movie"
                     })}
-                    className="bg-gradient-custom-gradient hover:bg-[#4cc9f0]/90 w-52 h-12 mt-4"
+                    className="bg-gradient-custom-gradient hover:bg-[#4cc9f0]/90 w-52 h-12 mt-4 animate-button"
                   >
                     Get Started
                   </Button>
                 </Link>
-
               </div>
             </div>
           </CardHeader>
 
           <CardContent className="space-y-12">
             <section className="space-y-6">
-              <h3 className="text-4xl font-bold leading-10">Swap Faces in 4 Easy Steps</h3>
-              <p className="text-lg font-normal leading-6">
-                Choose one of Eros' numerous stock face options to create a custom marketing campaign in minutes. Or
-                upload an image of your model, customer, or celebrity endorser to start creating unique advertisements
-                that look like a high-end design studio painstakingly created with a team of artists. You can also age
-                your model to make them look older or de-age your model to display a younger version of themselves using
-                the same technology prized by major Hollywood studios.
+              <h3 className="text-4xl font-bold leading-10 flex justify-center animate-text mb-10 ">Effortless Face Swaps in 4 Simple Steps</h3>
+              <p className="text-lg font-normal leading-6 animate-text">
+                Start by uploading your source photo or video, or choose an image from our curated stock database. Then, select the face you wish to swap for a seamless transformation. Once satisfied with the result, effortlessly share and post your high-quality, customized content.
               </p>
               <div className="grid sm:grid-cols-2 lg:grid-cols-2 gap-4">
                 {steps.map((step, i) => (
-                  <div key={i} className="flex items-center gap-3 lg:p-4 rounded-lg">
+                  <div key={i} className="flex items-center gap-3 lg:p-4 rounded-lg animate-text">
                     <div className="p-3 rounded-full bg-[#495583] flex items-center justify-center">
                       <Image
                         src={step.src}
@@ -237,9 +270,9 @@ const Home = () => {
 
             </section>
             <section className="space-y-0">
-              <h3 className="text-3xl font-bold leading-10 mb-5">World’s Most Advanced Face Swap Tool</h3>
+              <h3 className="text-3xl font-bold flex justify-center leading-10 mb-10 animate-text">Revolutionize Your Photos with the World’s Most Advanced Face Swap Tool!</h3>
               <div className="grid md:grid-cols-2 items-center gap-12 pt-0 pb-0">
-                <div className="relative ">
+                <div className="relative image-video-container">
                   {/* Corner borders */}
                   <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-[#4cc9f0]"></div>
                   <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-[#4cc9f0]"></div>
@@ -254,31 +287,27 @@ const Home = () => {
                   {[
                     {
                       title: "Animated Face Swap",
-                      desc: "Bring your photos to life by swapping faces in animations or dynamic images for a fun twist.",
+                      desc: "Breathe life into your images by swapping faces in animations or dynamic visuals, creating a captivating and playful effect",
                     },
                     {
                       title: "Group Face Swap",
-                      desc: "Easily swap faces of multiple people in a single image, perfect for enhancing group photos.",
+                      desc: "Effortlessly swap faces of multiple individuals within a single image, perfect for enhancing group photos and creating memorable moments."
                     },
                     {
                       title: "Video Face Swap",
-                      desc: "Transform high-quality videos by swapping faces seamlessly, making your footage more engaging.",
+                      desc: "Transform high-definition videos by seamlessly swapping faces, making your footage more engaging and visually striking..",
                     },
                     {
                       title: "Real-Time Face Swap",
-                      desc: "Swap faces instantly during video calls or live streams for an interactive experience.",
+                      desc: "Swap faces instantly during video calls or live streams, offering a unique and interactive experience in real time.",
                     },
-                    // {
-                    //   title: "Custom Face Swap",
-                    //   desc: "Create unique, personalized face swaps by selecting specific images or moments to modify.",
-                    // },
-                  ].map((feature, i) => (
-                    <div key={i} className="space-y-1 xs:mt-8">
+                  ].map((feature, index) => (
+                    <div key={index} className="space-y-3 mb-4 animate-text">
                       <h4 className="font-medium flex items-center gap-2">
                         <span className="text-[#4cc9f0]">◆</span>
                         {feature.title}
                       </h4>
-                      <p className="text-sm text-gray-300 ml-6">{feature.desc}</p>
+                      <p className="text-base text-white ">{feature.desc}</p>
                     </div>
                   ))}
                 </div>
@@ -287,8 +316,8 @@ const Home = () => {
             </section>
 
             <section className="">
-              <h3 className="text-2xl font-semibold mb-5">FAQ</h3>
-              <Accordion type="single" collapsible className="space-y-2">
+              <h3 className="text-2xl font-semibold mb-5 animate-text ">FAQ</h3>
+              <Accordion type="single" collapsible className="space-y-2 animate-text">
                 {[
                   {
                     question: "Why Choose Our Face Swap Tool?",
@@ -317,13 +346,12 @@ const Home = () => {
                 ))}
               </Accordion>
             </section>
-
           </CardContent>
         </Card>
-      </div >
+      </div>
     </>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
 

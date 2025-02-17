@@ -390,10 +390,18 @@ const UploadPage = ({ movies }) => {
               id="terms"
               checked={isAgreed}
               onChange={() => setIsAgreed(!isAgreed)}
-              className="h-4 w-4 text-customGreen border-gray-300 rounded"
+              className="h-4 w-4 text-customGreen border-gray-300 rounded "
             />
             <label htmlFor="terms" className="ml-2 text-sm text-customWhite">
-              By clicking ‘Next’ I agree to the <Link href="/terms-and-conditions" className="text-blue-500 hover:underline">terms and conditions</Link>.
+              By clicking ‘Next’ I agree to the
+              <Link
+                href="https://erosnow.com/termsofuse"
+                className="text-royalBlue hover:underline ml-1"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                terms and conditions
+              </Link>.
             </label>
           </div>
         )}
