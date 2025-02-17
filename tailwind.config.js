@@ -139,7 +139,7 @@ module.exports = {
         card: {
           DEFAULT: '#ffffff',
           dark: '#1f2937',
-          cardCustomBlue: 'rgba(31,44,100,0.7)', // Transparent color
+          cardCustomBlue: 'rgba(16, 23, 55, 0.7)',
         },
         'card-foreground': {
           DEFAULT: '#000000',

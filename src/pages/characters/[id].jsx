@@ -22,11 +22,15 @@ const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, 
 	const [currentPage, setCurrentPage] = useState(initialPage);
 	const [totalPages, setTotalPages] = useState(Math.ceil(totalCount / 8));
 	const [selectedCharacters, setSelectedCharacters] = useState([]);
+	const [swapType, setSwapType] = useState('single');
 
 	useEffect(() => {
 		const title = Cookie.get('title');
+		const swapType = Cookie.get('swapType'); // Read swapType from cookies
 		setTitleFromCookie(title);
+		setSwapType(swapType); // Store swapType in the state
 	}, []);
+
 
 	useEffect(() => {
 		const { page } = router.query;
@@ -87,15 +91,22 @@ const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, 
 	};
 
 	const handleCharactersSelect = (character) => {
-		setSelectedCharacters((prevSelected) => {
-			const isSelected = prevSelected.includes(character.character_id);
-			if (isSelected) {
-				return prevSelected.filter((id) => id !== character.character_id);
-			} else {
-				return [...prevSelected, character.character_id];
-			}
-		});
+		if (swapType === 'single') {
+			// If swapType is 'single', only one character can be selected
+			setSelectedCharacters([character.character_id]);
+		} else {
+			// If swapType is 'multiple', allow multiple characters to be selected
+			setSelectedCharacters((prevSelected) => {
+				const isSelected = prevSelected.includes(character.character_id);
+				if (isSelected) {
+					return prevSelected.filter((id) => id !== character.character_id);
+				} else {
+					return [...prevSelected, character.character_id];
+				}
+			});
+		}
 	};
+
 
 	const renderHeader = () => {
 		if (titleFromCookie) {

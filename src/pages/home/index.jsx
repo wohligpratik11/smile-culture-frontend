@@ -1,57 +1,126 @@
-import React, { useState } from 'react';
+"use client"
+
+import { useState, useEffect } from "react"
+import { useRouter } from "next/router"
 import Link from 'next/link';
-import { Card, CardContent } from '../../components/components/ui/card';
-import { ArrowLeft } from 'lucide-react';
-import { useRouter } from 'next/router';
-import Head from 'next/head';
-import Cookies from 'js-cookie';
-import PolygonLogo from '../../../public/assets/images/polygon.webp';
+import Head from "next/head"
+import Cookies from "js-cookie"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../../components/components/ui/accordion"
+import Image from 'next/image'
+import { Card, CardContent, CardHeader } from "../../components/components/ui/card"
+import { Button } from "@/components/components/ui/button"
+import FaceVector from "../../../public/assets/images/faceVector.webp"
+import BorderBox from "../../../public/assets/images/borderBox.webp"
+import FaceSwapImage from "../../../public/assets/images/faceswap.webp"
+import FaceGirl from "../../../public/assets/images/facegirl.webp"
+import DualFaceIcons from "../../../public/assets/images/dualface.webp"
+import ArrowIcon from "../../../public/assets/images/arrow.webp"
+import ImageIcon from "../../../public/assets/images/imagegallary.webp"
+import FaceSlider from "../../../public/assets/images/faceslider.webp"
+import FaceOne from "../../../public/assets/images/face1.webp"
+import KimFace from "../../../public/assets/images/kimface.webp"
+import ZyanFace from "../../../public/assets/images/zyanface.webp"
+import UploadIcon from "../../../public/assets/gif/uploadicon.gif"
+import FaceIcon from "../../../public/assets/gif/faceicon.gif"
+import PhotoIcon from "../../../public/assets/gif/photoicon.gif"
+import SaveShare from "../../../public/assets/gif/sharesave.gif"
+
 
 const Home = () => {
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
-  const [loginMessage, setLoginMessage] = useState('');
+  const router = useRouter()
+  const [isLoading, setIsLoading] = useState(false)
+  const [loginMessage, setLoginMessage] = useState("")
+  const [selectedSwap, setSelectedSwap] = useState(Cookies.get("swapType") || "single")
+  const [openIndex, setOpenIndex] = useState(null);
+  const AnimatedFace = "/assets/videos/ErosAnimatedFace.mp4";
+  const AnimatedFacGif = "/assets/gif/Eros.gif";
+  const [isFaceSliderVisible, setIsFaceSliderVisible] = useState(true);
+  const [currentImage, setCurrentImage] = useState(FaceGirl.src);
 
+
+  const steps = [
+    { src: UploadIcon, text: "Upload your source photo or video" },
+    { src: PhotoIcon, text: "Select a photo from your stock database" },
+    { src: FaceIcon, text: "Select the face you'd like to swap" },
+    { src: SaveShare, text: "Share & Post" },
+  ];
   const features = [
     {
-      title: 'face-swap',
-      image: '/assets/images/faceswap.webp',
-      description: 'Advanced face swapping technology',
-      path: '/movie',
+      title: "face-swap",
+      image: "/placeholder.svg?height=100&width=100",
+      description: "Advanced face swapping technology",
+      path: "/movie",
     },
     {
-      title: 'lip-syncing',
-      image: '/assets/images/lipsyncing.webp',
-      description: 'Precise lip synchronization',
-      path: '/movie',
+      title: "lip-syncing",
+      image: "/placeholder.svg?height=100&width=100",
+      description: "Precise lip synchronization",
+      path: "/movie",
     },
     {
-      title: 'multilingual',
-      image: '/assets/images/multilingual.webp',
-      description: 'Support for multiple languages',
-      path: '/movie',
+      title: "multilingual",
+      image: "/placeholder.svg?height=100&width=100",
+      description: "Support for multiple languages",
+      path: "/movie",
     },
-  ];
+  ]
 
   const handleBackClick = () => {
-    router.back();
-  };
+    router.back()
+  }
 
   const handleHomeBackClick = () => {
-    router.push('https://erosnow.com/');
+    router.push("https://erosnow.com/")
+  }
+  useEffect(() => {
+    const swapType = Cookies.get("swapType")
+    if (swapType) {
+      setSelectedSwap(swapType)
+    }
+  }, [])
+  const handleFeatureClick = (feature) => {
+    Cookies.set("title", feature?.title)
+    router.push("/movie")  // Navigate to the /movie path
+  }
+  const handleButtonClick = (buttonType) => {
+    // Set the cookie
+    Cookies.set("swapType", buttonType)
+
+    // Update the state
+    setSelectedSwap(buttonType)
+  }
+  const handleMouseEnter = (index) => {
+    setOpenIndex(index); // Open the accordion item when hovered
   };
 
-  const handleFeatureClick = (feature) => {
-    Cookies.set('title', feature?.title);
+  const handleMouseLeave = () => {
+    setOpenIndex(null); // Close it when hover leaves
   };
+  useEffect(() => {
+    const images = [FaceGirl.src, FaceOne.src, KimFace.src, ZyanFace.src];
+    let currentIndex = 0;
+
+    const interval = setInterval(() => {
+      setIsFaceSliderVisible(false);
+
+      setTimeout(() => {
+        currentIndex = (currentIndex + 1) % images.length;
+        setCurrentImage(images[currentIndex]);
+
+        setIsFaceSliderVisible(true);
+      }, 1000);
+
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
+
+
+
 
   return (
     <>
       <Head>
-        <title>
-          Eros Now - Watch over 11,000+ HD Movies, TV Shows & Originals Online |
-          Eros Now
-        </title>
+        <title>Eros Now - Watch over 11,000+ HD Movies, TV Shows & Originals Online | Eros Now</title>
         <meta
           name="description"
           content="Access India's largest movie collection with Eros Now. Watch & download HD Movies, TV Shows, Eros Now Originals & Songs!"
@@ -64,131 +133,197 @@ const Home = () => {
           property="og:description"
           content="Access India's largest movie collection with Eros Now. Watch & download HD Movies, TV Shows, Eros Now Originals & Songs!"
         />
-        <meta
-          property="og:image"
-          content="https://erosnow.com/public/images/sq-thumb-new-216_216.png"
-        />
+        <meta property="og:image" content="https://erosnow.com/public/images/sq-thumb-new-216_216.png" />
         <meta property="og:url" content="https://erosnow.com/" />
         <meta name="twitter:card" content="Summary" />
-
         <meta name="format-detection" content="telephone=no" />
         <meta name="mobile-web-app-capable" content="yes" />
-
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, maximum-scale=1"
-        />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
       </Head>
-      <div className="h-[835px] p-4">
+      <div className="p-4">
         <Card className="bg-card-cardCustomBlue p-4">
-          <div className="mt-2 space-y-4">
-            <div className="relative flex justify-end mb-9 sm:mb-0">
-              <Link href="/viewall" passHref>
-                <button
-                  className="px-4 py-2 rounded-lg bg-gradient-custom-gradient hover:border border-transparent hover:border-buttonBorder cursor-pointer font-medium"
-                  aria-label="My Creations"
-                >
-                  My Creations
-                </button>
-              </Link>
+          <CardHeader >
+            <div className="flex justify-around sm:w-full   lg:w-fit xl:w-fit tablet:w-fit rounded-full p-1 bg-[#495583] border border-buttonBorder mb-3">
+              <Button
+                variant="ghost"
+                className={`rounded-full ${selectedSwap === "single" ? "bg-[#3c4071]" : "text-white/70 hover:text-white hover:bg-[#3c4071]/50"} text-white hover:bg-[#3c4071]/90 text-xs w-full sm:!text-base`}
+                onClick={() => handleButtonClick("single")}
+              >
+                Face Swap
+              </Button>
+              <Button
+                variant="ghost"
+                className={`rounded-full ${selectedSwap === "dual" ? "bg-[#3c4071]" : "text-white/70 hover:text-white hover:bg-[#3c4071]/50"} text-white hover:bg-[#3c4071]/90 text-xs w-full sm:!text-base`}
+                onClick={() => handleButtonClick("dual")}
+              >
+                Multi Face Swap
+              </Button>
+
             </div>
 
-            <div className="flex justify-center">
-              <div className="flex flex-col sm:flex-row items-center justify-center text-center text-customWhite h-14">
-                <span className="text-base sm:text-xl md:text-2xl lg:text-4xl font-semibold text-center">
-                  Bring Your Movie Vision to Life—
-                  <span className="gradient_text_about-bg">Step into the Spotlight</span>
-                </span>
-
+            <div className="grid md:grid-cols-2 gap-8">
+              <div className="relative">
+                {/* Corner borders */}
+                <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-[#4cc9f0]"></div>
+                <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-[#4cc9f0]"></div>
+                <div className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-[#4cc9f0]"></div>
+                <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-[#4cc9f0]"></div>
 
                 <img
-                  src={PolygonLogo.src}
-                  alt="Polygon Logo"
-                  className="w-10 h-10 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-28 lg:h-28 object-contain"
+                  src={currentImage}
+                  alt="Face girl"
+                  className="w-full"
+                />
+
+                <img
+                  src={FaceSlider.src}
+                  alt="Face slider"
+                  className={` absolute top-[40%] tablet:top-[28%] left-[50.5%] transform -translate-x-1/2 -translate-y-1/2 w-[24%] transition-opacity duration-1000  ${isFaceSliderVisible ? 'opacity-0' : 'opacity-100'} animate-faceSlide`}
                 />
               </div>
-            </div>
-            <div className="mt-6 flex justify-center space-x-4">
-              <div className="w-1004 text-center text-xl leading-7 text-customWhite font-medium">
-                Transform iconic movie scenes with your image, adding your unique twist to unforgettable moments. Become the star you’ve always dreamed of!
+              <div className="space-y-4 ">
+                <span className="font-semibold text-3xl">
+                  Step Into the Spotlight,&nbsp;
+                  <span className="text-[#4cc9f0]">Be the Hero</span>
+                </span>
+                <p className="text-lg font-normal leading-6">
+                  Transform iconic movie scenes with your image and become the star you've always dreamed of. Add your
+                  personal touch to the dialogue and create unforgettable moments!
+                </p>
+
+                <Link href="/movie">
+                  <Button
+                    onClick={() => handleFeatureClick({
+                      title: "face-swap",
+                      description: "Advanced face swapping technology",
+                      path: "/movie"
+                    })}
+                    className="bg-gradient-custom-gradient hover:bg-[#4cc9f0]/90 w-52 h-12 mt-4"
+                  >
+                    Get Started
+                  </Button>
+                </Link>
+
               </div>
             </div>
-            <div className="mt-4 flex items-center justify-center">
-              <div className="mx-auto max-w-8xl">
-                <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-3">
-                  {features.map((feature) => (
-                    <div key={feature.title} className="space-y-2">
-                      {feature.title === 'face-swap' ? (
-                        <Link href={feature.path} passHref legacyBehavior>
-                          <Card
-                            className="bg-blue-800/20 mb-6 transform cursor-pointer overflow-hidden border-0 backdrop-blur-sm transition-transform duration-200 hover:scale-105"
-                            aria-label={`Go to ${feature.title}`}
-                            onClick={() => handleFeatureClick(feature)}
-                          >
-                            <CardContent className="p-0 relative">
-                              <div className="relative aspect-video flex items-center justify-center">
-                                <img
-                                  src={feature.image}
-                                  alt={`${feature.title} image`}
-                                  className="object-cover h-full w-full"
-                                />
-                                {/* <div className="absolute  flex items-center justify-center rounded-full w-10 h-10 shadow-lg border-buttonBorder cursor-pointer bg-gradient-custom-gradient">
-                                  <ArrowLeft className="rotate-180 text-blue-600 w-5 h-5" />
-                                </div> */}
-                              </div>
-                            </CardContent>
-                          </Card>
-                        </Link>
-                      ) : (
-                        <div className="mb-6 cursor-not-allowed">
-                          <Card className="bg-blue-800/20 transform overflow-hidden border-0 backdrop-blur-sm transition-transform duration-200">
-                            <CardContent className="p-0">
-                              <div className="relative aspect-video">
-                                <img
-                                  src={feature.image}
-                                  alt={`${feature.title} image`}
-                                  className="h-full w-full object-cover"
-                                />
-                                <div className="bg-gray-900/80 absolute inset-0 flex items-center justify-center !backdrop-blur-[2px]">
-                                  <div className="text-center">
-                                    <span className="text-3xl font-bold text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.6)]">
-                                      Coming Soon
-                                    </span>
-                                    <div className="mt-2 h-1 w-16 bg-gradient-to-r from-transparent via-white to-transparent opacity-75" />
-                                  </div>
-                                </div>
-                              </div>
-                            </CardContent>
-                          </Card>
-                        </div>
-                      )}
-                      {feature.title === 'face-swap' ? (
-                        <Link
-                          href={feature.path}
-                          passHref
-                          legacyBehavior
-                          className="transition-opacity duration-200 hover:opacity-80"
-                        >
-                          <div className="bg-button-gradient flex h-14 cursor-pointer items-center justify-center rounded-2xl border border-slateBlue text-center text-lg font-bold capitalize text-white transition-opacity duration-200 hover:opacity-75">
-                            {feature.title}
-                          </div>
-                        </Link>
-                      ) : (
-                        <div className="bg-button-gradient flex h-14 cursor-not-allowed items-center justify-center rounded-2xl border border-slateBlue text-center text-lg font-bold capitalize text-white/50 transition-opacity duration-200 hover:opacity-75">
-                          {feature.title}
-                        </div>
-                      )}
+          </CardHeader>
+
+          <CardContent className="space-y-12">
+            <section className="space-y-6">
+              <h3 className="text-4xl font-bold leading-10">Swap Faces in 4 Easy Steps</h3>
+              <p className="text-lg font-normal leading-6">
+                Choose one of Eros' numerous stock face options to create a custom marketing campaign in minutes. Or
+                upload an image of your model, customer, or celebrity endorser to start creating unique advertisements
+                that look like a high-end design studio painstakingly created with a team of artists. You can also age
+                your model to make them look older or de-age your model to display a younger version of themselves using
+                the same technology prized by major Hollywood studios.
+              </p>
+              <div className="grid sm:grid-cols-2 lg:grid-cols-2 gap-4">
+                {steps.map((step, i) => (
+                  <div key={i} className="flex items-center gap-3 lg:p-4 rounded-lg">
+                    <div className="p-3 rounded-full bg-[#495583] flex items-center justify-center">
+                      <Image
+                        src={step.src}
+                        alt={step.text}
+                        width={43}
+                        height={43}
+                      />
+                    </div>
+                    <p className="text-1xl text-gray-300 font-medium leading-6">{step.text}</p>
+                  </div>
+                ))}
+              </div>
+
+            </section>
+            <section className="space-y-0">
+              <h3 className="text-3xl font-bold leading-10 mb-5">World’s Most Advanced Face Swap Tool</h3>
+              <div className="grid md:grid-cols-2 items-center gap-12 pt-0 pb-0">
+                <div className="relative ">
+                  {/* Corner borders */}
+                  <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-[#4cc9f0]"></div>
+                  <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-[#4cc9f0]"></div>
+                  <div className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-[#4cc9f0]"></div>
+                  <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-[#4cc9f0]"></div>
+
+                  <div className="w-full h-full rounded-lg flex items-center justify-center">
+                    <img src={AnimatedFacGif} alt="Face vector" className="w-full" />
+                  </div>
+                </div>
+                <div className="">
+                  {[
+                    {
+                      title: "Animated Face Swap",
+                      desc: "Bring your photos to life by swapping faces in animations or dynamic images for a fun twist.",
+                    },
+                    {
+                      title: "Group Face Swap",
+                      desc: "Easily swap faces of multiple people in a single image, perfect for enhancing group photos.",
+                    },
+                    {
+                      title: "Video Face Swap",
+                      desc: "Transform high-quality videos by swapping faces seamlessly, making your footage more engaging.",
+                    },
+                    {
+                      title: "Real-Time Face Swap",
+                      desc: "Swap faces instantly during video calls or live streams for an interactive experience.",
+                    },
+                    // {
+                    //   title: "Custom Face Swap",
+                    //   desc: "Create unique, personalized face swaps by selecting specific images or moments to modify.",
+                    // },
+                  ].map((feature, i) => (
+                    <div key={i} className="space-y-1 xs:mt-8">
+                      <h4 className="font-medium flex items-center gap-2">
+                        <span className="text-[#4cc9f0]">◆</span>
+                        {feature.title}
+                      </h4>
+                      <p className="text-sm text-gray-300 ml-6">{feature.desc}</p>
                     </div>
                   ))}
                 </div>
               </div>
-            </div>
-          </div>
-        </Card>
-      </div>
-    </>
-  );
-};
 
-export default Home;
+            </section>
+
+            <section className="">
+              <h3 className="text-2xl font-semibold mb-5">FAQ</h3>
+              <Accordion type="single" collapsible className="space-y-2">
+                {[
+                  {
+                    question: "Why Choose Our Face Swap Tool?",
+                    answer: "Our Face Swap Tool offers a fast, accurate, and fun way to swap faces with ease. You’ll get realistic results while ensuring your privacy is fully protected—all at no cost to you!"
+                  },
+                  {
+                    question: "Can I use face swap on group photos?",
+                    answer: "It works seamlessly with group photos! Easily swap faces between multiple people, and enjoy flawless, natural results every time."
+                  },
+                  {
+                    question: "Can I edit the swapped face afterward?",
+                    answer: "Want to make the swap even more realistic? Our tool lets you fine-tune and adjust the swapped face for a more polished and natural look, ensuring the perfect final result."
+                  }, {
+                    question: "Can I swap faces between different genders and ages?",
+                    answer: "No problem! Our tool can handle face swaps across different genders and ages, delivering realistic and natural results, no matter the differences."
+                  },
+                ].map((item, i) => (
+                  <AccordionItem key={i} value={`item-${i}`} className="border-none rounded-lg bg-blueYonder px-4">
+                    <AccordionTrigger className="hover:no-underline">
+                      <span className="text-left">{typeof item === "string" ? item : item.question}</span>
+                    </AccordionTrigger>
+                    <AccordionContent className="text-gray-300">
+                      {item.answer}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </section>
+
+          </CardContent>
+        </Card>
+      </div >
+    </>
+  )
+}
+
+export default Home
+

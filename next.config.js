@@ -15,6 +15,7 @@ const nextConfig = {
     '@uppy/react',
     '@uppy/webcam',
     '@uppy/image-editor',
+    'gsap',
   ],
   experimental: {
     optimizeCss: true, // Enables CSS optimization for performance

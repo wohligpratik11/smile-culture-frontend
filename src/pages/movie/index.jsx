@@ -150,8 +150,7 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
                   <Card
                     className={`bg-blue-800/20 relative mb-2 transform cursor-pointer overflow-hidden border-0 backdrop-blur-sm transition-transform duration-200 hover:scale-105 ${selectedMovie?.id === feature.id ? 'border border-solid border-buttonBorder' : ''}`}
                     aria-label={`Select ${feature.title}`}
-                    onClick={() => handleMovieSelect(feature)}
-                  >
+                    onClick={() => router.push(feature.path)}                  >
                     <CardContent className="p-0">
                       <AspectRatio ratio={16 / 9} className="w-full">
                         <Image
@@ -184,14 +183,14 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
               onPageChange={handlePageChange}
             />
           </div>
-          {selectedMovie && (
+          {/* {selectedMovie && (
             <button
               className="bg-gradient-custom-gradient mt-4 h-12 w-52 rounded-lg hover:border hover:border-buttonBorder px-4 py-2 sm:ml-4 sm:mt-0"
               onClick={() => router.push(selectedMovie.path)}
             >
               Next
             </button>
-          )}
+          )} */}
         </div>
 
 

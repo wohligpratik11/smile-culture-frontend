@@ -23,7 +23,7 @@ export default function ShareModal({ isOpen, onClose, movies }) {
 		{
 			name: "Facebook",
 			icon: Facebook,
-			link: `https://www.facebook.com/`,
+			link: `https://www.facebook.com/sharer.php?u=${videoUrl}`,
 		},
 		{
 			name: "X",
@@ -62,17 +62,16 @@ export default function ShareModal({ isOpen, onClose, movies }) {
 		}
 	};
 
-	// Close modal if click outside
-	useEffect(() => {
-		const handleOutsideClick = (event) => {
-			if (modalRef.current && !modalRef.current.contains(event.target)) {
+	const handleOutsideClick = (event) => {
+		if (modalRef.current && !modalRef.current.contains(event.target)) {
+			if (typeof onClose === 'function') {
 				onClose();
+			} else {
+				console.error('onClose is not a function');
 			}
-		};
+		}
+	};
 
-		document.addEventListener("mousedown", handleOutsideClick);
-		return () => document.removeEventListener("mousedown", handleOutsideClick);
-	}, [onClose]);
 
 	return (
 		<div

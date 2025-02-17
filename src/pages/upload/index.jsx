@@ -47,6 +47,7 @@ const UploadPage = ({ movies }) => {
   // This will store an array of objects like:
   // [ { characterId: 123, uploadedUrl: 'https://...' }, ... ]
   const [selectedImages, setSelectedImages] = useState([]);
+  const [isAgreed, setIsAgreed] = useState(false);
 
   const { showSpinner, hideSpinner } = useSpinner();
   const { addToast } = useToaster();
@@ -382,20 +383,38 @@ const UploadPage = ({ movies }) => {
           )}
           {/* <LoadingScreen /> */}
         </div>
+        {isAllImagesUploaded && (
+          <div className="flex items-center mt-4">
+            <input
+              type="checkbox"
+              id="terms"
+              checked={isAgreed}
+              onChange={() => setIsAgreed(!isAgreed)}
+              className="h-4 w-4 text-customGreen border-gray-300 rounded"
+            />
+            <label htmlFor="terms" className="ml-2 text-sm text-customWhite">
+              By clicking ‘Next’ I agree to the <Link href="/terms-and-conditions" className="text-blue-500 hover:underline">terms and conditions</Link>.
+            </label>
+          </div>
+        )}
 
+        {/* Next Button */}
         {/* Next Button */}
         {isAllImagesUploaded && (
           <div className="mt-6 flex justify-end space-x-4">
             <Link href="/upload/viewupload" prefetch>
               <button
-                className="bg-gradient-custom-gradient h-12 w-52 rounded-lg border border-buttonBorder px-4 py-2"
+                className={`bg-gradient-custom-gradient h-12 w-52 rounded-lg border border-buttonBorder px-4 py-2 
+          ${!isAgreed ? 'opacity-50 cursor-not-allowed' : ''}`} // Disabled styles
                 onClick={handleNextClick}
+                disabled={!isAgreed}
               >
                 Next
               </button>
             </Link>
           </div>
         )}
+
       </Card>
     </div>
 

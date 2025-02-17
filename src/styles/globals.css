@@ -327,3 +327,15 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+@keyframes faceSlide {
+  0% {
+    transform: translateX(-50%) translateY(-50%);
+  }
+  100% {
+    transform: translateX(-50%) translateY(-50%) scale(1.1); /* Adjust the scale or other properties */
+  }
+}
+
+.animate-faceSlide {
+  animation: faceSlide 1.5s ease-in-out 2 alternate forwards;
+}
