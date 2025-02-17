@@ -86,7 +86,7 @@ module.exports = {
         vividSkyBlue: '#10A3E7',
         lavenderBlue: '#5E6DA7',
         slateBlue: '#5B6BAB',
-        blueYonder: '#495583'
+        blueYonder: '#495583',
         blueSecondary: '#4318FF',
 
         green: {
