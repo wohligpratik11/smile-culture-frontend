@@ -25,6 +25,9 @@ import FaceIcon from "../../../public/assets/gif/faceicon.gif"
 import PhotoIcon from "../../../public/assets/gif/photoicon.gif"
 import SaveShare from "../../../public/assets/gif/sharesave.gif"
 import gsap from "gsap"; // Import GSAP
+import ImageComparisonCard from "../../components/components/ui/CompareCard";
+import AshishFace from "../../../public/assets/images/ashish.webp"
+// import Slider from "../../components/components/ui/slider";
 
 const Home = () => {
   const router = useRouter()
@@ -64,7 +67,21 @@ const Home = () => {
       path: "/movie",
     },
   ];
-
+  const imageComparisons = [
+    {
+      image1: AshishFace,  // Image 1 for the first card
+      image2: AshishFace,    // Image 2 for the first card
+      title: "Face Girl vs Face One",
+      description: "A comparison of different face images."
+    },
+    {
+      image1: AshishFace,    // Image 1 for the second card
+      image2: AshishFace,   // Image 2 for the second card
+      title: "Kim vs Zyan",
+      description: "A comparison of two different faces."
+    },
+    // Add more comparisons as needed
+  ];
   const handleBackClick = () => {
     router.back()
   }
@@ -146,14 +163,20 @@ const Home = () => {
       stagger: 0.3,
       ease: "power3.out",
     });
-    const images = document.querySelectorAll('.animated-img');
-    gsap.from(images, {
-      opacity: 0,
-      scale: 0.10,
-      duration: 1,
-      stagger: 0.3,
-      ease: 'power2.out',
-    });
+
+  }, []);
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      // This code will only run in the browser
+      const images = document.querySelectorAll('.animated-img');
+      gsap.from(images, {
+        opacity: 0,
+        scale: 0.10,
+        duration: 1,
+        stagger: 0.3,
+        ease: 'power2.out',
+      });
+    }
   }, []);
 
   return (
@@ -183,23 +206,35 @@ const Home = () => {
       <div className="p-4">
         <Card className="bg-card-cardCustomBlue p-4">
           <CardHeader>
-            <div className="flex justify-around sm:w-full lg:w-fit xl:w-fit tablet:w-fit rounded-full p-1 bg-[#495583] border border-buttonBorder mb-3">
-              <Button
-                variant="ghost"
-                className={`rounded-full ${selectedSwap === "single" ? "bg-[#3c4071]" : "text-white/70 hover:text-white hover:bg-[#3c4071]/50"} text-white hover:bg-[#3c4071]/90 text-xs w-full sm:!text-base`}
-                onClick={() => handleButtonClick("single")}
-              >
-                Face Swap
-              </Button>
-              <Button
-                variant="ghost"
-                className={`rounded-full ${selectedSwap === "dual" ? "bg-[#3c4071]" : "text-white/70 hover:text-white hover:bg-[#3c4071]/50"} text-white hover:bg-[#3c4071]/90 text-xs w-full sm:!text-base`}
-                onClick={() => handleButtonClick("dual")}
-              >
-                Multi Face Swap
-              </Button>
-            </div>
+            <div className="flex justify-between">
+              <div className="flex justify-around sm:w-full lg:w-fit xl:w-fit tablet:w-fit rounded-full p-1 bg-[#495583] border border-buttonBorder mb-3">
+                <Button
+                  variant="ghost"
+                  className={`rounded-full ${selectedSwap === "single" ? "bg-[#3c4071]" : "text-white/70 hover:text-white hover:bg-[#3c4071]/50"} text-white hover:bg-[#3c4071]/90 text-xs w-full sm:!text-base`}
+                  onClick={() => handleButtonClick("single")}
+                >
+                  Face Swap
+                </Button>
+                <Button
+                  variant="ghost"
+                  className={`rounded-full ${selectedSwap === "dual" ? "bg-[#3c4071]" : "text-white/70 hover:text-white hover:bg-[#3c4071]/50"} text-white hover:bg-[#3c4071]/90 text-xs w-full sm:!text-base`}
+                  onClick={() => handleButtonClick("dual")}
+                >
+                  Multi Face Swap
+                </Button>
 
+              </div>
+              <span className=" sm:w-full lg:w-fit xl:w-fit tablet:w-fit rounded-full p-1 bg-[#495583] border border-buttonBorder mb-3">
+                <Link href="/viewall">
+                  <Button
+                    variant="ghost"
+                    className={`rounded-full ${selectedSwap === "single" ? "bg-[#3c4071]" : "text-white/70 hover:text-white hover:bg-[#3c4071]/50"} text-white hover:bg-[#3c4071]/90 text-xs w-full sm:!text-base`}
+                  >
+                    My Creations
+                  </Button>
+                </Link>
+              </span>
+            </div>
             <div className="grid md:grid-cols-2 gap-8">
               <div className="relative image-container">
                 {/* Corner borders */}
@@ -312,11 +347,17 @@ const Home = () => {
                   ))}
                 </div>
               </div>
-
             </section>
+            {/* <section className="space-y-6">
+              <h3 className="text-3xl font-bold text-center mb-8">Image Example</h3>
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <Slider />
+
+              </div>
+            </section> */}
 
             <section className="">
-              <h3 className="text-2xl font-semibold mb-5 animate-text ">FAQ</h3>
+              <h3 className="text-2xl font-semibold mb-5 animate-text flex justify-center ">FAQ</h3>
               <Accordion type="single" collapsible className="space-y-2 animate-text">
                 {[
                   {
