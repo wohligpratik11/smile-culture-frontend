@@ -25,8 +25,8 @@ import FaceIcon from "../../../public/assets/gif/faceicon.gif"
 import PhotoIcon from "../../../public/assets/gif/photoicon.gif"
 import SaveShare from "../../../public/assets/gif/sharesave.gif"
 import gsap from "gsap"; // Import GSAP
-import ImageComparisonCard from "../../components/components/ui/CompareCard";
-import AshishFace from "../../../public/assets/images/ashish.webp"
+// import ImageComparisonCard from "../../components/components/ui/CompareCard";
+// import AshishFace from "../../../public/assets/images/ashish.webp"
 // import Slider from "../../components/components/ui/slider";
 
 const Home = () => {
@@ -67,21 +67,21 @@ const Home = () => {
       path: "/movie",
     },
   ];
-  const imageComparisons = [
-    {
-      image1: AshishFace,  // Image 1 for the first card
-      image2: AshishFace,    // Image 2 for the first card
-      title: "Face Girl vs Face One",
-      description: "A comparison of different face images."
-    },
-    {
-      image1: AshishFace,    // Image 1 for the second card
-      image2: AshishFace,   // Image 2 for the second card
-      title: "Kim vs Zyan",
-      description: "A comparison of two different faces."
-    },
-    // Add more comparisons as needed
-  ];
+  // const imageComparisons = [
+  //   {
+  //     image1: AshishFace,  // Image 1 for the first card
+  //     image2: AshishFace,    // Image 2 for the first card
+  //     title: "Face Girl vs Face One",
+  //     description: "A comparison of different face images."
+  //   },
+  //   {
+  //     image1: AshishFace,    // Image 1 for the second card
+  //     image2: AshishFace,   // Image 2 for the second card
+  //     title: "Kim vs Zyan",
+  //     description: "A comparison of two different faces."
+  //   },
+  //   // Add more comparisons as needed
+  // ];
   const handleBackClick = () => {
     router.back()
   }
