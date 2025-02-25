@@ -130,6 +130,7 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
               placeholder="Search for Movies"
               value={searchQuery}
               onChange={handleSearchChange}
+              maxLength={50}
               className="w-full rounded-full border-none bg-blueYonder py-3 pl-12 pr-3 text-customWhite placeholder-customWhite"
             />
           </div>

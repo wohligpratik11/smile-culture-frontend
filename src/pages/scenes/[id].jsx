@@ -158,6 +158,7 @@ const ScenesPage = ({
 
 	const handleSearchChange = useCallback((e) => {
 		setSearchQuery(e.target.value);
+
 	}, []);
 
 	const filteredFeatures = scenes?.filter((feature) =>
@@ -259,16 +260,31 @@ const ScenesPage = ({
 								placeholder={selectedTab === 'scene' ? 'Search for Scenes' : 'Search for Images'}
 								value={searchQuery}
 								onChange={handleSearchChange}
+								maxLength={50}
 								className="w-full rounded-full border-none bg-blueYonder py-3 pl-12 pr-3 text-customWhite placeholder-customWhite"
 							/>
 						</div>
 					</div>
 
-					<div className="mt-4 flex items-center justify-between">
-						<div className="relative text-lg font-semibold !text-customWhite">
+					<div className="mt-4 flex items-center justify-between flex-col sm:flex-row sm:space-x-4">
+						<div className="relative text-lg font-semibold !text-customWhite mb-4 sm:mb-0">
 							{selectedTab === 'scene' ? 'Choose Scene' : 'Choose Image'}
 						</div>
+						{selectedScenes && (
+							<button
+								className="bg-gradient-custom-gradient h-12 w-full sm:w-52 rounded-lg hover:border hover:border-buttonBorder px-4 py-2 sm:mt-0"
+								onClick={() => {
+									if (selectedScenes) {
+										router.push(`/characters/${selectedScenes.scene_id}`);
+									}
+								}}
+								disabled={!selectedScenes}
+							>
+								Next
+							</button>
+						)}
 					</div>
+
 
 					{selectedTab === 'image' ? (
 						<div
@@ -279,7 +295,7 @@ const ScenesPage = ({
 									<Card
 										className={`bg-blue-800/20 mb-2 transform cursor-pointer overflow-hidden border-0 backdrop-blur-sm transition-transform duration-200 hover:scale-105 ${selectedScenes?.scene_id === feature.scene_id ? 'border border-solid border-buttonBorder' : ''}`}
 										aria-label={`Select ${feature.scene_name}`}
-										onClick={() => handleScenesSelect(feature)}
+										onClick={() => router.push(`/characters/${feature.scene_id}`)}
 									>
 										<CardContent className="p-0">
 											<AspectRatio ratio={16 / 9} className="w-full">
@@ -358,19 +374,6 @@ const ScenesPage = ({
 							onPageChange={handlePageChange}
 						/>
 					</div>
-					{selectedScenes && (
-						<button
-							className="bg-gradient-custom-gradient mt-4 h-12 w-52 rounded-lg hover:border hover:border-buttonBorder px-4 py-2 sm:ml-4 sm:mt-0"
-							onClick={() => {
-								if (selectedScenes) {
-									router.push(`/characters/${selectedScenes.scene_id}`);
-								}
-							}}
-							disabled={!selectedScenes}
-						>
-							Next
-						</button>
-					)}
 				</div>
 			</Card >
 		</div >

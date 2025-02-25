@@ -146,13 +146,20 @@ const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, 
 							placeholder="Search for Characters"
 							value={searchQuery}
 							onChange={handleSearchChange}
+							maxLength={50}
 							className="w-full pl-12 pr-3 py-3 border-none bg-blueYonder rounded-full text-customWhite placeholder-customWhite"
 						/>
 					</div>
-					<div className="relative text-lg font-semibold !text-customWhite">
-						Choose Character
-					</div>
-
+					<div className="mt-4 flex items-center justify-between flex-col sm:flex-row sm:space-x-4"> <div className="relative text-lg font-semibold !text-customWhite mb-4 sm:mb-0"> Choose Character </div>
+						{selectedCharacters.length > 0 && (
+							<button
+								className="px-4 py-2 rounded-lg bg-gradient-custom-gradient hover:border hover:border-buttonBorder w-52 h-12 sm:ml-4 sm:mt-0"
+								onClick={() => handleNextClick()}
+								disabled={selectedCharacters.length === 0}
+							>
+								Next
+							</button>
+						)}</div>
 					<div className={`mt-6 ${filteredFeatures.length > 0 ? 'grid grid-cols-1 md:grid-cols-4 gap-6' : ''}`}>
 						{filteredFeatures.length === 0 ? (
 							<div className="flex justify-center items-center h-full">
@@ -196,15 +203,6 @@ const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, 
 							onPageChange={handlePageChange}
 						/>
 					</div>
-					{selectedCharacters.length > 0 && (
-						<button
-							className="px-4 py-2 rounded-lg bg-gradient-custom-gradient hover:border hover:border-buttonBorder w-52 h-12 mt-4 sm:ml-4 sm:mt-0"
-							onClick={() => handleNextClick()}
-							disabled={selectedCharacters.length === 0}
-						>
-							Next
-						</button>
-					)}
 				</div>
 			</Card>
 		</div>
