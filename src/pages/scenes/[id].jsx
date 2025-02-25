@@ -27,7 +27,7 @@ const ScenesPage = ({
 	const [scenes, setScenes] = useState(initialScenes);
 	const [currentPage, setCurrentPage] = useState(initialPage);
 	const [totalPages, setTotalPages] = useState(Math.ceil(totalCount / 8));
-	const [selectedTab, setSelectedTab] = useState('image');
+	const [selectedTab, setSelectedTab] = useState('scene');
 	const videoRefs = useRef({});
 	const [isPlaying, setIsPlaying] = useState(false);
 	const [isMobile, setIsMobile] = useState(false);
@@ -233,15 +233,6 @@ const ScenesPage = ({
 					<div className="flex flex-wrap items-center gap-4 mt-4">
 						<div className="flex space-x-2">
 							<button
-								className={`rounded-full px-6 py-2 font-semibold text-white transition-colors duration-200  ${selectedTab === 'image' ? 'bg-gradient-custom-gradient hover:border hover:border-buttonBorder' : 'cursor-pointer border border-slateBlue bg-blueYonder transition-all'}`}
-								onClick={() => {
-									setSelectedTab('image');
-									Cookie.set('mode', 'image');
-								}}
-							>
-								Images
-							</button>
-							<button
 								className={`rounded-full px-6 py-2 font-semibold text-white transition-colors duration-200 ${selectedTab === 'scene' ? 'bg-gradient-custom-gradient hover:border hover:border-buttonBorder' : 'cursor-pointer border border-slateBlue bg-blueYonder transition-all'}`}
 								onClick={() => {
 									setSelectedTab('scene');
@@ -249,6 +240,15 @@ const ScenesPage = ({
 								}}
 							>
 								Scenes
+							</button>
+							<button
+								className={`rounded-full px-6 py-2 font-semibold text-white transition-colors duration-200  ${selectedTab === 'image' ? 'bg-gradient-custom-gradient hover:border hover:border-buttonBorder' : 'cursor-pointer border border-slateBlue bg-blueYonder transition-all'}`}
+								onClick={() => {
+									setSelectedTab('image');
+									Cookie.set('mode', 'image');
+								}}
+							>
+								Images
 							</button>
 						</div>
 

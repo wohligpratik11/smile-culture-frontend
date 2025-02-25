@@ -26,7 +26,7 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 	const [movies, setMovies] = useState(initialMovies);
 	const [currentPage, setCurrentPage] = useState(initialPage);
 	const [totalPages, setTotalPages] = useState(Math.ceil(totalCount / 8));
-	const [selectedTab, setSelectedTab] = useState('image');
+	const [selectedTab, setSelectedTab] = useState('video');
 	const [isOpen, setIsOpen] = useState(false);
 	const [videoUrl, setVideoUrl] = useState(null);
 	const [fullscreenModal, setFullscreenModal] = useState(false);
@@ -206,15 +206,6 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 
 					<div className="flex flex-wrap items-center gap-4 mt-4">
 						<div className="flex space-x-2">
-
-							<button
-								className={`rounded-full px-6 py-2 font-semibold text-white transition-colors duration-200 ${selectedTab === 'image' ? 'bg-gradient-custom-gradient border border-buttonBorder' : 'cursor-pointer border border-slateBlue bg-blueYonder transition-all'}`}
-								onClick={() => {
-									setSelectedTab('image');
-								}}
-							>
-								Images
-							</button>
 							<button
 								className={`rounded-full px-6 py-2 font-semibold text-white transition-colors duration-200 ${selectedTab === 'video' ? 'bg-gradient-custom-gradient hover:border hover:border-buttonBorder' : 'cursor-pointer border border-slateBlue bg-blueYonder transition-all'}`}
 								onClick={() => {
@@ -222,6 +213,14 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 								}}
 							>
 								Scenes
+							</button>
+							<button
+								className={`rounded-full px-6 py-2 font-semibold text-white transition-colors duration-200 ${selectedTab === 'image' ? 'bg-gradient-custom-gradient border border-buttonBorder' : 'cursor-pointer border border-slateBlue bg-blueYonder transition-all'}`}
+								onClick={() => {
+									setSelectedTab('image');
+								}}
+							>
+								Images
 							</button>
 						</div>
 
