@@ -41,10 +41,10 @@ body {
   background: linear-gradient(to right, #40aeff 50%, #91db73 50%);
 }
 .bg-gradient-custom-gradient {
-  background: linear-gradient(89.17deg, #a0e061 0.72%, #2fadff 62.22%);
+  background: linear-gradient(270deg, #40c6b6, #0aa1ea);
 }
 .bg-polygon-gradient {
-  background: linear-gradient(90deg, #40adff, #91db73);
+  background: linear-gradient(90deg, #40c6b6, #40c6b6);
 }
 
 :root {

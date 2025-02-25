@@ -23,7 +23,7 @@ const Header = () => {
         <img
           src={ErosNow.src}
           alt="ErosNow"
-          className="ml-5 mr-4 max-w-[60%] cursor-pointer sm:max-w-[40%]"
+          className="ml-5 mr-4 w-[50%] cursor-pointer "
         />
       </Link>
 

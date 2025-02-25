@@ -322,19 +322,19 @@ const Home = () => {
                   {[
                     {
                       title: "Animated Face Swap",
-                      desc: "Breathe life into your images by swapping faces in animations or dynamic visuals, creating a captivating and playful effect",
+                      desc: "Transform your favorite characters with seamless face swaps from movies, making every scene uniquely yours.",
                     },
                     {
                       title: "Group Face Swap",
-                      desc: "Effortlessly swap faces of multiple individuals within a single image, perfect for enhancing group photos and creating memorable moments."
+                      desc: "Effortlessly swap faces of multiple individuals within a multiple images, perfect for enhancing group photos and creating memorable moments."
                     },
                     {
                       title: "Video Face Swap",
                       desc: "Transform high-definition videos by seamlessly swapping faces, making your footage more engaging and visually striking..",
                     },
                     {
-                      title: "Real-Time Face Swap",
-                      desc: "Swap faces instantly during video calls or live streams, offering a unique and interactive experience in real time.",
+                      title: "Cinematic Face Swap ",
+                      desc: "Step into the world of movies by swapping faces in blockbuster scenes, delivering a lifelike and immersive experience.",
                     },
                   ].map((feature, index) => (
                     <div key={index} className="space-y-3 mb-4 animate-text">
@@ -362,19 +362,23 @@ const Home = () => {
                 {[
                   {
                     question: "Why Choose Our Face Swap Tool?",
-                    answer: "Our Face Swap Tool offers a fast, accurate, and fun way to swap faces with ease. You’ll get realistic results while ensuring your privacy is fully protected—all at no cost to you!"
+                    answer: "Effortlessly swap faces in photos with our easy-to-use tool for fun and seamless results!"
                   },
                   {
-                    question: "Can I use face swap on group photos?",
-                    answer: "It works seamlessly with group photos! Easily swap faces between multiple people, and enjoy flawless, natural results every time."
+                    question: "Is it safe to use Face Swap?",
+                    answer: "Rest assured, Face swap prioritizes safety. Your data is exclusively utilized for face-swapping purposes. Any photos or facial features you upload are retained solely during the face swap process and are promptly deleted. You can confidently use our tool to swap faces without any concerns."
                   },
                   {
-                    question: "Can I edit the swapped face afterward?",
-                    answer: "Want to make the swap even more realistic? Our tool lets you fine-tune and adjust the swapped face for a more polished and natural look, ensuring the perfect final result."
-                  }, {
                     question: "Can I swap faces between different genders and ages?",
                     answer: "No problem! Our tool can handle face swaps across different genders and ages, delivering realistic and natural results, no matter the differences."
                   },
+                  {
+                    question: "How does AI Face Swap work?",
+                    answer: "Eros Now AI Face Swap, an advanced AI tool, utilizes sophisticated algorithms to seamlessly swap faces in your selected images. Leveraging face recognition, feature matching, and seamless blending techniques, it significantly enhances efficiency and ensures consistent high-quality results."
+                  }, {
+                    question: "How can I ensure the best results with Face Swap?",
+                    answer: "Always use high-quality photos for both source and target images. Clear, sharp images will produce more accurate results. And try to choose photos that have similar facial expressions. That way, the facial alignment will ensure a more realistic face swap."
+                  }
                 ].map((item, i) => (
                   <AccordionItem key={i} value={`item-${i}`} className="border-none rounded-lg bg-blueYonder px-4">
                     <AccordionTrigger className="hover:no-underline">
