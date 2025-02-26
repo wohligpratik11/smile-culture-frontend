@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Input } from '../../components/components/ui/input';
-import { Card, CardContent } from '../../components/components/ui/card';
+import { Card, CardContent } from '../../components/components/ui/cardborderxl';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { CiSearch } from "react-icons/ci";
@@ -159,11 +159,11 @@ const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, 
 						/>
 					</div>
 					<div className="mt-4 flex items-center justify-between flex-col sm:flex-row sm:space-x-4">
-						<div className="relative text-lg font-semibold !text-customWhite mb-4 sm:mb-0">
+						<div className="relative text-lg font-semibold !text-customWhite sm:mb-0">
 							Choose Character
 						</div>
 						{selectedCharacters.length > 0 && (
-							<div className="mt-4 flex justify-end">
+							<div className="flex justify-end">
 								<button
 									className="px-4 py-2 rounded-lg bg-gradient-custom-gradient hover:border hover:border-buttonBorder w-52 h-12"
 									onClick={handleNextClick}

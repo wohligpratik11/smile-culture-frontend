@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { useState, useEffect, useRef } from 'react';
 import { Input } from '../../components/components/ui/input';
-import { Card, CardContent } from '../../components/components/ui/card';
+import { Card, CardContent } from '../../components/components/ui/cardborderxl';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { IoMdEye } from "react-icons/io";

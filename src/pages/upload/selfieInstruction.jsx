@@ -79,32 +79,27 @@ export default function SelfieInstructions({ closeModal, uploadImageData }) {
 									<li>Avoid shadows or bright light from behind.</li>
 								</ul>
 							</div>
-							<div className="grid grid-cols-2 gap-4 mb-8">
-								<div className="relative">
-									<Image
+							<div className="flex justify-center gap-4 mb-8">
+								<div className="relative w-full aspect-square">
+									<img
 										src="/assets/images/boy.webp"
 										alt="Good lighting example"
-										width={200}
-										height={200}
-										className="rounded-lg w-full"
+										className="rounded-lg w-full h-full object-cover"
 									/>
 									<div className="absolute top-2 right-2 w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
 										<CheckCircle2 className="w-5 h-5 text-white" />
 									</div>
 								</div>
-								<div className="relative">
-									<Image
+								<div className="relative w-full aspect-square">
+									<img
 										src="/assets/images/boy.webp"
 										alt="Poor lighting example"
-										width={200}
-										height={200}
-										className="rounded-lg w-full brightness-50"
+										className="rounded-lg w-full h-full object-cover brightness-50"
 									/>
 									<div className="absolute top-2 right-2 w-8 h-8 bg-red-500 rounded-full flex items-center justify-center">
 										<XCircle className="w-5 h-5 text-white" />
 									</div>
 								</div>
-
 							</div>
 						</div>
 					) : (
@@ -121,14 +116,12 @@ export default function SelfieInstructions({ closeModal, uploadImageData }) {
 									<li>Keep the phone steady to avoid blur.</li>
 								</ul>
 							</div>
-							<div className="flex justify-center gap-4 mb-8">
-								<div className="relative">
-									<Image
+							<div className="flex justify-center mb-8">
+								<div className="relative w-full max-w-xs aspect-square mx-auto">
+									<img
 										src="/assets/images/boy.webp"
 										alt="Good lighting example"
-										width={500}
-										height={500}
-										className="rounded-lg w-full"
+										className="rounded-lg w-full h-full object-cover"
 									/>
 									<div className="absolute inset-0 border-4 border-dashed border-white rounded-full m-4" />
 								</div>

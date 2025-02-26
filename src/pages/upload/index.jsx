@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import React, { useState, useEffect, useCallback } from 'react';
-import { Card } from '../../components/components/ui/card';
+import { Card } from '../../components/components/ui/cardborderxl';
 import Link from 'next/link';
 import { ArrowLeft, ArrowUpFromLine } from 'lucide-react';
 import { apiService, API_ENDPOINTS } from '../../lib/api/apiService';

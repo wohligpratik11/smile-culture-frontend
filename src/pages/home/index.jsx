@@ -7,7 +7,7 @@ import Head from "next/head"
 import Cookies from "js-cookie"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../../components/components/ui/accordion"
 import Image from 'next/image'
-import { Card, CardContent, CardHeader } from "../../components/components/ui/card"
+import { Card, CardContent, CardHeader } from "../../components/components/ui/cardborderxl"
 import { Button } from "@/components/components/ui/button"
 import FaceVector from "../../../public/assets/images/faceVector.webp"
 import BorderBox from "../../../public/assets/images/borderBox.webp"
@@ -228,7 +228,7 @@ const Home = () => {
                 <Link href="/viewall">
                   <Button
                     variant="ghost"
-                    className={`rounded-full ${selectedSwap === "single" ? "bg-[#3c4071]" : "text-white/70 hover:text-white hover:bg-[#3c4071]/50"} text-white hover:bg-[#3c4071]/90 text-xs w-full sm:!text-base`}
+                    className={`rounded-full text-white hover:bg-[#3c4071]/90 text-xs w-full sm:!text-base`}
                   >
                     My Creations
                   </Button>

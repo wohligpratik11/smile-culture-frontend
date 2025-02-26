@@ -1,9 +1,8 @@
 import React from 'react';
 import Link from 'next/link';
-import { Avatar, AvatarFallback } from '../components/ui/avatar';
-import ErosNow from '../../../public/assets/images/erosnow.webp';
 import { useRouter } from 'next/router';
-import { useAuth } from '../../context/AuthContext'; // Import AuthContext
+import { useAuth } from '../../context/AuthContext';
+import ProfileDropdown from '../components/ui/ProfileDropdown'; // Import the new component
 
 const Header = () => {
   const router = useRouter();
@@ -21,20 +20,14 @@ const Header = () => {
     <div className="flex items-center justify-between gap-2">
       <Link href="/">
         <img
-          src={ErosNow.src}
+          src="/assets/images/erosnow.webp"
           alt="ErosNow"
-          className="ml-5 mr-4 w-[50%] cursor-pointer "
+          className="ml-5 mr-4 w-[20%] cursor-pointer"
         />
       </Link>
 
-      <div className="bg-gradient-custom-gradient shadow-shadow-500 relative  flex h-[60px] w-[60px] flex-grow items-center justify-center gap-2 rounded-full hover:border hover:border-buttonBorder text-white shadow-xl dark:!bg-navy-800 dark:shadow-none md:flex-grow-0 md:gap-1 xl:w-[60px] xl:gap-2">
-        <Avatar className="cursor-pointer text-3xl">
-          <AvatarFallback>
-            {user ? getFirstLetter(user.user_email) : ''}{' '}
-            {/* Default to 'G' */}
-          </AvatarFallback>
-        </Avatar>
-      </div>
+      {/* Using the ProfileDropdown component which contains your existing avatar markup */}
+      <ProfileDropdown user={user} getFirstLetter={getFirstLetter} />
     </div>
   );
 };
