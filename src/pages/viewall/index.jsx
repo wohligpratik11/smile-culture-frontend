@@ -217,7 +217,7 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 					</div>
 				</div>
 			</div>
-			<Card className="bg-card-cardCustomBlue p-6 h-full overflow-y-auto" ref={scrollContainerRef}>
+			<Card className="bg-card-cardCustomBlue p-6 h-full overflow-y-auto hide-scrollbar" ref={scrollContainerRef}>
 				<div className="space-y-4">
 					{filteredMovies.length === 0 && !loading ? (
 						<div className="flex h-full items-center justify-center mt-6">
@@ -232,7 +232,7 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 							className={`grid grid-cols-1 gap-6 md:grid-cols-4`}
 							loader={
 								<div className="flex justify-center items-center py-4 col-span-full">
-									<div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-white"></div>
+									<div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-buttonBorder"></div>
 								</div>
 							}
 						>
@@ -243,8 +243,8 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 										aria-label={`Select ${movie.feature_used}`}
 										onClick={() => handleMovieSelect(movie)}
 									>
-										<CardContent className="p-0">
-											<AspectRatio ratio={16 / 9} className="w-full">
+										<CardContent className="p-0 ">
+											<AspectRatio ratio={16 / 9} className="w-full ">
 												{movie.mode === 'video' ? (
 													<video
 														ref={(el) => { videoRefs.current[movie.stored_data_id] = el }}

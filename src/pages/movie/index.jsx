@@ -138,7 +138,7 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
           />
         </div>
       </div>
-      <Card className="bg-card-cardCustomBlue p-6 h-full overflow-y-auto" ref={scrollContainerRef}>
+      <Card className="bg-card-cardCustomBlue p-6 h-full overflow-y-auto hide-scrollbar" ref={scrollContainerRef}>
         <div className="space-y-4">
 
           <div className="relative text-lg font-semibold !text-customWhite">
@@ -159,7 +159,7 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
               className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-4"
               loader={
                 <div className="flex justify-center items-center py-4 col-span-full">
-                  <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-white"></div>
+                  <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-buttonBorder"></div>
                 </div>
               }
             >

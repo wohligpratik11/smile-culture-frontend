@@ -304,6 +304,14 @@ body {
       -1.8em -1.8em 0 0em #ffffff;
   }
 }
+.hide-scrollbar {
+  scrollbar-width: none; /* For Firefox */
+  -ms-overflow-style: none; /* For Internet Explorer and Edge */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* For Chrome, Safari, and Opera */
+}
 /* Slim scrollbar for webkit browsers */
 ::-webkit-scrollbar {
   width: 5px; /* Adjust width */

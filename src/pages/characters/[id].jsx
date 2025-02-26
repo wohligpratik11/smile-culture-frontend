@@ -126,7 +126,7 @@ const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, 
 
 	return (
 		<div className="min-h-screen p-6 h-[835px] overflow-hidden">
-			<Card className="bg-card-cardCustomBlue p-6 h-full overflow-y-auto" ref={scrollContainerRef}>
+			<Card className="bg-card-cardCustomBlue p-6 h-full overflow-y-auto hide-scrollbar" ref={scrollContainerRef}>
 				<div className="space-y-4">
 					<div className="flex items-center gap-4">
 						<Link href={router.asPath} passHref>
@@ -189,7 +189,7 @@ const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, 
 							className="mt-6 grid grid-cols-1 md:grid-cols-4 gap-6"
 							loader={
 								<div className="flex justify-center items-center py-4 col-span-full">
-									<div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-white"></div>
+									<div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-buttonBorder"></div>
 								</div>
 							}
 						>

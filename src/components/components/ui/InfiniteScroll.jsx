@@ -69,7 +69,7 @@ const InfiniteScroll = ({
 			<div ref={lastElementRef} className="h-1 w-full"></div>
 			{loading && (loader || (
 				<div className="flex justify-center items-center py-4">
-					<div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-white"></div>
+					<div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-buttonBorder"></div>
 				</div>
 			))}
 		</div>
