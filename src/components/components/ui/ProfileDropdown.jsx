@@ -79,11 +79,11 @@ const ProfileDropdown = ({ user, getFirstLetter }) => {
 
 				<div className="p-2">
 					<DropdownMenuItem
-						className="flex items-center px-4 py-3 rounded-lg bg-red-900 text-white cursor-pointer hover:bg-red-800 transition-colors duration-200"
+						className="flex items-center px-4 py-3 rounded-lg bg-gradient-to-r from-[#e03c27] to-[#F8A895] text-white cursor-pointer hover:opacity-90 transition-opacity duration-200 text-bold "
 						onClick={handleLogout}
 					>
 						<LogOut className="mr-3 h-5 w-5" />
-						<span>Log Out</span>
+						<span >Log Out</span>
 					</DropdownMenuItem>
 				</div>
 			</DropdownMenuContent>
