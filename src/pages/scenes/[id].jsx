@@ -4,21 +4,19 @@ import { Input } from '../../components/components/ui/input';
 import { Card, CardContent } from '../../components/components/ui/card';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
-import { ChevronRight, ChevronLeft } from 'lucide-react';
 import { CiSearch } from 'react-icons/ci';
-import { apiService, API_ENDPOINTS } from '../../lib/api/apiService';
+import { API_ENDPOINTS } from '../../lib/api/apiService';
 import axiosInstance from '../../lib/api/axiosInstance';
 import Cookie from 'js-cookie';
 import Image from 'next/image';
 import { AspectRatio } from '../../components/components/ui/aspect-ratio';
-import Pagination from '../../components/components/ui/pagination';
+import InfiniteScroll from '../../components/components/ui/InfiniteScroll';
 
 const ScenesPage = ({
 	initialScenes,
 	totalCount,
 	page: initialPage,
 	id,
-	prefetchNextPageData,
 }) => {
 	const router = useRouter();
 	const [titleFromCookie, setTitleFromCookie] = useState('');
@@ -26,17 +24,20 @@ const ScenesPage = ({
 	const [selectedScenes, setSelectedScenes] = useState(null);
 	const [scenes, setScenes] = useState(initialScenes);
 	const [currentPage, setCurrentPage] = useState(initialPage);
-	const [totalPages, setTotalPages] = useState(Math.ceil(totalCount / 8));
 	const [selectedTab, setSelectedTab] = useState('scene');
 	const videoRefs = useRef({});
 	const [isPlaying, setIsPlaying] = useState(false);
 	const [isMobile, setIsMobile] = useState(false);
+	const [loading, setLoading] = useState(false);
+	const [hasMore, setHasMore] = useState(true);
+	const scrollContainerRef = useRef(null);
 
 	useEffect(() => {
 		const title = Cookie.get('title');
 		setTitleFromCookie(title);
 		Cookie.set('mode', 'image');
 	}, []);
+
 	useEffect(() => {
 		// Check if screen width is mobile (max width 768px)
 		const handleResize = () => {
@@ -52,6 +53,51 @@ const ScenesPage = ({
 		// Cleanup the event listener on component unmount
 		return () => window.removeEventListener('resize', handleResize);
 	}, []);
+
+	useEffect(() => {
+		// Reset scenes when tab changes
+		setScenes([]);
+		setCurrentPage(1);
+		setHasMore(true);
+		fetchScenes(1, true, selectedTab);
+	}, [selectedTab]);
+
+	const fetchScenes = async (page, replace = false, tabType = selectedTab) => {
+		if (loading || !hasMore) return;
+
+		setLoading(true);
+		try {
+			const axios = axiosInstance();
+			const response = await axios.post(API_ENDPOINTS.GET_ALL_SCENE_LIST, {
+				page,
+				movie_id: id,
+				mode: tabType === 'image' ? 'image' : 'video', // Pass the mode parameter based on selected tab
+			});
+
+			console.log('Fetched data for tab:', tabType, response?.data?.data);
+
+			const newScenes = response?.data?.data?.data || [];
+			const total = response?.data?.data?.totalCount || 0;
+
+			if (newScenes.length === 0) {
+				setHasMore(false);
+			} else {
+				setScenes(prev => replace ? newScenes : [...prev, ...newScenes]);
+				setHasMore(page < Math.ceil(total / 8));
+			}
+		} catch (error) {
+			console.error('Error fetching scenes:', error);
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	const loadMoreItems = () => {
+		const nextPage = currentPage + 1;
+		setCurrentPage(nextPage);
+		fetchScenes(nextPage, false, selectedTab);
+	};
+
 	const handleTouchOrClick = (sceneId) => {
 		const videoElement = videoRefs.current[sceneId];
 		if (videoElement) {
@@ -76,6 +122,7 @@ const ScenesPage = ({
 			}
 		}
 	};
+
 	const handleMouseEnter = (sceneId) => {
 		const videoElement = videoRefs.current[sceneId];
 		if (videoElement) {
@@ -90,27 +137,6 @@ const ScenesPage = ({
 			}
 		}
 	};
-	const handlePlayPauseClick = (sceneId) => {
-		const videoElement = videoRefs.current[sceneId];
-		if (videoElement) {
-			if (isPlaying) {
-				const pausePromise = videoElement.pause();
-				if (pausePromise !== undefined) {
-					pausePromise.catch(error => {
-						console.log("Pause error:", error);
-					});
-				}
-			} else {
-				const playPromise = videoElement.play();
-				if (playPromise !== undefined) {
-					playPromise.catch(error => {
-						console.log("Play error:", error);
-					});
-				}
-			}
-			setIsPlaying(!isPlaying);
-		}
-	}
 
 	const handleMouseLeave = (sceneId) => {
 		const videoElement = videoRefs.current[sceneId];
@@ -118,67 +144,45 @@ const ScenesPage = ({
 			videoElement.pause();
 		}
 	};
-	useEffect(() => {
-		const { page } = router.query;
-		if (page && parseInt(page) !== currentPage) {
-			handlePageChange(parseInt(page));
-		}
-	}, [router.query.page]);
-
-	const handlePageChange = useCallback(
-		async (page) => {
-			if (page < 1 || page > totalPages) return;
-
-			router.push(
-				{
-					pathname: router.pathname,
-					query: { ...router.query, page },
-				},
-				undefined,
-				{ shallow: true }
-			);
-
-			setCurrentPage(page);
-
-			try {
-				const axios = axiosInstance();
-				const response = await axios.post(API_ENDPOINTS.GET_ALL_SCENE_LIST, {
-					page,
-					movie_id: id,
-				});
-
-				setScenes(response?.data?.data?.data || []);
-				setTotalPages(Math.ceil(response?.data?.data?.totalCount / 8));
-			} catch (error) {
-				console.error('Error fetching Scene:', error);
-			}
-		},
-		[router, totalPages, id]
-	);
 
 	const handleSearchChange = useCallback((e) => {
 		setSearchQuery(e.target.value);
-
 	}, []);
 
-	const filteredFeatures = scenes?.filter((feature) =>
-		feature?.scene_name?.toLowerCase()?.includes(searchQuery.toLowerCase())
+	// Apply filtering to already loaded scenes
+	const filteredScenes = scenes.filter((scene) =>
+		scene?.scene_name?.toLowerCase()?.includes(searchQuery.toLowerCase())
 	);
 
 	const handleScenesSelect = (scene) => {
 		event.stopPropagation();
-		console.log('Scene clicked:', scene); // Log the selected scene
-		setSelectedScenes((prev) => {
-			const updatedScene = prev?.scene_id === scene.scene_id ? null : scene;
-			console.log('Updated selected scene:', updatedScene); // Log the updated scene
-			return updatedScene;
-		});
+		setSelectedScenes((prev) =>
+			prev?.scene_id === scene.scene_id ? null : scene
+		);
 	};
 
 	const handleTabChange = (tab) => {
 		setSelectedTab(tab);
 		setSelectedScenes(null);
+
+		// Explicitly update the mode in cookie and reset data
+		if (tab === 'image') {
+			Cookie.set('mode', 'image');
+		} else {
+			Cookie.set('mode', 'video');
+		}
+
+		// Clear current scenes and fetch new ones with the proper mode
+		setScenes([]);
+		setCurrentPage(1);
+		setHasMore(true);
+
+		// Small timeout to ensure state is updated
+		setTimeout(() => {
+			fetchScenes(1, true, tab);
+		}, 0);
 	};
+
 	useEffect(() => {
 		if (selectedTab === 'image') {
 			Cookie.set('mode', 'image');
@@ -208,8 +212,8 @@ const ScenesPage = ({
 	};
 
 	return (
-		<div className="h-[835px] min-h-screen p-4">
-			<Card className="bg-card-cardCustomBlue p-4">
+		<div className="h-[835px] min-h-screen p-4 overflow-hidden">
+			<Card className="bg-card-cardCustomBlue p-6 h-full overflow-y-auto" ref={scrollContainerRef}>
 				<div className="space-y-4">
 					<div className="flex items-center gap-4">
 						<Link href="#" passHref>
@@ -235,8 +239,7 @@ const ScenesPage = ({
 							<button
 								className={`rounded-full px-6 py-2 font-semibold text-white transition-colors duration-200 ${selectedTab === 'scene' ? 'bg-gradient-custom-gradient hover:border hover:border-buttonBorder' : 'cursor-pointer border border-slateBlue bg-blueYonder transition-all'}`}
 								onClick={() => {
-									setSelectedTab('scene');
-									Cookie.set('mode', 'video');
+									handleTabChange('scene');
 								}}
 							>
 								Scenes
@@ -244,8 +247,7 @@ const ScenesPage = ({
 							<button
 								className={`rounded-full px-6 py-2 font-semibold text-white transition-colors duration-200  ${selectedTab === 'image' ? 'bg-gradient-custom-gradient hover:border hover:border-buttonBorder' : 'cursor-pointer border border-slateBlue bg-blueYonder transition-all'}`}
 								onClick={() => {
-									setSelectedTab('image');
-									Cookie.set('mode', 'image');
+									handleTabChange('image');
 								}}
 							>
 								Images
@@ -285,57 +287,61 @@ const ScenesPage = ({
 						)}
 					</div>
 
-
-					{selectedTab === 'image' ? (
-						<div
-							className={`mt-6 ${filteredFeatures.length > 0 ? 'grid grid-cols-1 gap-6 md:grid-cols-4' : ''}`}
-						>
-							{filteredFeatures.map((feature) => (
-								<div key={feature.path} className="space-y-2">
-									<Card
-										className={`bg-blue-800/20 mb-2 transform cursor-pointer overflow-hidden border-0 backdrop-blur-sm transition-transform duration-200 hover:scale-105 ${selectedScenes?.scene_id === feature.scene_id ? 'border border-solid border-buttonBorder' : ''}`}
-										aria-label={`Select ${feature.scene_name}`}
-										onClick={() => router.push(`/characters/${feature.scene_id}`)}
-									>
-										<CardContent className="p-0">
-											<AspectRatio ratio={16 / 9} className="w-full">
-												<Image
-													src={feature.compressed_thumbnail_url || '/fallback-image.jpg'}
-													alt={`${feature.scene_name} image`}
-													width={500}
-													height={500}
-													quality={100}
-													objectFit="contain"
-													priority={true}
-												/>
-											</AspectRatio>
-										</CardContent>
-									</Card>
-									<p className="text-center text-sm font-bold text-customWhite">
-										{feature.scene_name}
-									</p>
-								</div>
-							))}
+					{/* Scene/Image Cards with InfiniteScroll component */}
+					{filteredScenes.length === 0 && !loading ? (
+						<div className="flex h-full items-center justify-center mt-6">
+							No {selectedTab === 'scene' ? 'Scene' : 'Image'} found
 						</div>
 					) : (
-						<div
-							className={`mt-6 ${filteredFeatures.length > 0 ? 'grid grid-cols-1 gap-6 md:grid-cols-4' : ''}`}
-						>
-							{filteredFeatures.length === 0 ? (
-								<div className="flex h-full items-center justify-center">
-									No Scene found
+						<InfiniteScroll
+							hasMore={hasMore}
+							loadMore={loadMoreItems}
+							loading={loading}
+							scrollContainerRef={scrollContainerRef}
+							className={`mt-6 grid grid-cols-1 gap-6 md:grid-cols-4`}
+							loader={
+								<div className="flex justify-center items-center py-4 col-span-full">
+									<div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-white"></div>
 								</div>
-							) : (
-								filteredFeatures.map((feature) => (
-									<div key={feature.path} className="space-y-2">
+							}
+						>
+							{selectedTab === 'image' ? (
+								filteredScenes.map((feature) => (
+									<div key={feature.scene_id || feature.path} className="space-y-2">
 										<Card
 											className={`bg-blue-800/20 mb-2 transform cursor-pointer overflow-hidden border-0 backdrop-blur-sm transition-transform duration-200 hover:scale-105 ${selectedScenes?.scene_id === feature.scene_id ? 'border border-solid border-buttonBorder' : ''}`}
-
+											aria-label={`Select ${feature.scene_name}`}
+											onClick={() => router.push(`/characters/${feature.scene_id}`)}
+										>
+											<CardContent className="p-0">
+												<AspectRatio ratio={16 / 9} className="w-full">
+													<Image
+														src={feature.compressed_thumbnail_url || '/fallback-image.jpg'}
+														alt={`${feature.scene_name} image`}
+														width={500}
+														height={500}
+														quality={100}
+														objectFit="contain"
+														priority={feature.index < 4} // Only prioritize first 4 images
+													/>
+												</AspectRatio>
+											</CardContent>
+										</Card>
+										<p className="text-center text-sm font-bold text-customWhite">
+											{feature.scene_name}
+										</p>
+									</div>
+								))
+							) : (
+								filteredScenes.map((feature) => (
+									<div key={feature.scene_id || feature.path} className="space-y-2">
+										<Card
+											className={`bg-blue-800/20 mb-2 transform cursor-pointer overflow-hidden border-0 backdrop-blur-sm transition-transform duration-200 hover:scale-105 ${selectedScenes?.scene_id === feature.scene_id ? 'border border-solid border-buttonBorder' : ''}`}
 											aria-label={`Select ${feature.scene_name}`}
 											onClick={() => handleScenesSelect(feature)}
 										>
 											<CardContent className="p-0">
-												<AspectRatio ratio={16 / 9} className="w-full" >
+												<AspectRatio ratio={16 / 9} className="w-full">
 													<video
 														ref={(el) => { videoRefs.current[feature.scene_id] = el }}
 														src={feature.compressed_video_url}
@@ -361,51 +367,38 @@ const ScenesPage = ({
 									</div>
 								))
 							)}
-						</div>
+						</InfiniteScroll>
 					)}
 				</div>
-				<div className="flex justify-between items-center mt-4 flex-col sm:flex-row">
-					<div
-						className={`flex justify-center items-center space-x-2 sm:flex-1  flex-wrap sm:space-x-2 ${selectedScenes ? 'md:ml-36' : ''}`}
-					>
-						<Pagination
-							currentPage={currentPage}
-							totalPages={totalPages}
-							onPageChange={handlePageChange}
-						/>
-					</div>
-				</div>
-			</Card >
-		</div >
+			</Card>
+		</div>
 	);
 };
 
+// Server-side fetching
 export async function getServerSideProps(context) {
-	const { query } = context;
-	const page = query.page || 1;
 	const { id } = context.params;
+	// Get the mode from the cookie if available, default to 'video'
+	const cookies = context.req.headers.cookie || '';
+	const modeCookie = cookies.split(';').find(c => c.trim().startsWith('mode='));
+	const mode = modeCookie ? modeCookie.split('=')[1] : 'video';
 
 	try {
 		const axios = axiosInstance(context);
 		const response = await axios.post(API_ENDPOINTS.GET_ALL_SCENE_LIST, {
-			page,
+			page: 1,
 			movie_id: id,
+			mode: mode, // Pass the mode from the cookie
 		});
 
-		// Prefetch next page
-		const nextPage = page + 1;
-		const nextResponse = await axios.post(API_ENDPOINTS.GET_ALL_SCENE_LIST, {
-			page: nextPage,
-			movie_id: id,
-		});
+		console.log('Server-side initial fetch mode:', mode);
 
 		return {
 			props: {
 				initialScenes: response?.data?.data?.data || [],
 				totalCount: response?.data?.data?.totalCount || 0,
-				page: parseInt(page, 10),
+				page: 1,
 				id,
-				prefetchNextPageData: nextResponse?.data?.data?.data || [],
 			},
 		};
 	} catch (error) {
@@ -416,11 +409,9 @@ export async function getServerSideProps(context) {
 				totalCount: 0,
 				page: 1,
 				id: null,
-				prefetchNextPageData: [],
 			},
 		};
 	}
 }
 
 export default ScenesPage;
-

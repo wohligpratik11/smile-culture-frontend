@@ -1,10 +1,9 @@
 import { useRouter } from 'next/router';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Input } from '../../components/components/ui/input';
 import { Card, CardContent } from '../../components/components/ui/card';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
-import { ChevronRight, ChevronLeft } from 'lucide-react';
 import { CiSearch } from "react-icons/ci";
 import { apiService, API_ENDPOINTS } from '../../lib/api/apiService';
 import axiosInstance from '../../lib/api/axiosInstance';
@@ -12,17 +11,19 @@ import CryptoJS from 'crypto-js';
 import Cookie from 'js-cookie';
 import Image from 'next/image';
 import { AspectRatio } from "../../components/components/ui/aspect-ratio";
-import Pagination from '../../components/components/ui/pagination';
+import InfiniteScroll from '../../components/components/ui/InfiniteScroll';
 
-const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, prefetchNextPageData, mode }) => {
+const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, mode }) => {
 	const router = useRouter();
 	const [titleFromCookie, setTitleFromCookie] = useState('');
 	const [searchQuery, setSearchQuery] = useState('');
 	const [characters, setCharacters] = useState(initialCharacters);
 	const [currentPage, setCurrentPage] = useState(initialPage);
-	const [totalPages, setTotalPages] = useState(Math.ceil(totalCount / 8));
 	const [selectedCharacters, setSelectedCharacters] = useState([]);
 	const [swapType, setSwapType] = useState('single');
+	const [loading, setLoading] = useState(false);
+	const [hasMore, setHasMore] = useState(true);
+	const scrollContainerRef = useRef(null);
 
 	useEffect(() => {
 		const title = Cookie.get('title');
@@ -31,24 +32,15 @@ const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, 
 		setSwapType(swapType); // Store swapType in the state
 	}, []);
 
-
+	// Initialize hasMore based on initialCharacters and totalCount
 	useEffect(() => {
-		const { page } = router.query;
-		if (page && parseInt(page) !== currentPage) {
-			handlePageChange(parseInt(page));
-		}
-	}, [router.query.page]);
+		setHasMore(currentPage < Math.ceil(totalCount / 8));
+	}, [totalCount, currentPage]);
 
-	const handlePageChange = useCallback(async (page) => {
-		if (page < 1 || page > totalPages) return;
+	const fetchCharacters = async (page, replace = false) => {
+		if (loading || !hasMore) return;
 
-		router.push({
-			pathname: router.pathname,
-			query: { ...router.query, page },
-		}, undefined, { shallow: true });
-
-		setCurrentPage(page);
-
+		setLoading(true);
 		try {
 			const axios = axiosInstance();
 			let endpoint;
@@ -61,12 +53,29 @@ const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, 
 
 			const response = await axios.post(endpoint, { page, scene_id: id });
 
-			setCharacters(response?.data?.data?.data || []);
-			setTotalPages(Math.ceil(response?.data?.data?.totalCount / 8));
+			console.log('Fetched characters for page:', page, response?.data?.data);
+
+			const newCharacters = response?.data?.data?.data || [];
+			const total = response?.data?.data?.totalCount || 0;
+
+			if (newCharacters.length === 0) {
+				setHasMore(false);
+			} else {
+				setCharacters(prev => replace ? newCharacters : [...prev, ...newCharacters]);
+				setHasMore(page < Math.ceil(total / 8));
+			}
 		} catch (error) {
 			console.error('Error fetching Characters:', error);
+		} finally {
+			setLoading(false);
 		}
-	}, [router, totalPages, id, mode]);
+	};
+
+	const loadMoreItems = useCallback(() => {
+		const nextPage = currentPage + 1;
+		setCurrentPage(nextPage);
+		fetchCharacters(nextPage, false);
+	}, [currentPage]);
 
 	const handleSearchChange = useCallback((e) => {
 		setSearchQuery(e.target.value);
@@ -107,7 +116,6 @@ const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, 
 		}
 	};
 
-
 	const renderHeader = () => {
 		if (titleFromCookie) {
 			const formattedTitle = titleFromCookie.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
@@ -117,8 +125,8 @@ const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, 
 	};
 
 	return (
-		<div className="min-h-screen p-6 h-[835px]">
-			<Card className="bg-card-cardCustomBlue p-4">
+		<div className="min-h-screen p-6 h-[835px] overflow-hidden">
+			<Card className="bg-card-cardCustomBlue p-6 h-full overflow-y-auto" ref={scrollContainerRef}>
 				<div className="space-y-4">
 					<div className="flex items-center gap-4">
 						<Link href={router.asPath} passHref>
@@ -150,18 +158,45 @@ const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, 
 							className="w-full pl-12 pr-3 py-3 border-none bg-blueYonder rounded-full text-customWhite placeholder-customWhite"
 						/>
 					</div>
-					<div className="mt-4 flex items-center justify-between flex-col sm:flex-row sm:space-x-4"> <div className="relative text-lg font-semibold !text-customWhite mb-4 sm:mb-0"> Choose Character </div>
-					</div>
-					<div className={`mt-6 ${filteredFeatures.length > 0 ? 'grid grid-cols-1 md:grid-cols-4 gap-6' : ''}`}>
-						{filteredFeatures.length === 0 ? (
-							<div className="flex justify-center items-center h-full">
-								No Character found
+					<div className="mt-4 flex items-center justify-between flex-col sm:flex-row sm:space-x-4">
+						<div className="relative text-lg font-semibold !text-customWhite mb-4 sm:mb-0">
+							Choose Character
+						</div>
+						{selectedCharacters.length > 0 && (
+							<div className="mt-4 flex justify-end">
+								<button
+									className="px-4 py-2 rounded-lg bg-gradient-custom-gradient hover:border hover:border-buttonBorder w-52 h-12"
+									onClick={handleNextClick}
+								>
+									Next
+								</button>
 							</div>
-						) : (
-							filteredFeatures.map((feature) => (
-								<div key={feature.path} className="space-y-2 text-center">
+						)}
+					</div>
+
+
+					{/* Characters with InfiniteScroll */}
+					{filteredFeatures.length === 0 && !loading ? (
+						<div className="flex justify-center items-center h-full mt-6">
+							No Character found
+						</div>
+					) : (
+						<InfiniteScroll
+							hasMore={hasMore}
+							loadMore={loadMoreItems}
+							loading={loading}
+							scrollContainerRef={scrollContainerRef}
+							className="mt-6 grid grid-cols-1 md:grid-cols-4 gap-6"
+							loader={
+								<div className="flex justify-center items-center py-4 col-span-full">
+									<div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-white"></div>
+								</div>
+							}
+						>
+							{filteredFeatures.map((feature) => (
+								<div key={feature.character_id} className="space-y-2 text-center">
 									<Card
-										className={`bg-blue-800/20 border-0 backdrop-blur-sm overflow-hidden cursor-pointer transform transition-transform duration-200 hover:scale-105  ${selectedCharacters.includes(feature.character_id) ? 'border-buttonBorder border border-solid' : ''
+										className={`bg-blue-800/20 border-0 backdrop-blur-sm overflow-hidden cursor-pointer transform transition-transform duration-200 hover:scale-105 ${selectedCharacters.includes(feature.character_id) ? 'border-buttonBorder border border-solid' : ''
 											}`}
 										aria-label={`Select ${feature.character_real_name}`}
 										onClick={() => handleCharactersSelect(feature)}
@@ -171,40 +206,22 @@ const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, 
 												<Image
 													src={feature.compressed_thumbnail_url || '/fallback-image.jpg'}
 													alt={`${feature.character_real_name} image`}
-													objectFit="contain"
-													layout="responsive"
-													quality={100}
 													width={500}
 													height={500}
-													priority={true}
+													objectFit="contain"
+													priority={feature.character_id < 4} // Only prioritize first 4 images
 												/>
 											</AspectRatio>
 										</CardContent>
 									</Card>
 									<p className="text-sm text-customWhite font-bold mt-2">{feature.character_real_name}</p>
 								</div>
-							))
-						)}
-					</div>
-				</div>
-				<div className="flex justify-between items-center mt-4 flex-col sm:flex-row">
-					<div className={`flex justify-center items-center space-x-2 sm:flex-1 md:ml-36 flex-wrap sm:space-x-2 ${selectedCharacters ? 'md:ml-36' : ''}`}>
-						<Pagination
-							currentPage={currentPage}
-							totalPages={totalPages}
-							onPageChange={handlePageChange}
-						/>
-					</div>
-					{selectedCharacters.length > 0 && (
-						<button
-							className="px-4 py-2 rounded-lg bg-gradient-custom-gradient hover:border hover:border-buttonBorder w-52 h-12 mt-4 sm:ml-4 sm:mt-0"
-							onClick={() => handleNextClick()}
-							disabled={selectedCharacters.length === 0}
-						>
-							Next
-						</button>
+							))}
+						</InfiniteScroll>
 					)}
 				</div>
+
+
 			</Card>
 		</div>
 	);
@@ -229,16 +246,12 @@ export async function getServerSideProps(context) {
 
 		const response = await axios.post(endpoint, { page, scene_id: id });
 
-		const nextPage = page + 1;
-		const nextResponse = await axios.post(endpoint, { page: nextPage, scene_id: id });
-
 		return {
 			props: {
 				initialCharacters: response?.data?.data?.data || [],
 				totalCount: response?.data?.data?.totalCount || 0,
 				page: parseInt(page, 10),
 				id,
-				prefetchNextPageData: nextResponse?.data?.data?.data || [],
 				mode,
 			},
 		};
@@ -250,7 +263,6 @@ export async function getServerSideProps(context) {
 				totalCount: 0,
 				page: 1,
 				id: null,
-				prefetchNextPageData: [],
 				mode: 'image',
 			},
 		};
