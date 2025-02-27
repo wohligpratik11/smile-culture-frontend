@@ -243,7 +243,7 @@ const UploadPage = ({ movies }) => {
   };
 
   return (
-    <div className="min-h-auto p-4">
+    <div className="min-h-screen p-4">
       <Card className="bg-card-cardCustomBlue p-4 ">
         <div className="space-y-4">
           <div className="flex items-center gap-4">
@@ -271,7 +271,7 @@ const UploadPage = ({ movies }) => {
                 (item) => item.characterId === movie.character_id
               );
               return (
-                <div key={index} className="flex flex-col sm:flex-row md:flex-row tablet:mb-10">
+                <div key={index} className="flex flex-col sm:flex-row md:flex-row tablet:mb-10 h-52">
                   <div className="mt-2 flex flex-col items-center gap-2 sm:ml-4 sm:mt-0 rounded-2xl max-w-[300px]">
                     <Image
                       src={movie.url || UploadImages}
@@ -295,7 +295,7 @@ const UploadPage = ({ movies }) => {
                   </div>
 
                   <Card
-                    className={`${!previewData ? 'border border-customWhite border-dashed p-1 shadow' : ''}`}
+                    className={`${!previewData ? 'border-2 border-customWhite border-dashed p-1 shadow' : ''}`}
                     onClick={() => handleCharacterClick(movie)}
                   >
                     <div className="flex flex-col items-center gap-2">
@@ -400,7 +400,7 @@ const UploadPage = ({ movies }) => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                terms and conditions
+                Terms & Conditions
               </Link>.
             </label>
           </div>

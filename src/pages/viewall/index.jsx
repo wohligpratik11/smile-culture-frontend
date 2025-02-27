@@ -162,7 +162,7 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 	};
 
 	return (
-		<div className="min-h-screen p-4 overflow-hidden">
+		<div className="h-[835px] min-h-screen p-4 overflow-hidden">
 			<div className="sticky top-0 z-10 rounded-t-xl bg-card-cardCustomBlue p-4 pb-4">
 				{/* Header with back button */}
 				<div className="flex items-center gap-4">

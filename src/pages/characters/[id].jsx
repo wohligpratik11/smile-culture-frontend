@@ -126,39 +126,42 @@ const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, 
 
 	return (
 		<div className="min-h-screen p-6  overflow-hidden">
-			<Card className="bg-card-cardCustomBlue p-6 h-full overflow-y-auto hide-scrollbar" ref={scrollContainerRef}>
+			<div className="sticky rounded-t-xl top-0 z-10 bg-card-cardCustomBlue p-4">
+
+				<div className="flex items-center gap-4">
+					<Link href={router.asPath} passHref>
+						<button
+							className="px-4 py-2 rounded-lg bg-gradient-custom-gradient hover:border hover:border-buttonBorder"
+							onClick={(e) => {
+								e.preventDefault();
+								router.back();
+							}}
+							aria-label="Go Back"
+						>
+							<ArrowLeft />
+						</button>
+					</Link>
+
+					<div className="text-lg font-medium leading-10 mt-[17px]">
+						{renderHeader()}
+					</div>
+				</div>
+
+				<div className="relative mt-4">
+					<CiSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 font-bold text-customWhite h-full w-6" />
+					<Input
+						type="text"
+						placeholder="Search for Characters"
+						value={searchQuery}
+						onChange={handleSearchChange}
+						maxLength={50}
+						className="w-full pl-12 pr-3 py-3 border-none bg-blueYonder rounded-full text-customWhite placeholder-customWhite"
+					/>
+				</div></div>
+			<Card className="bg-card-cardCustomBlue pt-0 px-4 pb-6 h-full overflow-y-auto hide-scrollbar" ref={scrollContainerRef}>
 				<div className="space-y-4">
-					<div className="flex items-center gap-4">
-						<Link href={router.asPath} passHref>
-							<button
-								className="px-4 py-2 rounded-lg bg-gradient-custom-gradient hover:border hover:border-buttonBorder"
-								onClick={(e) => {
-									e.preventDefault();
-									router.back();
-								}}
-								aria-label="Go Back"
-							>
-								<ArrowLeft />
-							</button>
-						</Link>
 
-						<div className="text-lg font-medium leading-10 mt-[17px]">
-							{renderHeader()}
-						</div>
-					</div>
-
-					<div className="relative mt-4">
-						<CiSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 font-bold text-customWhite h-full w-6" />
-						<Input
-							type="text"
-							placeholder="Search for Characters"
-							value={searchQuery}
-							onChange={handleSearchChange}
-							maxLength={50}
-							className="w-full pl-12 pr-3 py-3 border-none bg-blueYonder rounded-full text-customWhite placeholder-customWhite"
-						/>
-					</div>
-					<div className="mt-4 flex items-center justify-between flex-col sm:flex-row sm:space-x-4">
+					<div className="flex items-center justify-between flex-col sm:flex-row sm:space-x-4">
 						<div className="relative text-lg font-semibold !text-customWhite sm:mb-0">
 							Choose Character
 						</div>

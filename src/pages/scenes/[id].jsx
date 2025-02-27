@@ -213,81 +213,79 @@ const ScenesPage = ({
 
 	return (
 		<div className="min-h-screen p-4 overflow-hidden ">
-			<Card className="bg-card-cardCustomBlue p-6 h-full overflow-y-auto hide-scrollbar " ref={scrollContainerRef}>
+			<div className="sticky rounded-t-xl top-0 z-10 bg-card-cardCustomBlue p-4">
+				<div className="flex items-center gap-4">
+					<Link href="#" passHref>
+						<button
+							className="bg-gradient-custom-gradient rounded-lg hover:border hover:border-buttonBorder px-4 py-2"
+							onClick={(e) => {
+								e.preventDefault();
+								router.back();
+							}}
+							aria-label="Go Back"
+						>
+							<ArrowLeft />
+						</button>
+					</Link>
+
+					<div className="mt-4 text-lg font-medium leading-10">
+						{renderHeader()}
+					</div>
+				</div>
+
+				<div className="flex flex-wrap items-center gap-4 mt-2">
+					<div className="flex space-x-2">
+						<button
+							className={`rounded-full px-6 py-2 font-semibold text-white transition-colors duration-200 ${selectedTab === 'scene' ? 'bg-gradient-custom-gradient hover:border hover:border-buttonBorder' : 'cursor-pointer border border-slateBlue bg-blueYonder transition-all'}`}
+							onClick={() => {
+								handleTabChange('scene');
+							}}
+						>
+							Scenes
+						</button>
+						<button
+							className={`rounded-full px-6 py-2 font-semibold text-white transition-colors duration-200  ${selectedTab === 'image' ? 'bg-gradient-custom-gradient hover:border hover:border-buttonBorder' : 'cursor-pointer border border-slateBlue bg-blueYonder transition-all'}`}
+							onClick={() => {
+								handleTabChange('image');
+							}}
+						>
+							Images
+						</button>
+					</div>
+
+					<div className="relative flex-grow mt-4 sm:mt-0">
+						<CiSearch className="absolute left-4 top-1/2 h-full w-6 -translate-y-1/2 transform font-bold text-customWhite" />
+						<Input
+							type="text"
+							placeholder={selectedTab === 'scene' ? 'Search for Scenes' : 'Search for Images'}
+							value={searchQuery}
+							onChange={handleSearchChange}
+							maxLength={50}
+							className="w-full rounded-full border-none bg-blueYonder py-3 pl-12 pr-3 text-customWhite placeholder-customWhite"
+						/>
+					</div>
+				</div>
+			</div>
+			<Card className="bg-card-cardCustomBlue pt-0 px-4 pb-6 h-full overflow-y-auto hide-scrollbar " ref={scrollContainerRef}>
+				<div className="flex items-center justify-between flex-col sm:flex-row sm:space-x-4">
+					<div className="relative text-lg font-semibold !text-customWhite mb-4 sm:mb-0">
+						{selectedTab === 'scene' ? 'Choose Scene' : 'Choose Image'}
+					</div>
+					{selectedScenes && (
+						<button
+							className="bg-gradient-custom-gradient h-12 w-full sm:w-52 rounded-lg hover:border hover:border-buttonBorder px-4 py-2 sm:mt-0"
+							onClick={() => {
+								if (selectedScenes) {
+									router.push(`/characters/${selectedScenes.scene_id}`);
+								}
+							}}
+							disabled={!selectedScenes}
+						>
+							Next
+						</button>
+					)}
+				</div>
 				<div className="space-y-4">
-					<div className="flex items-center gap-4">
-						<Link href="#" passHref>
-							<button
-								className="bg-gradient-custom-gradient rounded-lg hover:border hover:border-buttonBorder px-4 py-2"
-								onClick={(e) => {
-									e.preventDefault();
-									router.back();
-								}}
-								aria-label="Go Back"
-							>
-								<ArrowLeft />
-							</button>
-						</Link>
-
-						<div className="mt-4 text-lg font-medium leading-10">
-							{renderHeader()}
-						</div>
-					</div>
-
-					<div className="flex flex-wrap items-center gap-4 mt-4">
-						<div className="flex space-x-2">
-							<button
-								className={`rounded-full px-6 py-2 font-semibold text-white transition-colors duration-200 ${selectedTab === 'scene' ? 'bg-gradient-custom-gradient hover:border hover:border-buttonBorder' : 'cursor-pointer border border-slateBlue bg-blueYonder transition-all'}`}
-								onClick={() => {
-									handleTabChange('scene');
-								}}
-							>
-								Scenes
-							</button>
-							<button
-								className={`rounded-full px-6 py-2 font-semibold text-white transition-colors duration-200  ${selectedTab === 'image' ? 'bg-gradient-custom-gradient hover:border hover:border-buttonBorder' : 'cursor-pointer border border-slateBlue bg-blueYonder transition-all'}`}
-								onClick={() => {
-									handleTabChange('image');
-								}}
-							>
-								Images
-							</button>
-						</div>
-
-						{/* Search Input */}
-						<div className="relative flex-grow mt-4 sm:mt-0">
-							<CiSearch className="absolute left-4 top-1/2 h-full w-6 -translate-y-1/2 transform font-bold text-customWhite" />
-							<Input
-								type="text"
-								placeholder={selectedTab === 'scene' ? 'Search for Scenes' : 'Search for Images'}
-								value={searchQuery}
-								onChange={handleSearchChange}
-								maxLength={50}
-								className="w-full rounded-full border-none bg-blueYonder py-3 pl-12 pr-3 text-customWhite placeholder-customWhite"
-							/>
-						</div>
-					</div>
-
-					<div className="mt-4 flex items-center justify-between flex-col sm:flex-row sm:space-x-4">
-						<div className="relative text-lg font-semibold !text-customWhite mb-4 sm:mb-0">
-							{selectedTab === 'scene' ? 'Choose Scene' : 'Choose Image'}
-						</div>
-						{selectedScenes && (
-							<button
-								className="bg-gradient-custom-gradient h-12 w-full sm:w-52 rounded-lg hover:border hover:border-buttonBorder px-4 py-2 sm:mt-0"
-								onClick={() => {
-									if (selectedScenes) {
-										router.push(`/characters/${selectedScenes.scene_id}`);
-									}
-								}}
-								disabled={!selectedScenes}
-							>
-								Next
-							</button>
-						)}
-					</div>
-
-					{/* Scene/Image Cards with InfiniteScroll component */}
 					{filteredScenes.length === 0 && !loading ? (
 						<div className="flex h-full items-center justify-center mt-6">
 							No {selectedTab === 'scene' ? 'Scene' : 'Image'} found
@@ -298,7 +296,7 @@ const ScenesPage = ({
 							loadMore={loadMoreItems}
 							loading={loading}
 							scrollContainerRef={scrollContainerRef}
-							className={`mt-6 grid grid-cols-1 gap-6 md:grid-cols-4`}
+							className={`mt-4 grid grid-cols-1 gap-6 md:grid-cols-4`}
 							loader={
 								<div className="flex justify-center items-center py-4 col-span-full">
 									<div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-buttonBorder"></div>

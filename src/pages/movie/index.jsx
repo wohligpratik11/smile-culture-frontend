@@ -108,7 +108,7 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
   };
 
   return (
-    <div className="min-h-screen p-4 overflow-hidden">
+    <div className="h-[835px] min-h-screen p-4 overflow-hidden">
       <div className="sticky rounded-t-xl top-0 z-10 bg-card-cardCustomBlue p-4">
         {/* Header with back button */}
         <div className="flex items-center gap-4">
@@ -138,13 +138,11 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
           />
         </div>
       </div>
-      <Card className="bg-card-cardCustomBlue p-6 h-full overflow-y-auto hide-scrollbar" ref={scrollContainerRef}>
+      <Card className="bg-card-cardCustomBlue pt-0 px-4 pb-6 h-full overflow-y-auto hide-scrollbar" ref={scrollContainerRef}>
         <div className="space-y-4">
-
           <div className="relative text-lg font-semibold !text-customWhite">
             Choose Movie
           </div>
-
           {/* Movie Cards with InfiniteScroll component */}
           {filteredFeatures.length === 0 && !loading ? (
             <div className="flex h-full items-center justify-center mt-6">
