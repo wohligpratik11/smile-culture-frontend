@@ -101,7 +101,7 @@ const ViewUpload = () => {
 		}
 	};
 	return (
-		<div className="min-h-screen p-4 h-[835px]">
+		<div className="min-h-screen p-4">
 			<Card className="bg-card-cardCustomBlue p-4 ">
 				<div className="space-y-4">
 					<div className="mx-auto max-w-full sm:max-w-5xl space-y-12 p-2">

@@ -125,7 +125,7 @@ const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, 
 	};
 
 	return (
-		<div className="min-h-screen p-6 h-[835px] overflow-hidden">
+		<div className="min-h-screen p-6  overflow-hidden">
 			<Card className="bg-card-cardCustomBlue p-6 h-full overflow-y-auto hide-scrollbar" ref={scrollContainerRef}>
 				<div className="space-y-4">
 					<div className="flex items-center gap-4">

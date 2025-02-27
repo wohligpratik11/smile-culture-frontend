@@ -212,7 +212,7 @@ const ScenesPage = ({
 	};
 
 	return (
-		<div className="h-[835px] min-h-screen p-4 overflow-hidden ">
+		<div className="min-h-screen p-4 overflow-hidden ">
 			<Card className="bg-card-cardCustomBlue p-6 h-full overflow-y-auto hide-scrollbar " ref={scrollContainerRef}>
 				<div className="space-y-4">
 					<div className="flex items-center gap-4">

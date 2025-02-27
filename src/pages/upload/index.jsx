@@ -243,7 +243,7 @@ const UploadPage = ({ movies }) => {
   };
 
   return (
-    <div className="h-[835px] min-h-auto p-4">
+    <div className="min-h-auto p-4">
       <Card className="bg-card-cardCustomBlue p-4 ">
         <div className="space-y-4">
           <div className="flex items-center gap-4">
