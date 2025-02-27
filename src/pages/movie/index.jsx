@@ -145,7 +145,7 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
           </div>
           {/* Movie Cards with InfiniteScroll component */}
           {filteredFeatures.length === 0 && !loading ? (
-            <div className="flex h-full items-center justify-center mt-6">
+            <div className="flex h-full items-center justify-center  text-2xl mt-80">
               No Movie found
             </div>
           ) : (

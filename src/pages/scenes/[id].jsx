@@ -287,7 +287,7 @@ const ScenesPage = ({
 				</div>
 				<div className="space-y-4">
 					{filteredScenes.length === 0 && !loading ? (
-						<div className="flex h-full items-center justify-center mt-6">
+						<div className="flex h-full items-center justify-center mt-80">
 							No {selectedTab === 'scene' ? 'Scene' : 'Image'} found
 						</div>
 					) : (

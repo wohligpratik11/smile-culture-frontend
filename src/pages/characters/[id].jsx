@@ -180,7 +180,7 @@ const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, 
 
 					{/* Characters with InfiniteScroll */}
 					{filteredFeatures.length === 0 && !loading ? (
-						<div className="flex justify-center items-center h-full mt-6">
+						<div className="flex justify-center items-center h-full mt-80">
 							No Character found
 						</div>
 					) : (

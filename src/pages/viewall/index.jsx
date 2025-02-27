@@ -220,7 +220,7 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 			<Card className="bg-card-cardCustomBlue p-6 h-full overflow-y-auto hide-scrollbar" ref={scrollContainerRef}>
 				<div className="space-y-4">
 					{filteredMovies.length === 0 && !loading ? (
-						<div className="flex h-full items-center justify-center mt-6">
+						<div className="flex h-full items-center justify-center mt-80">
 							No {selectedTab === 'video' ? 'Scenes' : 'Images'} found
 						</div>
 					) : (
