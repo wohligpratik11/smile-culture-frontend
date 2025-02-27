@@ -295,7 +295,7 @@ const UploadPage = ({ movies }) => {
                   </div>
 
                   <Card
-                    className={`${!previewData ? 'border-2 border-customWhite border-dashed p-1 shadow' : ''}`}
+                    className={`${!previewData ? 'border-2 border-softGray border-dashed p-1 shadow' : ''}`}
                     onClick={() => handleCharacterClick(movie)}
                   >
                     <div className="flex flex-col items-center gap-2">

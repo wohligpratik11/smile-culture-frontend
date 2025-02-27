@@ -71,6 +71,7 @@ module.exports = {
         fixaText: '#005BEC',
         disableGray: '#B0B0B0',
         normalGray: '#EEF0F1',
+        softGray: '#f0f0f0ab',
         cloudbg: '#EAF7F5',
         deploymentLogBg: '#1E1D47',
         darkBackGround: '#101c44',
