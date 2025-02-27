@@ -63,7 +63,7 @@ const ProfileDropdown = ({ user, getFirstLetter }) => {
 								onMouseEnter={() => setIsProfileHovering(true)}
 								onMouseLeave={() => setIsProfileHovering(false)}
 							>
-								{user?.user_name || 'Pratik Sawant'}
+								{user?.user_name || 'Jainam Nisar'}
 							</span>
 							<span
 								className={`text-sm text-gray-300 transition-colors duration-200 cursor-pointer
