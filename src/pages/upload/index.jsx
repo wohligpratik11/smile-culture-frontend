@@ -194,7 +194,7 @@ const UploadPage = ({ movies }) => {
       if (response.data.status_code === 200) {
         setIsUploadSuccessful(true);
         addToast({
-          title: response?.data?.msg || 'Upload successful',
+          title: response?.data?.message || 'Upload successful',
           type: 'success',
         });
         const outputVideoUrl = response.data?.data[0]?.output_video_url;
