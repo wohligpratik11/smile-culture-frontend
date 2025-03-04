@@ -127,12 +127,12 @@ const UploadPage = ({ movies }) => {
           }
 
           addToast({
-            title: response.data?.message || 'Upload successful',
+            title: response.data.data?.final_response  || 'Upload successful',
             type: 'success',
           });
         } else if (response.data.status_code === 400) {
           addToast({
-            title: response.data?.message || 'Upload failed',
+            title: response.data.data?.final_response  || 'Upload failed',
             type: 'error',
           });
         }
