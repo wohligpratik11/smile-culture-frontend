@@ -71,7 +71,21 @@ const ViewUpload = () => {
 		}
 	}, []);
 
+	useEffect(() => {
+		// Handle route changes that aren't explicitly through our UI
+		const handleRouteChange = (url) => {
+			// Only clear cookies if navigating away from viewupload and not going to upload page
+			if (!url.includes('/upload/viewupload') && !url.includes('/upload')) {
+				clearAllUploadCookies();
+			}
+		};
 
+		router.events.on('routeChangeStart', handleRouteChange);
+
+		return () => {
+			router.events.off('routeChangeStart', handleRouteChange);
+		};
+	}, [router]);
 
 	const openModal = () => {
 		setIsModalOpen(true);

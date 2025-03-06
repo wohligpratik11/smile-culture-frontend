@@ -43,6 +43,7 @@ const UploadPage = ({ movies }) => {
   const [isUploading, setIsUploading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isUploadSuccessful, setIsUploadSuccessful] = useState(false);
+  const [isPageInitialized, setIsPageInitialized] = useState(false);
 
   // This will store an array of objects like:
   // [ { characterId: 123, uploadedUrl: 'https://...' }, ... ]
@@ -52,34 +53,108 @@ const UploadPage = ({ movies }) => {
   const { showSpinner, hideSpinner } = useSpinner();
   const { addToast } = useToaster();
 
+  // Function to clear image-related cookies
+  const clearImageCookies = () => {
+    Cookie.remove('uploadedData');
+    Cookie.remove('characterId');
+    Cookie.remove('output_video_url');
+  };
+
   // -- Effects --
   useEffect(() => {
     const title = Cookie.get('title');
     setTitleFromCookie(title || '');
 
-    // Decrypt the array of selected characters, if stored.
-    const encryptedData = Cookie.get('selectedCharacters');
-    if (encryptedData) {
-      try {
-        const bytes = CryptoJS.AES.decrypt(
-          encryptedData,
-          'your-encryption-key'
-        );
-        const decryptedData = bytes.toString(CryptoJS.enc.Utf8);
-        if (decryptedData) {
-          setSelectedCharacters(JSON.parse(decryptedData));
+    // Check if this is a fresh page load or a back navigation
+    const navigationEntries = window.performance.getEntriesByType('navigation');
+    const isBackNavigation = navigationEntries.length > 0 &&
+      navigationEntries[0].type === 'back_forward';
+
+    if (isBackNavigation) {
+      // Clear image cookies when user navigates back
+      clearImageCookies();
+      setSelectedImages([]);
+    } else {
+      // Decrypt the array of selected characters, if stored.
+      const encryptedData = Cookie.get('selectedCharacters');
+      if (encryptedData) {
+        try {
+          const bytes = CryptoJS.AES.decrypt(
+            encryptedData,
+            'your-encryption-key'
+          );
+          const decryptedData = bytes.toString(CryptoJS.enc.Utf8);
+          if (decryptedData) {
+            setSelectedCharacters(JSON.parse(decryptedData));
+          }
+        } catch (error) {
+          console.error('Error decrypting selectedCharacters:', error);
         }
-      } catch (error) {
-        console.error('Error decrypting selectedCharacters:', error);
+      }
+
+      // Only load uploaded data if not coming back via browser back button
+      const uploadedData = Cookie.get('uploadedData');
+      const characterIds = Cookie.get('characterId');
+
+      if (uploadedData && characterIds) {
+        try {
+          const uploadedUrls = JSON.parse(uploadedData);
+          const charIds = JSON.parse(characterIds);
+
+          // Create the selectedImages array from cookies
+          const newSelectedImages = [];
+          charIds.forEach((charId, index) => {
+            if (index < uploadedUrls.length) {
+              newSelectedImages.push({
+                characterId: charId,
+                uploadedUrl: uploadedUrls[index]
+              });
+            }
+          });
+
+          setSelectedImages(newSelectedImages);
+        } catch (error) {
+          console.error('Error parsing uploaded data cookies:', error);
+        }
       }
     }
+
+    setIsPageInitialized(true);
   }, []);
+
+  // Set up event listener for before unload (back button or page close)
+  useEffect(() => {
+    // Listen for route changes
+    const handleRouteChange = (url) => {
+      // If navigating away from this page without going to viewupload
+      if (!url.includes('/upload/viewupload') && !url.includes(router.asPath)) {
+        clearImageCookies();
+      }
+    };
+
+    router.events.on('routeChangeStart', handleRouteChange);
+
+    // Also handle browser back button with the popstate event
+    const handlePopState = () => {
+      clearImageCookies();
+    };
+
+    window.addEventListener('popstate', handlePopState);
+
+    return () => {
+      router.events.off('routeChangeStart', handleRouteChange);
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, [router]);
 
   // -- Handlers --
   const handleUploadComplete = useCallback(
     async (files) => {
       if (!files || files.length === 0) {
-        alert('No files selected');
+        addToast({
+          title: 'No files selected',
+          type: 'error',
+        });
         return;
       }
 
@@ -127,12 +202,12 @@ const UploadPage = ({ movies }) => {
           }
 
           addToast({
-            title: response.data.data?.final_response  || 'Upload successful',
+            title: response.data.data?.final_response || 'Upload successful',
             type: 'success',
           });
         } else if (response.data.status_code === 400) {
           addToast({
-            title: response.data.data?.final_response  || 'Upload failed',
+            title: response.data.data?.final_response || 'Upload failed',
             type: 'error',
           });
         }
@@ -161,9 +236,49 @@ const UploadPage = ({ movies }) => {
     setCurrentCharacterId(movie.character_id);
     setShowSelfieInstructions(true);
   };
+
   const isAllImagesUploaded = movies.every((movie) =>
     selectedImages.some((image) => image.characterId === movie.character_id)
   );
+  const handleRemoveImage = (characterId) => {
+    setSelectedImages((prevSelectedImages) =>
+      prevSelectedImages.filter(
+        (item) => item.characterId !== characterId
+      )
+    );
+
+    // Also update the cookies when removing an image
+    const existingCharacterIds = Cookie.get('characterId');
+    const existingUploadedData = Cookie.get('uploadedData');
+
+    if (existingCharacterIds && existingUploadedData) {
+      try {
+        const charIds = JSON.parse(existingCharacterIds);
+        const uploadedUrls = JSON.parse(existingUploadedData);
+
+        // Find index of the character ID to remove
+        const indexToRemove = charIds.indexOf(characterId);
+
+        if (indexToRemove !== -1) {
+          // Remove the character ID and corresponding URL
+          charIds.splice(indexToRemove, 1);
+          uploadedUrls.splice(indexToRemove, 1);
+
+          // Update cookies
+          Cookie.set('characterId', JSON.stringify(charIds));
+          Cookie.set('uploadedData', JSON.stringify(uploadedUrls));
+        }
+      } catch (error) {
+        console.error('Error updating cookies when removing image:', error);
+      }
+    }
+  };
+  const handleGoBack = (e) => {
+    e.preventDefault();
+    clearImageCookies();
+    router.back();
+  };
+
   const handleNextClick = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -250,10 +365,7 @@ const UploadPage = ({ movies }) => {
             <Link href={router.asPath} passHref>
               <button
                 className="bg-gradient-custom-gradient rounded-lg hover:border hover:border-buttonBorder px-4 py-2"
-                onClick={(e) => {
-                  e.preventDefault();
-                  router.back();
-                }}
+                onClick={handleGoBack}
                 aria-label="Go Back"
               >
                 <ArrowLeft />
@@ -303,12 +415,9 @@ const UploadPage = ({ movies }) => {
                         <div className="relative">
                           <button
                             className="absolute right-0 top-[10px] rounded-full bg-gray-800 bg-opacity-50 p-1 text-white"
-                            onClick={() => {
-                              setSelectedImages((prevSelectedImages) =>
-                                prevSelectedImages.filter(
-                                  (item) => item.characterId !== movie.character_id
-                                )
-                              );
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleRemoveImage(movie.character_id);
                             }}
                             aria-label="Remove Image"
                           >
@@ -320,6 +429,10 @@ const UploadPage = ({ movies }) => {
                               alt="Uploaded Image"
                               width={200}
                               height={200}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleRemoveImage(movie.character_id);
+                              }}
                               className="h-full w-full rounded-2xl border border-slateBlue object-fill shadow"
                             />
                           </div>
@@ -331,6 +444,10 @@ const UploadPage = ({ movies }) => {
                             alt="Image Icon"
                             width={64}
                             height={64}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleRemoveImage(movie.character_id);
+                            }}
                             className="h-16 w-16"
                           />
                           <div className="flex items-center space-x-2">
@@ -347,7 +464,6 @@ const UploadPage = ({ movies }) => {
               );
             })}
           </div>
-
 
           {/* Show the "SelfieInstruction" component */}
           {showSelfieInstructions && (
@@ -377,55 +493,52 @@ const UploadPage = ({ movies }) => {
 
           {/* If you have a loader screen when isLoading */}
           {isLoading && (
-            <div >
+            <div>
               <LoadingScreen />
             </div>
           )}
-          {/* <LoadingScreen /> */}
         </div>
         {isAllImagesUploaded && (
-          <div className="flex items-center mt-4">
-            <input
-              type="checkbox"
-              id="terms"
-              checked={isAgreed}
-              onChange={() => setIsAgreed(!isAgreed)}
-              className="h-4 w-4 text-customGreen border-gray-300 rounded "
-            />
-            <label htmlFor="terms" className="ml-2 text-sm text-customWhite">
-              By clicking ‘Next’ I agree to the
-              <Link
-                href="https://erosnow.com/termsofuse"
-                className="text-royalBlue hover:underline ml-1"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Terms & Conditions
-              </Link>.
-            </label>
-          </div>
-        )}
+          <div className="flex items-center justify-between mt-4">
+            <div className="flex items-center">
+              <input
+                type="checkbox"
+                id="terms"
+                checked={isAgreed}
+                onChange={() => setIsAgreed(!isAgreed)}
+                className="h-4 w-4 text-customGreen border-gray-300 rounded "
+              />
+              <label htmlFor="terms" className="ml-2 text-sm text-customWhite">
+                By clicking 'Next' I agree to the
+                <Link
+                  href="https://erosnow.com/termsofuse"
+                  className="text-royalBlue hover:underline ml-1"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Terms & Conditions
+                </Link>.
+              </label>
+            </div>
 
-        {/* Next Button */}
-        {/* Next Button */}
-        {isAllImagesUploaded && (
-          <div className="mt-6 flex justify-end space-x-4">
-            <Link href="/upload/viewupload" prefetch>
-              <button
-                className={`bg-gradient-custom-gradient h-12 w-52 rounded-lg border border-buttonBorder px-4 py-2 
+            {/* Next Button */}
+            <div className="flex justify-end">
+              <Link href="/upload/viewupload" prefetch>
+                <button
+                  className={`bg-gradient-custom-gradient h-12 w-52 rounded-lg border border-buttonBorder px-4 py-2 
           ${!isAgreed ? 'opacity-50 cursor-not-allowed' : ''}`} // Disabled styles
-                onClick={handleNextClick}
-                disabled={!isAgreed}
-              >
-                Next
-              </button>
-            </Link>
+                  onClick={handleNextClick}
+                  disabled={!isAgreed}
+                >
+                  Next
+                </button>
+              </Link>
+            </div>
           </div>
         )}
 
       </Card>
     </div>
-
   );
 };
 
@@ -473,5 +586,3 @@ export async function getServerSideProps(context) {
 }
 
 export default UploadPage;
-
-
