@@ -256,7 +256,6 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 														controlsList="nodownload noplaybackrate"
 														disablePictureInPicture
 														className="h-full w-full object-contain"
-														aria-label={`Video for ${movie.movie_name}`}
 														onMouseEnter={() => handleMouseEnter(movie.stored_data_id)}
 														onMouseLeave={() => handleMouseLeave(movie.stored_data_id)}
 														onClick={() => handleTouchOrClick(movie.stored_data_id)}
