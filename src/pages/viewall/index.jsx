@@ -323,7 +323,7 @@ export async function getServerSideProps(context) {
 
 		return {
 			props: {
-				initialMovies: response?.data?.data?.data || [],
+				initialMovies: response?.data?.data?.data,
 				totalCount: response?.data?.data?.totalCount || 0,
 				page: 1,
 			},

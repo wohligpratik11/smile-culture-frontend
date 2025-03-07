@@ -26,7 +26,6 @@ function MyApp({ Component, pageProps }) {
       Cookies.remove('selectedCharacters');
       Cookies.remove('uploadedData');
       Cookies.remove('title');
-      Cookies.remove('swapType');
     }
   }, [router.pathname]);
   return (

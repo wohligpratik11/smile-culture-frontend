@@ -383,7 +383,7 @@ const UploadPage = ({ movies }) => {
                 (item) => item.characterId === movie.character_id
               );
               return (
-                <div key={index} className="flex flex-col sm:flex-row md:flex-row tablet:mb-10 h-52">
+                <div key={index} className="flex flex-col sm:flex-row md:flex-row tablet:mb-10 ">
                   <div className="mt-2 flex flex-col items-center gap-2 sm:ml-4 sm:mt-0 rounded-2xl max-w-[300px]">
                     <Image
                       src={movie.url || UploadImages}
@@ -499,40 +499,44 @@ const UploadPage = ({ movies }) => {
           )}
         </div>
         {isAllImagesUploaded && (
-          <div className="flex items-center justify-between mt-4">
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="terms"
-                checked={isAgreed}
-                onChange={() => setIsAgreed(!isAgreed)}
-                className="h-4 w-4 text-customGreen border-gray-300 rounded "
-              />
-              <label htmlFor="terms" className="ml-2 text-sm text-customWhite">
-                By clicking 'Next' I agree to the
-                <Link
-                  href="https://erosnow.com/termsofuse"
-                  className="text-royalBlue hover:underline ml-1"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Terms & Conditions
-                </Link>.
-              </label>
-            </div>
+          <div className="mt-4">
+            {/* For desktop, this remains a flex container with justify-between */}
+            {/* For tablet and below, we change to flex-col to stack the elements */}
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  id="terms"
+                  checked={isAgreed}
+                  onChange={() => setIsAgreed(!isAgreed)}
+                  className="h-4 w-4 text-customGreen border-gray-300 rounded"
+                />
+                <label htmlFor="terms" className="ml-2 text-sm text-customWhite">
+                  By clicking 'Next' I agree to the
+                  <Link
+                    href="https://erosnow.com/termsofuse"
+                    className="text-royalBlue hover:underline ml-1"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Terms & Conditions
+                  </Link>.
+                </label>
+              </div>
 
-            {/* Next Button */}
-            <div className="flex justify-end">
-              <Link href="/upload/viewupload" prefetch>
-                <button
-                  className={`bg-gradient-custom-gradient h-12 w-52 rounded-lg border border-buttonBorder px-4 py-2 
-          ${!isAgreed ? 'opacity-50 cursor-not-allowed' : ''}`} // Disabled styles
-                  onClick={handleNextClick}
-                  disabled={!isAgreed}
-                >
-                  Next
-                </button>
-              </Link>
+              {/* Next Button */}
+              <div className="flex md:justify-end">
+                <Link href="/upload/viewupload" prefetch>
+                  <button
+                    className={`bg-gradient-custom-gradient h-12 w-64  sm:w-full lg:w-52 rounded-lg border border-buttonBorder px-4 py-2 
+            ${!isAgreed ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    onClick={handleNextClick}
+                    disabled={!isAgreed}
+                  >
+                    Next
+                  </button>
+                </Link>
+              </div>
             </div>
           </div>
         )}
