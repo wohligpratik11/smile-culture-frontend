@@ -74,8 +74,6 @@ const ScenesPage = ({
 				mode: tabType === 'image' ? 'image' : 'video', // Pass the mode parameter based on selected tab
 			});
 
-			console.log('Fetched data for tab:', tabType, response?.data?.data);
-
 			const newScenes = response?.data?.data?.data || [];
 			const total = response?.data?.data?.totalCount || 0;
 
@@ -106,7 +104,7 @@ const ScenesPage = ({
 				const playPromise = videoElement.play();
 				if (playPromise !== undefined) {
 					playPromise.catch((error) => {
-						console.log("Play error:", error);
+						// console.log("Play error:", error);
 					});
 				}
 				setIsPlaying(true);
@@ -115,7 +113,7 @@ const ScenesPage = ({
 				const pausePromise = videoElement.pause();
 				if (pausePromise !== undefined) {
 					pausePromise.catch((error) => {
-						console.log("Pause error:", error);
+						// console.log("Pause error:", error);
 					});
 				}
 				setIsPlaying(false);
@@ -132,7 +130,7 @@ const ScenesPage = ({
 			const playPromise = videoElement.play();
 			if (playPromise !== undefined) {
 				playPromise.catch(error => {
-					console.log("Playback error:", error);
+					// console.log("Playback error:", error);
 				});
 			}
 		}
@@ -388,8 +386,6 @@ export async function getServerSideProps(context) {
 			movie_id: id,
 			mode: mode, // Pass the mode from the cookie
 		});
-
-		console.log('Server-side initial fetch mode:', mode);
 
 		return {
 			props: {

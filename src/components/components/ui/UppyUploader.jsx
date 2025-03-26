@@ -136,12 +136,10 @@ const MediaUploader = ({ onUploadComplete }) => {
         }
       });
       uppy.on('cancel-all', () => {
-        console.log('Upload cancelled');
         stopMediaStream();
       });
 
       uppy.on('dashboard:closed', () => {
-        console.log('Dashboard closed');
         stopMediaStream();
       });
 
@@ -156,7 +154,6 @@ const MediaUploader = ({ onUploadComplete }) => {
       if (uppyInstance) {
         try {
           uppyInstance.close({ reason: 'unmount' });
-          console.log('Uppy instance closed and cleanup completed');
         } catch (error) {
           console.warn('Error closing Uppy instance:', error);
         }

@@ -224,17 +224,18 @@ const Home = () => {
                 </Button>
 
               </div>
-              <span className=" sm:w-full lg:w-fit xl:w-fit tablet:w-fit rounded-full p-1 bg-[#495583] border border-buttonBorder mb-3">
-                <Link href="/viewall">
-                  <Button
-                    variant="ghost"
-                    className={`rounded-full text-white hover:bg-[#3c4071]/90 text-xs w-full sm:!text-base`}
-                  >
-                    My Creations
-                  </Button>
-                </Link>
-              </span>
+
             </div>
+            <span className=" sm:w-full lg:w-fit xl:w-fit tablet:w-fit rounded-full p-1 bg-[#495583] border border-buttonBorder mb-3">
+              <Link href="/viewall">
+                <Button
+                  variant="ghost"
+                  className={`rounded-full text-white hover:bg-[#3c4071]/90 text-xs w-full sm:!text-base`}
+                >
+                  My Creations
+                </Button>
+              </Link>
+            </span>
             <div className="grid md:grid-cols-2 gap-8">
               <div className="relative image-container">
                 {/* Corner borders */}

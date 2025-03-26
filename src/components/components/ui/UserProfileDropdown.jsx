@@ -26,17 +26,14 @@ const UserProfileDropdown = ({ user }) => {
 	};
 
 	const handleLogout = () => {
-		console.log('Logging out...');
 		// Implement logout logic here
 	};
 
 	const handleResetPassword = () => {
-		console.log('Reset password...');
 		// Implement reset password logic here
 	};
 
 	const handleDeleteAccount = () => {
-		console.log('Delete account...');
 		// Implement delete account logic here
 	};
 

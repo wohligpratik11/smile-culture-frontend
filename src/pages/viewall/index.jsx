@@ -60,8 +60,6 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 				mode: tabType,
 			});
 
-			console.log('Fetched data for tab:', tabType, response?.data?.data);
-
 			const newMovies = response?.data?.data?.data || [];
 			const total = response?.data?.data?.totalCount || 0;
 
@@ -101,7 +99,7 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 			const playPromise = videoElement.play();
 			if (playPromise !== undefined) {
 				playPromise.catch(error => {
-					console.log("Playback error:", error);
+					// console.log("Playback error:", error);
 				});
 			}
 		}
@@ -113,7 +111,7 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 			const pausePromise = videoElement.pause();
 			if (pausePromise !== undefined) {
 				pausePromise.catch(error => {
-					console.log("Pause error:", error);
+					// console.log("Pause error:", error);
 				});
 			}
 		}
@@ -127,14 +125,14 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
 				const pausePromise = videoElement.pause();
 				if (pausePromise !== undefined) {
 					pausePromise.catch((error) => {
-						console.log("Pause error:", error);
+						// console.log("Pause error:", error);
 					});
 				}
 			} else {
 				const playPromise = videoElement.play();
 				if (playPromise !== undefined) {
 					playPromise.catch((error) => {
-						console.log("Play error:", error);
+						// console.log("Play error:", error);
 					});
 				}
 			}

@@ -43,8 +43,6 @@ const MoviePage = ({ initialMovies, totalCount, page: initialPage }) => {
         page,
       });
 
-      console.log('Fetched movies for page:', page, response?.data?.data);
-
       const newMovies = response?.data?.data?.data || [];
       const total = response?.data?.data?.totalCount || 0;
 

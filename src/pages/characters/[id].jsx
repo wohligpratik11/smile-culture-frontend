@@ -53,8 +53,6 @@ const CharactersPage = ({ initialCharacters, totalCount, page: initialPage, id, 
 
 			const response = await axios.post(endpoint, { page, scene_id: id });
 
-			console.log('Fetched characters for page:', page, response?.data?.data);
-
 			const newCharacters = response?.data?.data?.data || [];
 			const total = response?.data?.data?.totalCount || 0;
 
