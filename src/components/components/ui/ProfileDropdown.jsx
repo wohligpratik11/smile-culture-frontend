@@ -16,7 +16,7 @@ const ProfileDropdown = ({ user, getFirstLetter }) => {
 
 	const handleLogout = () => {
 		localStorage.removeItem('userData');
-		window.location.href = 'https://erosnow.com/';
+		window.location.href = 'https://smileculture.com/';
 	};
 
 	return (

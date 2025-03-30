@@ -13,31 +13,36 @@ module.exports = {
         dm: ['DM Sans', 'sans-serif'],
       },
       screens: {
-        xs: '576px', // For very small devices like phones
-        'xs-max': { max: '575px' }, // For devices up to 575px, typically small screens
-        sm: '576px', // Small screens (phones, but larger than xs)
-        'sm-max': { max: '767px' }, // Max width for small devices
-        md: '768px', // Medium screens (tablets and small laptops)
-        'md-max': { max: '991px' }, // Max width for medium devices (tablets and small laptops)
-        tablet: { min: '768px', max: '1024px' }, // Tablets only (portrait and landscape mode)
-        lg: '1024px', // Large screens (desktops and larger)
-        'lg-max': { max: '1199px' }, // Max width for large devices
-        xl: '1200px', // Extra-large screens (larger desktops)
-        'xl-max': { max: '1320px' }, // Max width for extra-large devices
-        '2xl': '1321px', // 2x extra-large screens
-        '2xl-max': { max: '1599px' }, // Max width for 2x extra-large devices
-        '3xl': '1600px', // 3x extra-large screens
-        '3xl-max': { max: '1849px' }, // Max width for 3x extra-large devices
-        '4xl': '1850px', // 4x extra-large screens
-        '4xl-max': { max: '2047px' }, // Max width for 4x extra-large devices
-        '5xl': { min: '2048px', max: '2559px' }, // Large laptops and smaller desktop screens
-        '6xl': { min: '2560px', max: '3839px' }, // Bigger desktops or standard TV screens
+        xxxs: '320px', // Extra Extra Small screens (small phones)
+        'iphone-5': '320px', // iPhone 5
+        xxs: '320px', // Very Small screens
+        'xxs-max': { max: '319px' }, // Max width for very small devices
+        xs: '576px', // Extra Small screens
+        'xs-max': { max: '575px' }, // Max width for xs devices
+        sm: '576px', // Small screens
+        'sm-max': { max: '767px' }, // Max width for sm devices
+        tablet: { min: '768px', max: '1024px' }, // Tablet screens only
+        md: '768px', // Medium screens and larger
+        lg: '1024px', // Large screens
+        'lg-max': { max: '1199px' }, // Max width for lg devices
+        xl: '1200px', // Extra Large screens
+        'xl-max': { max: '1320px' }, // Max width for xl devices
+        '2xl': '1321px', // 2x Extra Large screens
+        '2xl-max': { max: '1599px' }, // Max width for 2xl devices
+        '3xl': '1600px', // 3x Extra Large screens
+        '3xl-max': { max: '1849px' }, // Max width for 3xl devices
+        '4xl': '1850px', // 4x Extra Large screens
+        '4xl-max': { max: '2047px' }, // Max width for 4xl devices
+        '5xl': { min: '2048px', max: '2559px' }, // Large laptops and smaller desktops
+        '6xl': { min: '2560px', max: '3839px' }, // Bigger desktops and standard TVs
         '7xl': { min: '3840px' }, // Ultra-wide screens and large TVs
-        hd: { min: '1366px', max: '1366px' }, // HD screens (1366x768, common for many laptops)
-        'full-hd': { min: '1920px', max: '1920px' }, // Full HD screens (1920x1080)
-        '2k': { min: '2560px', max: '2560px' }, // 2K screens (2560x1440)
-        '4k': { min: '3840px', max: '3840px' }, // 4K screens (3840x2160)
-        '8k': { min: '7680px', max: '7680px' }, // 8K screens (7680x4320)
+        hd: { min: '1366px', max: '1366px' }, // HD screens
+        'full-hd': { min: '1920px', max: '1920px' }, // Full HD screens
+        '2k': { min: '2560px', max: '2560px' }, // 2K screens
+        '4k': { min: '3840px', max: '3840px' }, // 4K screens
+        '8k': { min: '7680px', max: '7680px' }, // 8K screens
+        'iphone-6': '375px', // For devices with 375px width (e.g., iPhone 6/7/8)
+        'small-tablet': '425px', // For devices with 425px width (e.g., small tablets)
       },
 
       borderImageLine: {
@@ -56,6 +61,7 @@ module.exports = {
         1004: '1004px',
       },
       colors: {
+        shadeBlue: '#609cb0',
         lavender: '#F2EFFF',
         black: '#000000',
         lightBlack: '#264966',

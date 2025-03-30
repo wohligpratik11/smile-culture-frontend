@@ -6,7 +6,7 @@
 :root {
   --background-color: #000000; /* Dark background */
   --text-color: #ffffff; /* Light text */
-  --background-image: url('../../public/assets/images/erosnowbg.webp') !important;
+  /* --background-image: url('../../public/assets/images/erosnowbg.webp') !important; */
 }
 /* styles/globals.css or equivalent */
 
@@ -78,25 +78,7 @@ body {
     border-image-source: linear-gradient(180deg, #13a6e3 0%, #3bc2ba 100%);
   }
 }
-/* Buttons */
-.uppy-u-reset.uppy-c-btn.uppy-StatusBar-actionBtn.uppy-StatusBar-actionBtn--upload.uppy-c-btn-primary {
-  padding: 0.5rem 1rem !important; /* px-4 py-2 */
-  background: linear-gradient(
-    90deg,
-    #0ca1ea,
-    #3ec5b6
-  ) !important; /* Gradient */
-  border: 1px solid #56e5f6 !important; /* Updated border color */
-  border-radius: 0.5rem !important; /* rounded-lg */
-  width: 13rem !important; /* w-52 */
-  height: 3rem !important; /* h-12 */
-  color: #fff !important; /* Adjust text color */
-  text-align: center;
-}
 
-.uppy-u-reset.uppy-c-btn.uppy-Dashboard-browse {
-  color: #0075ff !important;
-}
 .gradient_text_about-bg {
   color: #fff;
   background-image: linear-gradient(88deg, #a0e061 0%, #2fadff 56%);

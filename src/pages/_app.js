@@ -37,7 +37,7 @@ function MyApp({ Component, pageProps }) {
               <ToasterProvider>
                 <Layout>
                   <Head>
-                    <title>Eros Now</title>
+                    <title>Smile Culture</title>
                   </Head>
                   <Component {...pageProps} />
                 </Layout>

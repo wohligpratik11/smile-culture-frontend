@@ -7,7 +7,7 @@ const nextConfig = {
       `http://localhost:${process.env.PORT || 3000}`,
   },
   images: {
-    domains: ['eros_content.storage.googleapis.com'],
+    domains: ['smile-culture.storage.googleapis.com'],
   },
   transpilePackages: [
     '@uppy/core',

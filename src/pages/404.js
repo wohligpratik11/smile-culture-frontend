@@ -1,18 +1,17 @@
 import Link from 'next/link';
-import Image from 'next/image';
-import ErosNow from '../../public/assets/images/erosnow.webp';
+// import Image from 'next/image';
 
 export default function NotFound() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center p-4">
       <div className="mb-12">
-        <Image
+        {/* <Image
           src={ErosNow.src}
-          alt="Erosnow Logo"
+          alt="Smile Culture Logo"
           width={200}
           height={50}
           className="h-8 w-auto"
-        />
+        /> */}
       </div>
 
       <h1 className="mb-8 text-4xl font-light text-blue md:text-5xl">
