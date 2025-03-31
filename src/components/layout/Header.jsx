@@ -15,6 +15,19 @@ const Header = ({ navItems }) => {
   // Google Maps URL for Smile Culture Dental Clinic
   const googleMapsUrl = "https://www.google.com/maps/dir//Smile+Culture+Dental+Clinic+Malad+%7C+Braces,+Invisalign,+Veneers,+Aligners,+Dental+Implants,+Root+Canal+In+Malad+West+Shop+No+1,+Harshita+Building+Liberty+Garden+Rd+Number+4,+Malad,+Navy+Colony,+Liberty+Garden,+Malad+West+Mumbai,+Maharashtra+400064/@19.1867163,72.8401376,17z/data=!4m5!4m4!1m0!1m2!1m1!1s0x3be7b71d64384c3d:0x82e0128134f626c0";
 
+  // Appointment booking URL
+  const appointmentUrl = "https://smileculturemumbai.in/contact-us/";
+
+  // Direct handler for appointment booking
+  const handleBookAppointment = (e) => {
+    // Prevent any default behaviors
+    e.preventDefault();
+    // Close mobile menu if open
+    setMobileMenuOpen(false);
+    // Navigate to appointment page
+    window.location.href = appointmentUrl;
+  };
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
@@ -48,7 +61,6 @@ const Header = ({ navItems }) => {
             ></div>
           </div>
           <div className="container mx-auto relative z-10 flex flex-wrap items-center justify-center px-4 sm:px-6 iphone-6:px-8">
-
             <p className="text-xs sm:text-sm md:text-base font-medium pr-6 sm:pr-8">
               <span className="animate-bounce inline-block mr-2">
                 <Star className="h-3 w-3 sm:h-4 sm:w-4 text-yellow-300 fill-yellow-300" />
@@ -133,13 +145,8 @@ const Header = ({ navItems }) => {
                   priority
                 />
               </div>
-              <div className="overflow-hidden">
-                <span className="font-bold text-lg bg-gradient-to-r from-cyan-700 to-teal-600 bg-clip-text text-transparent hidden sm:block transform transition-all duration-500 group-hover:translate-x-1">
-                  Smile Culture
-                </span>
-                <div className="h-0.5 w-0 bg-gradient-to-r from-cyan-500 to-teal-400 group-hover:w-full transition-all duration-500 hidden sm:block"></div>
-              </div>
             </Link>
+
             <div className="bg-gradient-to-r from-cyan-50 to-white border-b border-cyan-100 relative overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-r from-cyan-50 via-white to-cyan-50 animate-pulse opacity-40"></div>
             </div>
@@ -176,29 +183,23 @@ const Header = ({ navItems }) => {
 
               {/* Book Appointment Button - Only visible on laptop screens and larger */}
               {windowWidth >= 1024 && (
-                <>
-                  <div className="relative group">
-                    <Link href="https://smileculturemumbai.in/contact-us/">
-                      <Button className="relative bg-gradient-to-r from-cyan-600 to-teal-500 hover:from-cyan-500 hover:to-teal-400 text-white rounded-full shadow-md px-4 py-2 transform hover:translate-y-[-2px] transition-all duration-300 w-full">
-                        <div
-                          className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 rounded-full"
-                          onClick={() => setMobileMenuOpen(false)}
-                        ></div>
-                        <Calendar className="h-4 w-4 mr-2 group-hover:animate-bounce" />
-                        <span>Book Appointment</span>
-                      </Button>
-                    </Link>
-                  </div>
-                </>
+                <div className="relative group">
+                  <button
+                    onClick={handleBookAppointment}
+                    className="relative bg-gradient-to-r from-cyan-600 to-teal-500 hover:from-cyan-500 hover:to-teal-400 text-white rounded-full shadow-md px-4 py-2 transform hover:translate-y-[-2px] transition-all duration-300 w-full flex items-center"
+                  >
+                    <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 rounded-full"></div>
+                    <Calendar className="h-4 w-4 mr-2 group-hover:animate-bounce" />
+                    <span>Book Appointment</span>
+                  </button>
+                </div>
               )}
-
             </div>
           </div>
 
-          {/* Mobile Menu */}
           {mobileMenuOpen && (
             <div className="lg:hidden absolute top-full left-0 right-0 bg-white shadow-lg py-4 px-4">
-              <div className="flex flex-col space-y-4">
+              <div className="flex flex-col space-y-3">
                 <Link
                   href="tel:+918369892101"
                   className="group flex items-center gap-1.5 hover:text-cyan-600 transition-all duration-300"
@@ -209,8 +210,7 @@ const Header = ({ navItems }) => {
                   </div>
                   <span className="text-xs font-medium text-black group-hover:scale-105 transition-transform duration-300">+91 83698 92101</span>
                 </Link>
-
-                {/* Location with Icon in mobile menu - now also clickable */}
+                <hr className="border-t border-normalGray w-full" />
                 <Link
                   href={googleMapsUrl}
                   target="_blank"
@@ -222,6 +222,7 @@ const Header = ({ navItems }) => {
                   </div>
                   <span className="text-xs text-black group-hover:scale-105 transition-transform duration-300">Smile Culture Dental Clinic, Malad(W), Mumbai</span>
                 </Link>
+                <hr className="border-t border-normalGray w-full" />
 
                 <div className="flex items-center gap-1.5">
                   <div className="relative bg-cyan-50 p-1 rounded-full">
@@ -233,22 +234,17 @@ const Header = ({ navItems }) => {
                     <span className="text-black">Sun: Appointment Only</span>
                   </div>
                 </div>
-
-                {/* Book Appointment Button in Mobile Menu - Only visible below lg breakpoint */}
-                {windowWidth < 1024 && (
-                  <div className="relative group">
-                    <Link href="https://smileculturemumbai.in/contact-us/">
-                      <Button className="relative bg-gradient-to-r from-cyan-600 to-teal-500 hover:from-cyan-500 hover:to-teal-400 text-white rounded-full shadow-md px-4 py-2 transform hover:translate-y-[-2px] transition-all duration-300 w-full">
-                        <div
-                          className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 rounded-full"
-                          onClick={() => setMobileMenuOpen(false)}
-                        ></div>
-                        <Calendar className="h-4 w-4 mr-2 group-hover:animate-bounce" />
-                        <span>Book Appointment</span>
-                      </Button>
-                    </Link>
-                  </div>
-                )}
+                <hr className="border-t border-normalGray w-full" />
+                <div className="relative group">
+                  <button
+                    onClick={handleBookAppointment}
+                    className="relative bg-gradient-to-r from-cyan-600 to-teal-500 hover:from-cyan-500 hover:to-teal-400 text-white rounded-full shadow-md px-4 py-2 transform hover:translate-y-[-2px] transition-all duration-300 w-full flex items-center justify-center"
+                  >
+                    <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 rounded-full"></div>
+                    <Calendar className="h-4 w-4 mr-2 group-hover:animate-bounce" />
+                    <span>Book Appointment</span>
+                  </button>
+                </div>
               </div>
             </div>
           )}

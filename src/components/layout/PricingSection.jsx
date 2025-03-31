@@ -25,6 +25,8 @@ import {
 	Smile,
 	Droplet,
 	Bone,
+	Menu,
+	X
 } from "lucide-react"
 import { useState, useEffect } from "react"
 import Link from "next/link"
@@ -38,14 +40,24 @@ const DentalLandingPage = () => {
 	const [activeIcon, setActiveIcon] = useState(0)
 	const [expandedCard, setExpandedCard] = useState(null)
 	const [hoveredAward, setHoveredAward] = useState(null)
+	const [clickedAward, setClickedAward] = useState(null) // New state to track clicked awards
+	const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+
+	// Phone number for contact
+	const phoneNumber = "+918369892101"
+
+	// Function to handle phone call
+	const handlePhoneCall = () => {
+		window.location.href = `tel:${phoneNumber}`
+	}
 
 	// Title icons with corresponding text
 	const titleIcons = [
-		{ icon: <SmileIcon className="h-8 w-8" />, text: "Premium Dental Care" },
-		{ icon: <Sparkles className="h-8 w-8" />, text: "Exceptional Quality" },
-		{ icon: <Shield className="h-8 w-8" />, text: "Safe Procedures" },
-		{ icon: <Clock className="h-8 w-8" />, text: "Quick Recovery" },
-		{ icon: <Heart className="h-8 w-8" />, text: "Patient-Centered Care" },
+		{ icon: <SmileIcon className="h-5 w-5 sm:h-6 sm:w-6 md:h-8 md:w-8" />, text: "Premium Dental Care" },
+		{ icon: <Sparkles className="h-5 w-5 sm:h-6 sm:w-6 md:h-8 md:w-8" />, text: "Exceptional Quality" },
+		{ icon: <Shield className="h-5 w-5 sm:h-6 sm:w-6 md:h-8 md:w-8" />, text: "Safe Procedures" },
+		{ icon: <Clock className="h-5 w-5 sm:h-6 sm:w-6 md:h-8 md:w-8" />, text: "Quick Recovery" },
+		{ icon: <Heart className="h-5 w-5 sm:h-6 sm:w-6 md:h-8 md:w-8" />, text: "Patient-Centered Care" },
 	]
 
 	// Rotate through title icons
@@ -58,20 +70,20 @@ const DentalLandingPage = () => {
 
 	// Award icons for each dental service
 	const awardIcons = {
-		"Root Canal Treatment": { icon: <Zap className="h-5 w-5" />, color: "bg-violet-600" },
-		"Teeth Fillings": { icon: <Droplet className="h-5 w-5" />, color: "bg-teal-500" },
-		Dentures: { icon: <Smile className="h-5 w-5" />, color: "bg-slate-500" },
-		"Dental Implants": { icon: <Bone className="h-5 w-5" />, color: "bg-indigo-500" },
-		"Teeth Braces": { icon: <Gem className="h-5 w-5" />, color: "bg-cyan-500" },
-		"Clear Aligners": { icon: <Shield className="h-5 w-5" />, color: "bg-sky-500" },
-		"Teeth Cleaning": { icon: <Sparkles className="h-5 w-5" />, color: "bg-green-500" },
-		"Smile Designing": { icon: <Heart className="h-5 w-5" />, color: "bg-rose-500" },
-		"Tooth Crown": { icon: <Crown className="h-5 w-5" />, color: "bg-emerald-500" },
-		"Dental Bridges": { icon: <Stethoscope className="h-5 w-5" />, color: "bg-fuchsia-900" },
-		"Tooth Extraction": { icon: <Scissors className="h-5 w-5" />, color: "bg-red-500" },
-		"Teeth Scaling": { icon: <Syringe className="h-5 w-5" />, color: "bg-green-600" },
-		Gingivitis: { icon: <Pill className="h-5 w-5" />, color: "bg-red-400" },
-		"Gum Surgeries": { icon: <Scissors className="h-5 w-5" />, color: "bg-teal-600" },
+		"Root Canal Treatment": { icon: <Zap className="h-4 w-4 sm:h-5 sm:w-5" />, color: "bg-violet-600" },
+		"Teeth Fillings": { icon: <Droplet className="h-4 w-4 sm:h-5 sm:w-5" />, color: "bg-teal-500" },
+		Dentures: { icon: <Smile className="h-4 w-4 sm:h-5 sm:w-5" />, color: "bg-slate-500" },
+		"Dental Implants": { icon: <Bone className="h-4 w-4 sm:h-5 sm:w-5" />, color: "bg-indigo-500" },
+		"Teeth Braces": { icon: <Gem className="h-4 w-4 sm:h-5 sm:w-5" />, color: "bg-cyan-500" },
+		"Clear Aligners": { icon: <Shield className="h-4 w-4 sm:h-5 sm:w-5" />, color: "bg-sky-500" },
+		"Teeth Cleaning": { icon: <Sparkles className="h-4 w-4 sm:h-5 sm:w-5" />, color: "bg-green-500" },
+		"Smile Designing": { icon: <Heart className="h-4 w-4 sm:h-5 sm:w-5" />, color: "bg-rose-500" },
+		"Tooth Crown": { icon: <Crown className="h-4 w-4 sm:h-5 sm:w-5" />, color: "bg-emerald-500" },
+		"Dental Bridges": { icon: <Stethoscope className="h-4 w-4 sm:h-5 sm:w-5" />, color: "bg-fuchsia-900" },
+		"Tooth Extraction": { icon: <Scissors className="h-4 w-4 sm:h-5 sm:w-5" />, color: "bg-red-500" },
+		"Teeth Scaling": { icon: <Syringe className="h-4 w-4 sm:h-5 sm:w-5" />, color: "bg-green-600" },
+		Gingivitis: { icon: <Pill className="h-4 w-4 sm:h-5 sm:w-5" />, color: "bg-red-400" },
+		"Gum Surgeries": { icon: <Scissors className="h-4 w-4 sm:h-5 sm:w-5" />, color: "bg-teal-600" },
 	}
 
 	const dentalServices = [
@@ -108,7 +120,6 @@ const DentalLandingPage = () => {
 				"Dental implants are permanent artificial tooth roots that are surgically placed into the jawbone, providing...",
 			color: "bg-gradient-to-br from-indigo-400 to-indigo-600",
 			benefit: "Lifetime Guarantee",
-			location: "Malad, Mumbai",
 			fullDescription:
 				"Look no further! Our experienced dental team specializes in providing high-quality dental implant treatments that can restore your smile and improve your oral health. Dental implants are a long-lasting and natural-looking solution for replacing missing teeth. Book an appointment at Smile Culture Dental Clinic in Malad, Mumbai to explore the possibilities of dental implants and regain your confident smile.",
 			detailedView: true,
@@ -245,23 +256,39 @@ const DentalLandingPage = () => {
 	// Display only the first 6 items initially, or all items if showAll is true
 	const displayedServices = showAll ? dentalServices : dentalServices.slice(0, 6)
 
+	// Toggle mobile menu
+	const toggleMobileMenu = () => {
+		setMobileMenuOpen(!mobileMenuOpen);
+	}
+
+	// Handle award icon click to toggle animation
+	const handleAwardClick = (index) => {
+		if (clickedAward === index) {
+			setClickedAward(null); // Re-enable animation if clicked again
+		} else {
+			setClickedAward(index); // Disable animation
+		}
+	}
+
 	return (
-		<div className="w-full bg-gradient-to-b from-slate-50 to-white py-12">
+		<div className="w-full bg-gradient-to-b from-slate-50 to-white py-6 sm:py-8 md:py-12">
+			{/* Mobile Navigation */}
+
 			{/* Header Section */}
-			<div className="text-center mb-16">
-				<div className="inline-block mb-3 px-4 py-1.5 bg-gradient-to-r from-amber-100 to-amber-200 text-amber-800 rounded-full text-sm font-medium shadow-sm">
+			<div className="text-center mb-8 sm:mb-12 md:mb-16 mt-16 md:mt-0 px-4">
+				<div className="inline-block mb-3 px-3 py-1 sm:px-4 sm:py-1.5 bg-gradient-to-r from-amber-100 to-amber-200 text-amber-800 rounded-full text-xs sm:text-sm font-medium shadow-sm">
 					<span className="flex items-center">
-						<Star className="h-4 w-4 mr-1.5 text-amber-600" fill="currentColor" />
+						<Star className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-1.5 text-amber-600" fill="currentColor" />
 						Special Offers On All Treatments
 					</span>
 				</div>
 
 				{/* Animated Title with Icons */}
-				<div className="relative h-20 mb-5">
+				<div className="relative h-16 sm:h-20 mb-4 sm:mb-5 overflow-hidden">
 					{titleIcons.map((item, index) => (
 						<motion.div
 							key={index}
-							className="absolute inset-0 flex flex-col items-center justify-center"
+							className="absolute inset-0 flex flex-col items-center justify-center px-4"
 							initial={{ opacity: 0, y: 20 }}
 							animate={{
 								opacity: activeIcon === index ? 1 : 0,
@@ -269,15 +296,15 @@ const DentalLandingPage = () => {
 							}}
 							transition={{ duration: 0.5 }}
 						>
-							<div className="flex items-center gap-3 mb-2">
-								<div className="bg-gradient-to-r from-teal-500 to-cyan-500 p-2 rounded-lg text-white">{item.icon}</div>
-								<h2 className="text-5xl font-bold text-slate-800">{item.text}</h2>
+							<div className="flex items-center gap-2 sm:gap-3 mb-2">
+								<div className="bg-gradient-to-r from-teal-500 to-cyan-500 p-1.5 sm:p-2 rounded-lg text-white">{item.icon}</div>
+								<h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-slate-800 leading-tight">{item.text}</h2>
 							</div>
-							<div className="flex gap-1.5 mt-1">
+							<div className="flex gap-1 sm:gap-1.5 mt-1">
 								{titleIcons.map((_, i) => (
 									<div
 										key={i}
-										className={`h-1.5 rounded-full transition-all duration-300 ${i === activeIcon ? "w-6 bg-teal-500" : "w-1.5 bg-slate-200"
+										className={`h-1 sm:h-1.5 rounded-full transition-all duration-300 ${i === activeIcon ? "w-4 sm:w-6 bg-teal-500" : "w-1 sm:w-1.5 bg-slate-200"
 											}`}
 									/>
 								))}
@@ -286,7 +313,7 @@ const DentalLandingPage = () => {
 					))}
 				</div>
 
-				<p className="text-slate-600 max-w-3xl mx-auto px-4 text-lg">
+				<p className="text-slate-600 max-w-3xl mx-auto px-4 text-sm sm:text-base md:text-lg">
 					Experience our signature treatments with exclusive benefits and complimentary consultations. Every service
 					includes premium care at exceptional value.
 				</p>
@@ -294,7 +321,7 @@ const DentalLandingPage = () => {
 
 			{/* Services Grid */}
 			<div className="container mx-auto px-4 max-w-7xl">
-				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
 					{displayedServices.map((service, index) => (
 						<motion.div
 							key={index}
@@ -310,16 +337,17 @@ const DentalLandingPage = () => {
               `}
 						>
 							{/* Decorative elements */}
-							<div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16"></div>
-							<div className="absolute -bottom-6 -left-6 w-24 h-24 bg-white/10 rounded-full"></div>
+							<div className="absolute top-0 right-0 w-20 sm:w-24 md:w-32 h-20 sm:h-24 md:h-32 bg-white/10 rounded-full -mr-10 sm:-mr-12 md:-mr-16 -mt-10 sm:-mt-12 md:-mt-16"></div>
+							<div className="absolute -bottom-4 sm:-bottom-5 md:-bottom-6 -left-4 sm:-left-5 md:-left-6 w-16 sm:w-20 md:w-24 h-16 sm:h-20 md:h-24 bg-white/10 rounded-full"></div>
 
 							<div className="p-8">
 								{/* Award Icon Title */}
-								<div className="flex items-center  mb-6 relative z-10">
+								<div className="flex items-center mb-6 relative z-10">
 									<div
-										className="relative"
-										onMouseEnter={() => setHoveredAward(index)}
-										onMouseLeave={() => setHoveredAward(null)}
+										className="relative cursor-pointer"
+										onMouseEnter={() => clickedAward !== index && setHoveredAward(index)}
+										onMouseLeave={() => clickedAward !== index && setHoveredAward(null)}
+										onClick={() => handleAwardClick(index)}
 									>
 										<motion.div className="flex items-center" whileHover={{ scale: 1.05 }}>
 											<div className="relative">
@@ -358,9 +386,9 @@ const DentalLandingPage = () => {
 												</div>
 											</div>
 
-											{/* Title text that appears on hover */}
+											{/* Title text that appears on hover but not when clicked */}
 											<AnimatePresence>
-												{hoveredAward === index && (
+												{hoveredAward === index && clickedAward !== index && (
 													<motion.div
 														initial={{ opacity: 0, x: -10 }}
 														animate={{ opacity: 1, x: 0 }}
@@ -375,9 +403,10 @@ const DentalLandingPage = () => {
 										</motion.div>
 									</div>
 
-									{/* Always visible title for accessibility */}
+									{/* Always visible title (except when hovering and not clicked) */}
 									<h3
-										className={`text-2xl font-bold transition-opacity duration-300 ${hoveredAward === index ? "opacity-0" : "opacity-100"}`}
+										className={`text-2xl font-bold transition-opacity duration-300 ${hoveredAward === index && clickedAward !== index ? "opacity-0" : "opacity-100"
+											}`}
 									>
 										{service.title}
 									</h3>
@@ -439,9 +468,9 @@ const DentalLandingPage = () => {
 
 				{/* View All Services Button - Only show if not all services are displayed */}
 				{!showAll && (
-					<div className="mt-12 text-center">
-						<div className="inline-block mb-4 px-4 py-1.5 bg-amber-100 text-amber-800 rounded-full text-sm shadow-sm">
-							<Star className="h-4 w-4 inline mr-1.5 text-amber-600" fill="currentColor" />
+					<div className="mt-8 sm:mt-10 md:mt-12 text-center">
+						<div className="inline-block mb-3 sm:mb-4 px-3 py-1 sm:px-4 sm:py-1.5 bg-amber-100 text-amber-800 rounded-full text-xs sm:text-sm shadow-sm">
+							<Star className="h-3 w-3 sm:h-4 sm:w-4 inline mr-1 sm:mr-1.5 text-amber-600" fill="currentColor" />
 							Unlock more exclusive treatments
 						</div>
 						<div>
@@ -451,7 +480,7 @@ const DentalLandingPage = () => {
 								whileHover={{ scale: 1.05 }}
 								whileTap={{ scale: 0.98 }}
 								className={`bg-gradient-to-r from-cyan-600 to-teal-500 hover:from-blue-600 hover:to-teal-600 
-                  text-white font-medium py-4 px-10 rounded-full text-lg shadow-lg hover:shadow-xl 
+                  text-white font-medium py-3 sm:py-4 px-6 sm:px-8 md:px-10 rounded-full text-sm sm:text-base md:text-lg shadow-lg hover:shadow-xl 
                   transition-all duration-300 transform relative
                   ${isButtonAnimating ? "opacity-50" : ""}`}
 							>
@@ -461,7 +490,7 @@ const DentalLandingPage = () => {
 										initial={{ scale: 0.8 }}
 										animate={{ scale: [0.8, 1.2, 1] }}
 										transition={{ duration: 0.5, repeat: Number.POSITIVE_INFINITY, repeatDelay: 2 }}
-										className="absolute -top-2 -right-2 bg-amber-400 text-amber-900 w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold"
+										className="absolute -top-2 -right-2 bg-amber-400 text-amber-900 w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center text-xs font-bold"
 									>
 										+{dentalServices.length - 6}
 									</motion.span>
@@ -471,6 +500,20 @@ const DentalLandingPage = () => {
 					</div>
 				)}
 			</div>
+
+			{/* Floating contact button for mobile - Now with click handler to make a phone call */}
+			<div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 md:hidden">
+				<motion.button
+					onClick={handlePhoneCall}
+					whileHover={{ scale: 1.05 }}
+					whileTap={{ scale: 0.95 }}
+					className="bg-gradient-to-r from-teal-500 to-cyan-500 text-white rounded-full p-3 shadow-lg flex items-center justify-center"
+					aria-label="Call +91 83698 92101"
+				>
+					<Phone size={24} />
+				</motion.button>
+			</div>
+
 
 			{/* Add CSS animations */}
 			<style jsx>{`
@@ -502,10 +545,16 @@ const DentalLandingPage = () => {
             transform: rotate(360deg);
           }
         }
+
+        @media (max-width: 640px) {
+          .container {
+            padding-left: 12px;
+            padding-right: 12px;
+          }
+        }
       `}</style>
 		</div>
 	)
 }
 
 export default DentalLandingPage
-
