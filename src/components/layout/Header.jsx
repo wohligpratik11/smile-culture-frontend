@@ -81,7 +81,7 @@ const Header = ({ navItems }) => {
           {/* Background shimmer animation */}
           <div className="absolute inset-0 bg-gradient-to-r from-cyan-50 via-white to-cyan-50 animate-pulse opacity-40"></div>
 
-          <div className="container mx-auto xxs:px-4 xs:px-6 relative z-10">
+          <div className="container mx-auto xxs:px-4 xs:px-4 relative z-10">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-1">
               <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 sm:gap-3 md:gap-5">
                 {/* Primary Contact Number with enhanced animation */}
@@ -116,9 +116,9 @@ const Header = ({ navItems }) => {
                   <Clock className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-cyan-600 relative z-10" />
                 </div>
                 <div className="text-2xs sm:text-xs">
-                  <span className="text-gray-700 font-medium text-black">9:30-1:30 & 5:30-8:30</span>
+                  <span className="text-gray-700 font-medium text-black">Mon - Sat: 9:30 AM - 1:30 PM  & 5:30 PM - 8:30 PM</span>
                   <span className="text-black mx-1">|</span>
-                  <span className="text-black">Sun: Appointment Only</span>
+                  <span className="text-black">Sunday : Appointment Only</span>
                 </div>
               </div>
             </div>
@@ -224,14 +224,18 @@ const Header = ({ navItems }) => {
                 </Link>
                 <hr className="border-t border-normalGray w-full" />
 
-                <div className="flex items-center gap-1.5">
-                  <div className="relative bg-cyan-50 p-1 rounded-full">
-                    <Clock className="h-3 w-3 text-cyan-600 relative z-10" />
+                <div className="flex items-center gap-1.5 max-w-full">
+                  <div className="relative bg-cyan-50 p-1 rounded-full flex-shrink-0">
+                    <Clock className="h-4 w-4 text-cyan-600 relative z-10" />
                   </div>
-                  <div className="text-xs flex flex-wrap">
-                    <span className="text-gray-700 font-medium text-black">Mon-Sat: 9:30-1:30 & 5:30-8:30</span>
-                    <span className="text-black mx-1">|</span>
-                    <span className="text-black">Sun: Appointment Only</span>
+                  <div className="text-xs flex flex-col sm:flex-row sm:flex-wrap items-start sm:items-center">
+                    <span className="text-gray-700 font-medium text-black whitespace-nowrap">
+                      Mon - Sat: 9:30 AM - 1:30 PM, 5:30 PM - 8:30 PM
+                    </span>
+                    <span className="text-black mx-1 hidden sm:inline">|</span>
+                    <span className="text-black whitespace-nowrap">
+                      Sunday: Appointment Only
+                    </span>
                   </div>
                 </div>
                 <hr className="border-t border-normalGray w-full" />
