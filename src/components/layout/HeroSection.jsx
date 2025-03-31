@@ -290,37 +290,6 @@ const HeroSection = () => {
 						</div>
 					</div>
 				</div>
-
-				{/* Additional benefits section with responsive grid */}
-				<div className="mt-8 sm:mt-12 md:mt-16 grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
-					{[
-						{
-							icon: CheckCircle,
-							title: "Natural-Looking Results",
-							desc: "Custom-designed to match your natural teeth color and shape"
-						},
-						{
-							icon: Calendar,
-							title: "Quick Procedure",
-							desc: "Complete your treatment in just 2-3 comfortable visits"
-						},
-						{
-							icon: ThumbsUp,
-							title: "Long-Lasting Solution",
-							desc: "Enjoy your beautiful smile for 10-15 years with proper care"
-						}
-					].map((benefit, index) => (
-						<Card key={index} className="p-4 sm:p-6 border border-gray-200 hover:border-cyan-200 transition-all hover:shadow-lg">
-							<div className="flex flex-col items-center text-center">
-								<div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-cyan-100 flex items-center justify-center mb-3 sm:mb-4">
-									<benefit.icon className="h-5 w-5 sm:h-6 sm:w-6 text-cyan-600" />
-								</div>
-								<h3 className="text-base sm:text-lg font-bold text-slate-800 mb-1 sm:mb-2">{benefit.title}</h3>
-								<p className="text-sm sm:text-base text-slate-600">{benefit.desc}</p>
-							</div>
-						</Card>
-					))}
-				</div>
 		
 			</div>
 		</div>
