@@ -135,7 +135,8 @@ const Footer = () => {
 							</Button>
 						</div>
 						<p className="mt-6 text-slate-500">
-							© 2025 Smile Culture Dental Clinic, Malad. All rights reserved.</p>
+							© 2025 Smile Culture Dental Clinic.<br className="block sm:hidden" /> All rights reserved.
+						</p>
 					</div>
 				</div>
 			</div>
