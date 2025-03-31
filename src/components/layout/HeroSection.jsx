@@ -129,7 +129,7 @@ const HeroSection = () => {
 			</div>
 
 			{/* Main content container */}
-			<div className="container mx-auto px-4 py-6 sm:py-8 md:py-8 lg:py-8 relative z-10">
+			<div className="container mx-auto px-4 py-6 sm:py-4 md:py-4 lg:py-4 relative z-10">
 				{/* Hero section with truly responsive layout for all screen sizes */}
 				<div className="flex flex-col lg:flex-row-reverse gap-6 sm:gap-8 lg:gap-12 xl:gap-16 items-center">
 					{/* Image section with enhanced 3D effect and balanced responsive sizing */}
@@ -240,7 +240,7 @@ const HeroSection = () => {
 						<div className="bg-white p-3 sm:p-4 md:p-5 rounded-lg sm:rounded-xl border border-amber-200 sm:border-2 shadow-md sm:shadow-lg">
 							<div className="flex flex-col xs:flex-row items-center justify-between gap-2 mb-2 sm:mb-3">
 								<p className="font-medium text-slate-800 text-base sm:text-lg">Special Offer Ending:</p>
-								<div className="scale-75 xs:scale-90 sm:scale-100 origin-center">
+								<div className=" xs:scale-90 sm:scale-100 origin-center">
 									<CountdownTimer />
 								</div>
 							</div>

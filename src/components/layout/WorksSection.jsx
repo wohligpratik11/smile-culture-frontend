@@ -25,7 +25,7 @@ const HeroSection = () => {
 	const router = useRouter();
 
 	return (
-		<div className="relative bg-gradient-to-br from-white via-cyan-50 to-teal-100 py-12 md:py-12 overflow-visible min-h-screen w-full">
+		<div className="relative bg-gradient-to-br from-white via-cyan-50 to-teal-100 py-8 md:py-8 overflow-visible min-h-screen w-full">
 			{/* Background Decorative Elements */}
 			<div className="absolute inset-0 pointer-events-none z-0">
 				<div className="absolute top-0 left-0 w-40 h-40 sm:w-72 sm:h-72 bg-cyan-200 rounded-full opacity-20 blur-3xl -translate-x-1/2 translate-y-1/4"></div>
@@ -49,7 +49,7 @@ const HeroSection = () => {
 					<div className="relative">
 						<div className="absolute left-6 sm:left-8 md:left-12 top-0 bottom-0 w-1 bg-gradient-to-b from-cyan-400 to-teal-400 hidden sm:block rounded-full"></div>
 
-						<div className="space-y-10 md:space-y-16">
+						<div className="space-y-10 md:space-y-12">
 							{/* Step 1 */}
 							<div className="flex flex-col sm:flex-row gap-4 sm:gap-6 md:gap-8 relative group">
 								<div className="sm:w-16 flex-shrink-0 flex flex-col items-center">
@@ -135,7 +135,7 @@ const HeroSection = () => {
 						</div>
 					</div>
 
-					<div className="mt-10 md:mt-16 text-center">
+					<div className="mt-10 md:mt-12 text-center">
 						<Link href="https://smileculturemumbai.in/contact-us/">
 							<Button
 								size="lg"

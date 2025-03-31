@@ -92,7 +92,7 @@ const BookingSection = () => {
 	}, [percentageBooked, remainingSlots, lastResetTime]);
 
 	return (
-		<div className="bg-gradient-to-br from-cyan-900 to-teal-800 text-white py-8 md:py-12 lg:py-12">
+		<div className="bg-gradient-to-br from-cyan-900 to-teal-800 text-white py-8 md:py-8 lg:py-12">
 			<div className="container mx-auto px-4 sm:px-6 lg:px-8">
 				<div className="max-w-3xl mx-auto text-center mb-8 md:mb-12">
 					<Badge className="bg-white/20 text-white hover:bg-white/30 px-2 py-1 text-xs sm:text-sm font-medium rounded-full mb-3 sm:mb-4">

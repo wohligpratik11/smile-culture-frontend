@@ -271,12 +271,12 @@ const DentalLandingPage = () => {
 	}
 
 	return (
-		<div className="w-full bg-gradient-to-b from-slate-50 to-white py-6 sm:py-8 md:py-12">
+		<div className="w-full bg-gradient-to-b from-slate-50 to-white py-8 sm:py-8 md:py-8">
 			{/* Mobile Navigation */}
 
 			{/* Header Section */}
-			<div className="text-center mb-8 sm:mb-12 md:mb-16 mt-16 md:mt-0 px-4">
-				<div className="inline-block mb-3 px-3 py-1 sm:px-4 sm:py-1.5 bg-gradient-to-r from-amber-100 to-amber-200 text-amber-800 rounded-full text-xs sm:text-sm font-medium shadow-sm">
+			<div className="text-center mb-8 sm:mb-12 md:mb-16 mt-4 md:mt-0 px-4">
+				<div className="inline-block mb-6 px-3 py-1 sm:px-4 sm:py-1.5 bg-gradient-to-r from-amber-100 to-amber-200 text-amber-800 rounded-full text-xs sm:text-sm font-medium shadow-sm">
 					<span className="flex items-center">
 						<Star className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-1.5 text-amber-600" fill="currentColor" />
 						Special Offers On All Treatments
@@ -469,7 +469,7 @@ const DentalLandingPage = () => {
 				{/* View All Services Button - Only show if not all services are displayed */}
 				{!showAll && (
 					<div className="mt-8 sm:mt-10 md:mt-12 text-center">
-						<div className="inline-block mb-3 sm:mb-4 px-3 py-1 sm:px-4 sm:py-1.5 bg-amber-100 text-amber-800 rounded-full text-xs sm:text-sm shadow-sm">
+						<div className="inline-block mb-6 sm:mb-6 px-3 py-1 sm:px-4 sm:py-1.5 bg-amber-100 text-amber-800 rounded-full text-xs sm:text-sm shadow-sm">
 							<Star className="h-3 w-3 sm:h-4 sm:w-4 inline mr-1 sm:mr-1.5 text-amber-600" fill="currentColor" />
 							Unlock more exclusive treatments
 						</div>
